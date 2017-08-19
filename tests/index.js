@@ -61,9 +61,12 @@ function getWidgets (request, response) {
 }
 
 function getWidget (request, response) {
-	console.dir(request.getParams());
-	console.log(request.getHeader("content-type"));
-	response.end("Hello Widget (id: " + request.getPathParam("id") + ")");
+	var content = "Hello Widget (id: " + request.getPathParam("id") + ")";
+	response.writeHead(200, {
+		"Content-Type": "text/plain;utf-8",
+		"Content-Length": content.length
+	});
+	response.end(content);
 }
 
 function createWidget (request, response) {

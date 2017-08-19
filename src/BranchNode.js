@@ -61,8 +61,7 @@ function test (request) {
 function transition (request) {
 	Object.merge(request.pathParams, this.invoke(parsePathParams, request));
 	request.remainingPath = request.remainingPath.replace(this.pattern, "");
-	request.found = !request.remainingPath && this.leaves.length > 0;
-	request.notFound = !request.found;
+	request.notFound = request.remainingPath.length > 0 || !this.leaves.length;
 }
 
 function createPattern () {

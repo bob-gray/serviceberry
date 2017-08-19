@@ -1,6 +1,6 @@
 "use strict";
 
-var Service,
+var Trunk,
 	createClass = require("solv/src/class"),
 	meta = require("solv/src/meta"),
 	http = require("http"),
@@ -11,9 +11,9 @@ var Service,
 
 meta.define("./Branch", require("./Branch"));
 
-Service = createClass(
+Trunk = createClass(
 	meta({
-		"name": "Service",
+		"name": "Trunk",
 		"type": "class",
 		"extends": "./Branch",
 		"description": "HTTP service",
@@ -25,7 +25,7 @@ Service = createClass(
 	init
 );
 
-Service.method(
+Trunk.method(
 	meta({
 		"name": "start",
 		"arguments": []
@@ -73,24 +73,18 @@ function respond (incomingMessage, serverResponse) {
 	}
 }
 
-function plotRoute (request, branch) {
-	var leaf,
-		nextBranch;
+function plotRoute (request, current) {
+	var next;
 
-	branch.transition(request);
-
-	if (request.found) {
-		leaf = branch.chooseLeaf(request);
-		request.route.add(leaf.handlers);
-	} else {
-		request.route.add(branch.handlers);
-		request.route.catch(branch.catches);
-		nextBranch = branch.chooseBranch(request);
-	}
+	request.route.add(current.handlers);
+	request.route.catch(current.catches);
+	current.transition(request);
 	
-	if (nextBranch) {
-		this.invoke(plotRoute, request, nextBranch);
+	next = current.chooseNext(request);
+	
+	if (next) {
+		return this.invoke(plotRoute, request, next);
 	}
 }
 
-module.exports = Service;
+module.exports = Trunk;

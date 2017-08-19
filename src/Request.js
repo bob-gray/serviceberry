@@ -140,7 +140,6 @@ Request.method(
 function init () {
 	this.url = url.parse(this.incomingMessage.url);
 	this.path = this.url.pathname;
-	this.remainingPath = this.path;
 	this.pathParams = {};
 }
 

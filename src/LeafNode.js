@@ -47,7 +47,7 @@ LeafNode.method(
 		}],
 		"returns": "boolean"
 	}),
-	isAllowed
+	isSupported
 );
 
 LeafNode.method(
@@ -59,7 +59,31 @@ LeafNode.method(
 		}],
 		"returns": "boolean"
 	}),
-	isAllowed
+	isAcceptable
+);
+
+LeafNode.method(
+	meta({
+		"name": "transition",
+		"override": true,
+		"arguments": [{
+			"name": "request",
+			"type": "object"
+		}]
+	}),
+	Function.prototype
+);
+
+LeafNode.method(
+	meta({
+		"name": "chooseNext",
+		"override": true,
+		"arguments": [{
+			"name": "request",
+			"type": "object"
+		}]
+	}),
+	Function.prototype
 );
 
 function isAllowed (request) {

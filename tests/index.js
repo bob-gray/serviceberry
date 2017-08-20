@@ -1,8 +1,8 @@
 "use strict";
 
-var Trunk = require("../src/Trunk"),
+var serviceberry = require("../src/"),
 	meta = require("solv/src/meta"),
-	service = new Trunk({
+	service = serviceberry.createTrunk({
 		port: 3000
 	}),
 	widgets = service.at("/widgets"),

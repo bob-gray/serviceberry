@@ -33,6 +33,8 @@ path, content type and accepted response type match the service implementation, 
 queued middleware and handlers will be executed in sequence. If an error occurs while
 executing the queue it will be caught and fallback to the nearest catch.
 
+Each handler is executed asynchronously in the queue must call `request.proceed()` or `response.send()` 
+
 Auto Error Statuses
 -------------------
 Serviceberry can respond automatically with 404 Not Found, 405 Method Not Allowed,
@@ -44,18 +46,17 @@ Serviceberry can respond automatically to OPTIONS and HEAD requests.
 To override these auto responses implement your own
 
   - OPTIONS
+
     Any request path that implements methods will respond to OPTIONS
     requests with a status of 204 No Content and an Allow header.
-    All middleware and catches in the route will be executed as usual.
+    All middleware and catches in the queue will be executed as usual.
 
   - HEAD
-    Any request path that implements a GET method will respond to HEAD
-    requests with the head written while executing the GET route.
-    All middleware, catches and handlers in the GET route will be
-    executed.
 
-Catches
--------
+    Any request path that implements a GET method will respond to HEAD
+    requests with the head written while executing the GET queue.
+    All middleware, catches and handlers in the GET queue will be
+    executed.
 
 
 Classes
@@ -142,8 +143,8 @@ request to continue
       - returns string value
 
   - #proceed()
-      - requests are always routed asynchronously - each handler must call proceed
-        before the request proceeds to then next handler in the route
+      - each handler must call proceed before the request proceeds to the
+        next handler in the queue
 
 Response(serverResponse)
 ------------------------

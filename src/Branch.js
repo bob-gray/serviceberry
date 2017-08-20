@@ -49,6 +49,42 @@ Branch.method(
 			"name": "method",
 			"type": "string"
 		}, {
+			"name": "usable",
+			"type": "object"
+		}],
+		"returns": {
+			"name": "leaf",
+			"type": "object"
+		}
+	}),
+	onUsable
+);
+
+Branch.method(
+	meta({
+		"name": "on",
+		"arguments": [{
+			"name": "options",
+			"type": "object"
+		}, {
+			"name": "usable",
+			"type": "object"
+		}],
+		"returns": {
+			"name": "leaf",
+			"type": "object"
+		}
+	}),
+	onUsable
+);
+
+Branch.method(
+	meta({
+		"name": "on",
+		"arguments": [{
+			"name": "method",
+			"type": "string"
+		}, {
 			"name": "handler",
 			"type": "function",
 			"required": false
@@ -94,6 +130,10 @@ function at (path) {
 	return branch;
 }
 
+function onUsable (options, usable) {
+	return this.on(options, handler);
+}
+
 function onMethod (method, handler) {
 	return this.on({
 		method: method
@@ -110,12 +150,6 @@ function on (options, handler) {
 	}
 
 	return leaf;
-}
-
-function catch_ (handler) {
-	this.node.catches.push(handler);
-
-	return this;
 }
 
 function growBranch (node) {

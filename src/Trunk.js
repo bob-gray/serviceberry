@@ -28,7 +28,11 @@ Trunk = createClass(
 Trunk.method(
 	meta({
 		"name": "start",
-		"arguments": []
+		"arguments": [{
+			"name": "callback",
+			"type": "function",
+			"required": false
+		}]
 	}),
 	start
 );
@@ -39,13 +43,14 @@ function init (options) {
 	this.node = new TrunkNode();
 }
 
-function start () {
+function start (callback) {
 	this.server.on("request", this.proxy(respond));
 
 	this.server.listen(
 		this.options.port,
-		this.options.hostname,
-		this.options.backlog
+		this.options.host,
+		this.options.backlog,
+		callback
 	);
 }
 
@@ -66,8 +71,8 @@ function respond (incomingMessage, serverResponse) {
 		response.notAllowed();
 	} else if (request.unsupported) {
 		response.unsupported();
-	} else if (request.unacceptable) {
-		response.unacceptable();
+	} else if (request.notAcceptable) {
+		response.notAcceptable();
 	} else {
 		request.proceed();
 	}

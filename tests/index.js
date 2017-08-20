@@ -53,11 +53,11 @@ service.start();
 
 function serverError (error, request, response) {
 	response.writeHead(500);
-	response.end(error.message);
+	response.send(error.message);
 }
 
 function getWidgets (request, response) {
-	response.end("Hello Widgets!");
+	response.send("Hello Widgets!");
 }
 
 function getWidget (request, response) {
@@ -66,7 +66,7 @@ function getWidget (request, response) {
 		"Content-Type": "text/plain;utf-8",
 		"Content-Length": content.length
 	});
-	response.end(content);
+	response.send(content);
 }
 
 function createWidget (request, response) {
@@ -80,5 +80,5 @@ function createWidget (request, response) {
 		"Content-Length": data.length
 	});
 
-	response.end(data);
+	response.send(data);
 }

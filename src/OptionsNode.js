@@ -43,7 +43,7 @@ function respond (allow, request, response) {
 	response.writeHead(204, {
 		Allow: allow
 	});
-	response.end();
+	response.send();
 }
 
 module.exports = OptionsLeafNode;

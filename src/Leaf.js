@@ -28,7 +28,7 @@ Leaf.method(
 	meta({
 		"name": "use",
 		"arguments": [{
-			"name": "middleware",
+			"name": "handler",
 			"type": "function"
 		}],
 		"returns": {
@@ -43,7 +43,7 @@ Leaf.method(
 	meta({
 		"name": "use",
 		"arguments": [{
-			"name": "middleman",
+			"name": "useable",
 			"type": "object"
 		}],
 		"returns": {
@@ -51,7 +51,7 @@ Leaf.method(
 			"type": "object"
 		}
 	}),
-	useObject
+	useUsable
 );
 
 Leaf.method(
@@ -69,26 +69,43 @@ Leaf.method(
 	catch_
 );
 
+Leaf.method(
+	meta({
+		"name": "catch",
+		"arguments": [{
+			"name": "usable",
+			"type": "object"
+		}],
+		"returns": {
+			"name": "leaf",
+			"type": "object"
+		}
+	}),
+	catchUsable
+);
+
 function init (options) {
 	this.node = new LeafNode(options);
 }
 
-function use (middleware) {
-	this.node.handlers.push(middleware);
+function use (handler) {
+	this.node.handlers.push(handler);
 
 	return this;
 }
 
-function useObject (middleman) {
-	this.node.handlers.push(middleman.use.bind(middleman));
-
-	return this;
+function useUsable (usable) {
+	return this.use(usable.use.bind(usable));
 }
 
 function catch_ (handler) {
 	this.node.catches.push(handler);
 
 	return this;
+}
+
+function catchUsable (usable) {
+	return this.catch(usable.use.bind(usable));
 }
 
 module.exports = Leaf;

@@ -83,7 +83,7 @@ function chooseLeaf (request) {
 		allowed.push(this.invoke(createOptionsLeafNode));
 	} else if (!allowed.length && request.getMethod() === "HEAD") {
 		allowed = this.leaves.filter(leaf => leaf.options.method === "GET");
-		request.response.end = request.response.end.constrict();
+		request.response.send = request.response.send.constrict();
 	}
 
 	supported = allowed.filter(leaf => leaf.isSupported(request));
@@ -91,13 +91,13 @@ function chooseLeaf (request) {
 
 	request.notAllowed = !allowed.length;
 	request.unsupported = !supported.length;
-	request.unacceptable = !acceptable.length;
+	request.notAcceptable = !acceptable.length;
 
 	return acceptable.first();
 }
 
 function createOptionsLeafNode () {
-	var OptionsLeafNode = require("./OptionsLeafNode");
+	var OptionsNode = require("./OptionsNode");
 
 	return new OptionsLeafNode(this.leaves.map(leaf => leaf.options.method));
 }

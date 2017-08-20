@@ -41,7 +41,7 @@ Response.method(
 
 Response.method(
 	meta({
-		"name": "end",
+		"name": "send",
 		"arguments": [{
 			"name": "data",
 			"type": "string",
@@ -56,7 +56,7 @@ Response.method(
 			"required": false
 		}]
 	}),
-	end
+	send
 );
 
 Response.method(
@@ -85,10 +85,10 @@ Response.method(
 
 Response.method(
 	meta({
-		"name": "unacceptable",
+		"name": "notAcceptable",
 		"arguments": []
 	}),
-	unacceptable
+	notAcceptable
 );
 
 Response.method(
@@ -97,6 +97,14 @@ Response.method(
 		"arguments": []
 	}),
 	unauthorized
+);
+
+Response.method(
+	meta({
+		"name": "forbidden",
+		"arguments": []
+	}),
+	forbidden
 );
 
 function init (serverResponse) {
@@ -109,7 +117,7 @@ function writeHead () {
 	return response.writeHead.apply(response, arguments);
 }
 
-function end () {
+function send () {
 	var response = this.serverResponse;
 
 	return response.end.apply(response, arguments);
@@ -127,12 +135,16 @@ function unsupported () {
 	return this.invoke(respond, 415);
 }
 
-function unacceptable () {
+function notAcceptable () {
 	return this.invoke(respond, 406);
 }
 
 function unauthorized () {
 	return this.invoke(respond, 401);
+}
+
+function forbidden () {
+	return this.invoke(respond, 403);
 }
 
 function respond (statusCode) {

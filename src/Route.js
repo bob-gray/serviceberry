@@ -10,7 +10,7 @@ Route = createClass(
 	meta({
 		"name": "Route",
 		"type": "class",
-		"description": "",
+		"description": "A queue of handler functions",
 		"arguments": []
 	}),
 	init
@@ -80,15 +80,6 @@ Route.method(
 
 Route.method(
 	{
-		"name": "nextErrorHandler",
-		"arguments": [],
-		"returns": "function"
-	},
-	nextErrorHandler
-);
-
-Route.method(
-	{
 		"name": "next",
 		"arguments": [],
 		"returns": "function|object"
@@ -98,6 +89,7 @@ Route.method(
 
 function init () {
 	this.queue = [];
+	this.catches = [];
 }
 
 function add (handlers) {
@@ -129,6 +121,7 @@ function nextHandler () {
 	var next = this.next();
 
 	if (next.errorHandler) {
+		this.catches.push(next.errorHandler);
 		next = this.nextHandler();
 	}
 
@@ -136,21 +129,15 @@ function nextHandler () {
 }
 
 function fail (error, context, args) {
-	var handler = this.nextErrorHandler();
+	var handler = this.catches.pop();
 
 	args.unshift(error);
 
-	handler.apply(context, args);
-}
-
-function nextErrorHandler () {
-	var next = this.next();
-
-	if (!next.errorHandler) {
-		next = this.nextErrorHandler();
+	if (handler) {
+		handler.apply(context, args);
+	} else {
+		throw error;
 	}
-
-	return next.errorHandler;
 }
 
 function next () {

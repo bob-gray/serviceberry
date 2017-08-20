@@ -2,7 +2,7 @@
   "name": "serviceberry",
   "version": "0.0.1",
   "description": "Simple HTTP service framework",
-  "main": "Trunk.js",
+  "main": "index.js",
   "scripts": {
     "test": "grunt test"
   },

@@ -1,10 +1,9 @@
 "use strict";
 
-require("solv/src/array/last");
-
 var Route,
 	createClass = require("solv/src/class"),
-	meta = require("solv/src/meta");
+	meta = require("solv/src/meta"),
+	HttpError = require("./HttpError");
 
 Route = createClass(
 	meta({
@@ -42,11 +41,11 @@ Route.method(
 	meta({
 		"name": "proceed",
 		"arguments": [{
-			"name": "context",
+			"name": "request",
 			"type": "object"
 		}, {
-			"name": "args",
-			"type": "array"
+			"name": "response",
+			"type": "object"
 		}]
 	}),
 	proceed
@@ -56,7 +55,7 @@ Route.method(
 	{
 		"name": "nextHandler",
 		"arguments": [],
-		"returns": "function"
+		"returns": "function|undefined"
 	},
 	nextHandler
 );
@@ -66,13 +65,13 @@ Route.method(
 		"name": "fail",
 		"arguments": [{
 			"name": "error",
+			"type": "any"
+		}, {
+			"name": "request",
 			"type": "object"
 		}, {
-			"name": "context",
+			"name": "response",
 			"type": "object"
-		}, {
-			"name": "args",
-			"type": "array"
 		}]
 	},
 	fail
@@ -82,12 +81,13 @@ Route.method(
 	{
 		"name": "next",
 		"arguments": [],
-		"returns": "function|object"
+		"returns": "function|object|undefined"
 	},
 	next
 );
 
-function init () {
+function init (trunk) {
+	this.trunk = trunk;
 	this.queue = [];
 	this.catches = [];
 }
@@ -100,14 +100,21 @@ function catch_ (handlers) {
 	this.queue = this.queue.concat(handlers.map(toErrorHandlers));
 }
 
-function proceed (context, args) {
+function proceed (request, response) {
 	var handler = this.nextHandler();
 
 	try {
-		handler.apply(context, args);
-
+		if (handler) {
+			handler.call(this.trunk, request, response);
+		} else {
+			throw new Error("Route.proceed() called when handler queue was empty");
+		}
 	} catch (error) {
-		this.fail(error, context, args);
+		if (error instanceof HttpError) {
+			this.fail(error, request, response);
+		} else {
+			this.fail(new HttpError(error), request, response);
+		}
 	}
 }
 
@@ -128,15 +135,19 @@ function nextHandler () {
 	return next;
 }
 
-function fail (error, context, args) {
+function fail (error, request, response) {
 	var handler = this.catches.pop();
 
-	args.unshift(error);
+	request.error = error;
 
 	if (handler) {
-		handler.apply(context, args);
+		handler.call(this.trunk, request, response);
 	} else {
-		throw error;
+		response.send({
+			status: error.getStatus(),
+			headers: error.getHeaders(),
+			body: error.getMessage()
+		});
 	}
 }
 

@@ -69,6 +69,9 @@ LeafNode.method(
 		"arguments": [{
 			"name": "request",
 			"type": "object"
+		}, {
+			"name": "response",
+			"type": "object"
 		}]
 	}),
 	Function.prototype
@@ -81,13 +84,22 @@ LeafNode.method(
 		"arguments": [{
 			"name": "request",
 			"type": "object"
+		}, {
+			"name": "response",
+			"type": "object"
 		}]
 	}),
 	Function.prototype
 );
 
 function isAllowed (request) {
-	return request.getMethod() === this.options.method;
+	var allowed = true;
+
+	if (this.options.method) {
+		allowed = request.getMethod() === this.options.method;
+	}
+
+	return allowed;
 }
 
 function isSupported (request) {

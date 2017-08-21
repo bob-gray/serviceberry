@@ -2,13 +2,15 @@
 
 require("solv/src/abstract/base");
 require("solv/src/array/first");
+require("solv/src/array/add");
+require("solv/src/array/contains");
 require("solv/src/function/constrict");
 
-var TrunkNode,
-	createClass = require("solv/src/class"),
-	meta = require("solv/src/meta");
+const createClass = require("solv/src/class");
+const meta = require("solv/src/meta");
+const statusCodes = require("./statusCodes");
 
-TrunkNode = createClass(
+const TrunkNode = createClass(
 	meta({
 		"name": "TrunkNode",
 		"type": "class",
@@ -28,6 +30,9 @@ TrunkNode.method(
 		"arguments": [{
 			"name": "request",
 			"type": "object"
+		}, {
+			"name": "response",
+			"type": "object"
 		}],
 		"returns": "object|undefined"
 	}),
@@ -39,6 +44,9 @@ TrunkNode.method(
 		"name": "transition",
 		"arguments": [{
 			"name": "request",
+			"type": "object"
+		}, {
+			"name": "response",
 			"type": "object"
 		}]
 	}),
@@ -53,13 +61,13 @@ function init (options) {
 	this.catches = [];
 }
 
-function chooseNext (request) {
+function chooseNext (request, response) {
 	var next;
 
-	if (request.notFound) {
-		next = this.invoke(chooseBranch, request);
+	if (request.found) {
+		next = this.invoke(chooseLeaf, request, response);
 	} else {
-		next = this.invoke(chooseLeaf, request);
+		next = this.invoke(chooseBranch, request, response);
 	}
 
 	return next;
@@ -67,39 +75,63 @@ function chooseNext (request) {
 
 function transition (request) {
 	request.remainingPath = request.path;
-	request.notFound = request.remainingPath.length > 0 || !this.leaves.length;
+	request.found = !request.remainingPath.length && this.leaves.length > 0;
 }
 
-function chooseBranch (request) {
-	return this.branches.find(branch => branch.test(request));
+function chooseBranch (request, response) {
+	return this.branches.find(branch => branch.test(request, response));
 }
 
-function chooseLeaf (request) {
-	var allowed = this.leaves.filter(leaf => leaf.isAllowed(request)),
-		supported,
-		acceptable;
+function chooseLeaf (request, response) {
+	var ErrorNode = require("./ErrorNode"),
+		allowed = this.leaves.filter(leaf => leaf.isAllowed(request)),
+		supported = allowed.filter(leaf => leaf.isSupported(request)),
+		acceptable = supported.filter(leaf => leaf.isAcceptable(request)),
+		leaf;
 
 	if (!allowed.length && request.getMethod() === "OPTIONS") {
-		allowed.push(this.invoke(createOptionsLeafNode));
+		this.invoke(autoOptions, allowed);
 	} else if (!allowed.length && request.getMethod() === "HEAD") {
 		allowed = this.leaves.filter(leaf => leaf.options.method === "GET");
-		request.response.send = request.response.send.constrict();
+		response.getData = Function.prototype;
 	}
 
-	supported = allowed.filter(leaf => leaf.isSupported(request));
-	acceptable = supported.filter(leaf => leaf.isAcceptable(request));
+	if (!allowed.length) {
+		leaf = new ErrorNode(statusCodes.METHOD_NOT_ALLOWED, request, {
+			Allow: this.invoke(getAllow)
+		});
+	} else if (!supported.length) {
+		leaf = new ErrorNode(statusCodes.UNSUPPORTED_MEDIA_TYPE, request);
+	} else if (!acceptable.length) {
+		leaf = new ErrorNode(statusCodes.NOT_ACCEPTABLE, request);
+	} else {
+		leaf = acceptable.first();
+	}
 
-	request.notAllowed = !allowed.length;
-	request.unsupported = !supported.length;
-	request.notAcceptable = !acceptable.length;
-
-	return acceptable.first();
+	return leaf;
 }
 
-function createOptionsLeafNode () {
-	var OptionsNode = require("./OptionsNode");
+function getAllow () {
+	var allow = this.leaves.map(leaf => leaf.options.method).filter(method => method);
 
-	return new OptionsLeafNode(this.leaves.map(leaf => leaf.options.method));
+	allow.add("OPTIONS");
+
+	if (allow.contains("GET")) {
+		allow.add("HEAD");
+	}
+
+	allow.sort();
+
+	return allow.join();
+}
+
+function autoOptions (allowed) {
+	var OptionsNode = require("./OptionsNode"),
+		allow = this.invoke(getAllow);
+
+	if (allow) {
+		allowed.push(new OptionsNode(methods));
+	}
 }
 
 module.exports = TrunkNode;

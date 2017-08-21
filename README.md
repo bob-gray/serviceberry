@@ -7,7 +7,7 @@ Simple HTTP service framework for Node.js
       - returns new trunk
 
 ``` javascript
-const serviceberry = require("service-berry");
+const serviceberry = require("serviceberry");
 const service = serviceberry.createTrunk({
     port: 3000
 });
@@ -28,17 +28,40 @@ service.start();
 
 Routing
 -------
-Handler queues are cummulative. Each new branch builds onto the queue. If a request method,
-path, content type and accepted response type match the service implementation, all
-queued middleware and handlers will be executed in sequence. If an error occurs while
-executing the queue it will be caught and fallback to the nearest catch.
+Using the Serviceberry API builds a service tree. Starting with a trunk - branches and leaves
+are added. Middleware can be injected at stage. Each incoming request walks the tree to create
+a queue of handlers. All handlers (middleware, catches and endpoint implementations) have the
+same signature `(request, response)` and each handler has equal opportunity to control the
+request and response. 
 
-Each handler is executed asynchronously in the queue must call `request.proceed()` or `response.send()` 
+Handler queues are cummulative. Each new branch builds onto the queue. If a request method,
+path, content type and accepted response type match the service tree, all queued handlers
+will be executed in sequence. If an error occurs while executing the queue it will be caught
+and fallback to the nearest catch. The thrown error will be available in the catch hander
+as `request.error`.
+
+Each handler in the queue must call `request.proceed()` to invoke the next handler
+or `response.send()` to end the response.
 
 Auto Error Statuses
 -------------------
-Serviceberry can respond automatically with 404 Not Found, 405 Method Not Allowed,
-406 Not Acceptable and 415 Unsupported Media Type.
+Serviceberry will respond automatically to certain client errors in the following situations.
+
+  - 404 Not Found
+
+    When no route is found.
+
+  - 405 Method Not Allowed
+
+    When an implementation of the request method does not exist.
+
+  - 415 Unsupported Media Type
+
+    When an implementation consuming the request content type does not exist.
+
+  - 406 Not Acceptable
+
+    When an implementation producing an acceptable content type does not exist.
 
 Auto Methods
 ------------
@@ -59,22 +82,32 @@ To override these auto responses implement your own
     executed.
 
 
+Interfaces
+==========
+
+usable `<object>|<function>`
+------
+Any object with a property named "use" whose value is a handler function
+or a handler function. The handler signature is `(request, response)`.
+Usable objects will be invoked with the object as the calling context (`this`).
+
+
 Classes
 =======
 
 Trunk(options)
 --------------
   - options
-      - port <number>
-      - host <string>
-      - backlog <number>
+        port <number>
+        host <string>
+        backlog <number>
 
   - #start(callback)
 
-  - #use(middleware)
+  - #use(usable)
       - returns this trunk
 
-  - #catch(middleware)
+  - #catch(usable)
       - returns this trunk
 
   - #at(path)
@@ -82,38 +115,35 @@ Trunk(options)
 
 Branch(node)
 ------------
-  - #use(middleware)
+  - #use(usable)
       - returns this branch
 
-  - #catch(middleware)
+  - #catch(usable)
       - returns this branch
 
   - #at(path)
       - returns new branch
 
-  - #on(method, middleware?)
+  - #on(method[, usable])
       - returns new leaf
 
-  - #on(options, middleware?)
+  - #on(options[, usable])
       - options
-          - method <string>
-          - consumes <string>
-          - produces <string>
+            method <string>
+            consumes <string>
+            produces <string>
       - returns new leaf
 
 Leaf(node)
 ----------
-  - #use(middleware)
+  - #use(usable)
       - returns this leaf
 
-  - #catch(middleware)
+  - #catch(usable)
       - returns this leaf
 
 Request(incomingMessage)
 ------------------------
-Always async - middleware and handlers must call `request.proceed()` for the
-request to continue
-
   - #getMethod()
       - returns string
 
@@ -156,15 +186,3 @@ Response(serverResponse)
   - #unacceptable()
   - #unauthorized()
   - #forbidden()
-
-
-Interfaces
-==========
-
-middleware
-----------
-Any "usable" object or a handler function. A usable object is an object with
-a property name "use" that is a handler function.
-
-  - usable: {use: handler}
-  - handler: function (request, response)

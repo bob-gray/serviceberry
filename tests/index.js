@@ -51,34 +51,41 @@ widget.on(
 
 service.start();
 
-function serverError (error, request, response) {
-	response.writeHead(500);
-	response.send(error.message);
+function serverError (request, response) {
+	console.log(request.error.getMessage());
+	throw request.error;
 }
 
 function getWidgets (request, response) {
-	response.send("Hello Widgets!");
+	response.send({
+		body: "Hello Widgets!"
+	});
 }
 
 function getWidget (request, response) {
 	var content = "Hello Widget (id: " + request.getPathParam("id") + ")";
-	response.writeHead(200, {
-		"Content-Type": "text/plain;utf-8",
-		"Content-Length": content.length
-	});
-	response.send(content);
+
+	response.send({
+		headers: {
+			"Content-Type": "text/plain;utf-8",
+			"Content-Length": content.length
+		},
+		body: content
+	})
 }
 
 function createWidget (request, response) {
 	var widget = {
 			name: "baz"
+		}; //,
+		//content = JSON.stringify(widget);
+
+	response.send({
+		status: 201,
+		headers: {
+			"Content-Type": "application/json;utf-8",
+			"Content-Length": content.length
 		},
-		data = JSON.stringify(widget);
-
-	response.writeHead(201, {
-		"Content-Type": "application/json;utf-8",
-		"Content-Length": data.length
+		body: content
 	});
-
-	response.send(data);
 }

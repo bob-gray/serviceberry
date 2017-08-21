@@ -131,6 +131,24 @@ Request.method(
 
 Request.method(
 	meta({
+		"name": "getContentType",
+		"arguments": [],
+		"returns": "string|undefined"
+	}),
+	getContentType
+);
+
+Request.method(
+	meta({
+		"name": "getAccept",
+		"arguments": [],
+		"returns": "string|undefined"
+	}),
+	getAccept
+);
+
+Request.method(
+	meta({
 		"name": "proceed",
 		"arguments": []
 	}),
@@ -185,8 +203,16 @@ function getHeaders () {
 	return this.incomingMessage.headers;
 }
 
+function getContentType () {
+	return this.getHeader("content-type");
+}
+
+function getAccept () {
+	return this.getHeader("accept");
+}
+
 function proceed () {
-	this.route.proceed(this.service, [this, this.response]);
+	this.route.proceed(this, this.response);
 }
 
 module.exports = Request;

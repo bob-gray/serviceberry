@@ -1,16 +1,25 @@
 "use strict";
 
 require("solv/src/abstract/base");
+require("solv/src/abstract/emitter");
 
-var Response,
-	createClass = require("solv/src/class"),
-	meta = require("solv/src/meta");
+const createClass = require("solv/src/class");
+const meta = require("solv/src/meta");
+const statusCodes = require("./statusCodes");
 
-Response = createClass(
+meta.define("./StatusAccessor", require("./StatusAccessor"));
+meta.define("./HeadersAccessor", require("./HeadersAccessor"));
+
+const Response = createClass(
 	meta({
 		"name": "Response",
 		"type": "class",
 		"extends": "solv/src/abstract/base",
+		"mixins": [
+			"solv/src/abstract/emitter",
+			"./StatusAccessor",
+			"./HeadersAccessor"
+		],
 		"description": "HTTP response object",
 		"arguments": [{
 			"name": "serverResponse",
@@ -22,38 +31,11 @@ Response = createClass(
 
 Response.method(
 	meta({
-		"name": "writeHead",
-		"arguments": [{
-			"name": "statusCode",
-			"type": "number"
-		}, {
-			"name": "statusMessage",
-			"type": "string",
-			"required": false
-		}, {
-			"name": "headers",
-			"type": "object",
-			"required": false
-		}]
-	}),
-	writeHead
-);
-
-Response.method(
-	meta({
 		"name": "send",
 		"arguments": [{
-			"name": "data",
-			"type": "string",
-			"required": false
-		}, {
-			"name": "encoding",
-			"type": "string",
-			"required": false
-		}, {
-			"name": "callback",
-			"type": "function",
-			"required": false
+			"name": "options",
+			"type": "object",
+			"default": {}
 		}]
 	}),
 	send
@@ -107,44 +89,147 @@ Response.method(
 	forbidden
 );
 
+Response.method(
+	meta({
+		"name": "getBody",
+		"arguments": []
+	}),
+	getBody
+);
+
+Response.method(
+	meta({
+		"name": "setBody",
+		"arguments": [{
+			"name": "body",
+			"type": "any"
+		}]
+	}),
+	setBody
+);
+
+Response.method(
+	meta({
+		"name": "getEncoding",
+		"arguments": []
+	}),
+	getEncoding
+);
+
+Response.method(
+	meta({
+		"name": "setEncoding",
+		"arguments": [{
+			"name": "encoding",
+			"type": "string"
+		}]
+	}),
+	setEncoding
+);
+
+Response.method(
+	meta({
+		"name": "getData",
+		"arguments": [],
+		"returns": "string|buffer|undefined"
+	}),
+	getData
+);
+
+Response.method(
+	meta({
+		"name": "set",
+		"arguments": [{
+			"name": "properties",
+			"type": "object"
+		}]
+	}),
+	set
+);
+
 function init (serverResponse) {
 	this.serverResponse = serverResponse;
+	this.status = {};
+	this.headers = {};
+	this.setStatus(statusCodes.OK);
+	serverResponse.on("finish", this.proxy("trigger", "finish"));
 }
 
-function writeHead () {
-	var response = this.serverResponse;
-
-	return response.writeHead.apply(response, arguments);
+function getBody () {
+	return this.body;
 }
 
-function send () {
-	var response = this.serverResponse;
+function setBody (body) {
+	this.body = body;
+}
 
-	return response.end.apply(response, arguments);
+function getEncoding () {
+	return this.encoding;
+}
+
+function setEncoding (encoding) {
+	this.encoding = encoding;
+}
+
+function getData () {
+	// TODO: return serialized body
+	return this.body;
+}
+
+function set (options) {
+	if (options.status) {
+		this.setStatus(options.status);
+	}
+
+	if (options.headers) {
+		this.setHeaders(options.headers);
+	}
+
+	if (options.encoding) {
+		this.setEncoding(options.encoding);
+	}
+
+	if (options.body) {
+		this.setBody(options.body);
+	}
+
+	if (options.finished) {
+		this.on("finished", options.finished);
+	}
+}
+
+function send (options) {
+	var serverResponse = this.serverResponse,
+		status = this.status;
+
+	this.set(options);
+
+	serverResponse.writeHead(status.code, status.text, this.headers);
+	serverResponse.end(this.getData(), this.encoding);
 }
 
 function notFound () {
-	return this.invoke(respond, 404);
+	return this.invoke(respond, statusCodes.NOT_FOUND);
 }
 
 function notAllowed () {
-	return this.invoke(respond, 405);
+	return this.invoke(respond, statusCodes.METHOD_NOT_ALLOWED);
 }
 
 function unsupported () {
-	return this.invoke(respond, 415);
+	return this.invoke(respond, statusCodes.UNSUPPORTED_MEDIA_TYPE);
 }
 
 function notAcceptable () {
-	return this.invoke(respond, 406);
+	return this.invoke(respond, statusCodes.NOT_ACCEPTABLE);
 }
 
 function unauthorized () {
-	return this.invoke(respond, 401);
+	return this.invoke(respond, statusCodes.UNAUTHORIZED);
 }
 
 function forbidden () {
-	return this.invoke(respond, 403);
+	return this.invoke(respond, statusCodes.FORBIDDEN);
 }
 
 function respond (statusCode) {

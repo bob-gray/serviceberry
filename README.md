@@ -183,11 +183,11 @@ Response(serverResponse)
 ------------------------
   - #send([options])
 
-      status <number>|<object>
+        status <number>|<object>
           code <number>
           text <string>
-      headers <object>
-      body <any>
+        headers <object>
+        body <any>
 
   - #getStatus()
       - returns status object
@@ -197,7 +197,7 @@ Response(serverResponse)
 
   - #setStatus(status)
 
-      status <number>|<object>
+        status <number>|<object>
           code <number>
           text <string>
 
@@ -224,4 +224,5 @@ Response(serverResponse)
       - returns string
 
   - #setEncoding(encoding)
-      encoding <string>
+ 
+        encoding <string>

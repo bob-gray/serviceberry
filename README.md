@@ -98,6 +98,7 @@ Classes
 Trunk(options)
 --------------
   - options
+
         port <number>
         host <string>
         backlog <number>
@@ -129,9 +130,11 @@ Branch(node)
 
   - #on(options[, usable])
       - options
+
             method <string>
             consumes <string>
             produces <string>
+
       - returns new leaf
 
 Leaf(node)
@@ -179,6 +182,7 @@ Request(incomingMessage)
 Response(serverResponse)
 ------------------------
   - #send([options])
+
       status <number>|<object>
           code <number>
           text <string>
@@ -187,10 +191,12 @@ Response(serverResponse)
 
   - #getStatus()
       - returns status object
+
           code <number>
           text <string>
 
   - #setStatus(status)
+
       status <number>|<object>
           code <number>
           text <string>

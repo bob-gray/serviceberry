@@ -178,11 +178,44 @@ Request(incomingMessage)
 
 Response(serverResponse)
 ------------------------
-  - #writeHead(statusCode, statusMessage?, headers?)
-  - #send(data?, encoding?, callback?)
-  - #notFound()
-  - #notAllow()
-  - #unsupported()
-  - #unacceptable()
-  - #unauthorized()
-  - #forbidden()
+  - #send([options])
+      status <number>|<object>
+          code <number>
+          text <string>
+      headers <object>
+      body <any>
+
+  - #getStatus()
+      - returns status object
+          code <number>
+          text <string>
+
+  - #setStatus(status)
+      status <number>|<object>
+          code <number>
+          text <string>
+
+  - #setStatusCode(code)
+
+  - #setStatusText(text)
+
+  - #getHeaders()
+      - returns object
+
+  - #getHeader(name)
+      - return string or array
+
+  - #setHeaders(headers)
+
+  - #setHeader(name, value)
+
+  - #getBody()
+
+  - #setBody(body)
+      body <any>
+
+  - #getEncoding()
+      - returns string
+
+  - #setEncoding(encoding)
+      encoding <string>

@@ -86,13 +86,14 @@ function chooseLeaf (request, response) {
 	var ErrorNode = require("./ErrorNode"),
 		allowed = this.leaves.filter(leaf => leaf.isAllowed(request)),
 		supported = allowed.filter(leaf => leaf.isSupported(request)),
-		acceptable = supported.filter(leaf => leaf.isAcceptable(request)),
+		acceptable = supported.filter(leaf => leaf.isAcceptable(request, response)),
 		leaf;
 
 	if (!allowed.length && request.getMethod() === "OPTIONS") {
 		this.invoke(autoOptions, allowed);
 	} else if (!allowed.length && request.getMethod() === "HEAD") {
 		allowed = this.leaves.filter(leaf => leaf.options.method === "GET");
+		// TODO: handle this differently if content-length is going to be automatic
 		response.getData = Function.prototype;
 	}
 

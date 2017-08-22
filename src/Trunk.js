@@ -45,6 +45,7 @@ function init (options) {
 
 function start (callback) {
 	this.server.on("request", this.proxy(respond));
+	// TODO: maybe listen and trigger request event here on trunk for easy general purpose service level logging
 
 	this.server.listen(
 		this.options.port,
@@ -64,6 +65,7 @@ function respond (incomingMessage, serverResponse) {
 
 	this.invoke(plotRoute, request, response, this.node);
 
+	// TODO: need to test length here before calling proceed or add NotFoundNodes to the route so 404 still results in route queue length and handler being invoked
 	request.proceed();
 }
 

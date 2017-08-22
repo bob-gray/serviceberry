@@ -147,6 +147,11 @@ Response.method(
 	set
 );
 
+// TODO: set status to 204 if 200 and no content
+// TODO: enable auto serializers before send based on content-type header
+// TODO: set content-length on send if body has length and content-length not set
+// TODO: handle timeout and throw timeout error
+
 function init (serverResponse) {
 	this.serverResponse = serverResponse;
 	this.status = {};

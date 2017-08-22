@@ -117,14 +117,18 @@ function isSupported (request) {
 	return supported;
 }
 
-function isAcceptable (request) {
-	var acceptable = true;
+function isAcceptable (request, response) {
+	var acceptable;
 
 	if (this.options.produces) {
-		acceptable = accepts(request.incomingMessage).type(this.options.produces) !== false;
+		acceptable = accepts(request.incomingMessage).type(this.options.produces);
 	}
 
-	return acceptable;
+	if (acceptable && !response.getHeader("Content-Type")) {
+		response.setHeader("Content-Type", acceptable);
+	}
+
+	return acceptable !== false;
 }
 
 function getRequestType (request) {

@@ -2,13 +2,18 @@
 
 require("solv/src/abstract/base");
 require("solv/src/abstract/emitter");
+require("solv/src/object/merge");
 
 const createClass = require("solv/src/class");
 const meta = require("solv/src/meta");
 const statusCodes = require("./statusCodes");
+const StatusAccessor = require("./StatusAccessor");
+const HeadersAccessor = require("./HeadersAccessor");
+const contentType = require("content-type");
+const jsonSerializer = require("./jsonSerializer");
 
-meta.define("./StatusAccessor", require("./StatusAccessor"));
-meta.define("./HeadersAccessor", require("./HeadersAccessor"));
+meta.define("./StatusAccessor", StatusAccessor);
+meta.define("./HeadersAccessor", HeadersAccessor);
 
 const Response = createClass(
 	meta({
@@ -43,50 +48,57 @@ Response.method(
 
 Response.method(
 	meta({
-		"name": "notFound",
-		"arguments": []
+		"name": "setSerializer",
+		"arguments": [{
+			"name": "contentType",
+			"type": "string"
+		}, {
+			"name": "serializer",
+			"type": "function"
+		}]
 	}),
-	notFound
+	setSerializer
 );
 
 Response.method(
 	meta({
-		"name": "notAllowed",
-		"arguments": []
+		"name": "setSerializers",
+		"arguments": [{
+			"name": "serializers",
+			"type": "object",
+			"default": {}
+		}]
 	}),
-	notAllowed
+	setSerializers
 );
 
 Response.method(
 	meta({
-		"name": "unsupported",
-		"arguments": []
+		"name": "serialize",
+		"arguments": [],
+		"returns": "any"
 	}),
-	unsupported
+	serialize
 );
 
 Response.method(
 	meta({
-		"name": "notAcceptable",
+		"name": "getContentType",
 		"arguments": []
 	}),
-	notAcceptable
+	getContentType
 );
 
 Response.method(
 	meta({
-		"name": "unauthorized",
-		"arguments": []
+		"name": "getContent",
+		"arguments": [],
+		"returns": {
+			"name": "buffer",
+			"type": "any"
+		}
 	}),
-	unauthorized
-);
-
-Response.method(
-	meta({
-		"name": "forbidden",
-		"arguments": []
-	}),
-	forbidden
+	getContent
 );
 
 Response.method(
@@ -129,15 +141,6 @@ Response.method(
 
 Response.method(
 	meta({
-		"name": "getData",
-		"arguments": [],
-		"returns": "string|buffer|undefined"
-	}),
-	getData
-);
-
-Response.method(
-	meta({
 		"name": "set",
 		"arguments": [{
 			"name": "properties",
@@ -147,17 +150,86 @@ Response.method(
 	set
 );
 
-// TODO: set status to 204 if 200 and no content
-// TODO: enable auto serializers before send based on content-type header
-// TODO: set content-length on send if body has length and content-length not set
+// TODO: support thenable async serializers
 // TODO: handle timeout and throw timeout error
 
 function init (serverResponse) {
-	this.serverResponse = serverResponse;
-	this.status = {};
-	this.headers = {};
-	this.setStatus(statusCodes.OK);
+	this.invoke(StatusAccessor.init);
+	this.invoke(HeadersAccessor.init);
+	this.invoke(initSerializers);
+	this.setEncoding("utf8");
+	this.sendBody = true;
 	serverResponse.on("finish", this.proxy("trigger", "finish"));
+	this.serverResponse = serverResponse;
+}
+
+function send (options) {
+	var serverResponse = this.serverResponse,
+		content;
+
+	this.set(options);
+
+	content = this.getContent();
+
+	if (!content.length && this.is("OK")) {
+		this.setStatus(statusCodes.NO_CONTENT);
+	} else if (content.length && this.withoutHeader("Content-Length")) {
+		this.setHeader("Content-Length", content.length);
+	}
+
+	serverResponse.writeHead(this.getStatusCode(), this.getStatusText(), this.getHeaders());
+
+	// TODO: maybe don't send the body on 204 and 304
+	if (content.length && this.sendBody) {
+		serverResponse.write(content, this.getEncoding());
+	}
+
+	serverResponse.end();
+}
+
+function initSerializers () {
+	this.serializers = {};
+	this.setSerializer("application/json", jsonSerializer);
+}
+
+function setSerializer (contentType, serializer) {
+	this.serializers[contentType] = serializer;
+}
+
+function setSerializers (serializers) {
+	Object.merge(this.serializers, serializers);
+}
+
+function serialize () {
+	var type = this.getContentType(),
+		serialized;
+
+	if (type in this.serializers) {
+		serialized = this.serializers[type](this);
+	} else {
+		serialized = this.getBody();
+	}
+
+	return serialized;
+}
+
+function getContentType () {
+	var type;
+
+	// throws if missing header or header is malformed
+	try {
+		type = contentType.parse(this.getHeader("Content-Type")).type;
+	} catch (error) {
+		// ignore
+	}
+
+	return type;
+}
+
+function getContent () {
+	var content = this.serialize() || "";
+	
+	return Buffer.from(content, this.getEncoding());
 }
 
 function getBody () {
@@ -176,9 +248,12 @@ function setEncoding (encoding) {
 	this.encoding = encoding;
 }
 
-function getData () {
-	// TODO: return serialized body
-	return this.body;
+function setSendBody (sendBody) {
+	this.sendBody = sendBody;
+}
+
+function getSendBody () {
+	return this.sendBody;
 }
 
 function set (options) {
@@ -194,53 +269,17 @@ function set (options) {
 		this.setEncoding(options.encoding);
 	}
 
-	if (options.body) {
+	if ("body" in options) {
 		this.setBody(options.body);
 	}
 
-	if (options.finished) {
-		this.on("finished", options.finished);
+	if ("sendBody" in options) {
+		this.setSendBody(options.sendBody);
 	}
-}
 
-function send (options) {
-	var serverResponse = this.serverResponse,
-		status = this.status;
-
-	this.set(options);
-
-	serverResponse.writeHead(status.code, status.text, this.headers);
-	serverResponse.end(this.getData(), this.encoding);
-}
-
-function notFound () {
-	return this.invoke(respond, statusCodes.NOT_FOUND);
-}
-
-function notAllowed () {
-	return this.invoke(respond, statusCodes.METHOD_NOT_ALLOWED);
-}
-
-function unsupported () {
-	return this.invoke(respond, statusCodes.UNSUPPORTED_MEDIA_TYPE);
-}
-
-function notAcceptable () {
-	return this.invoke(respond, statusCodes.NOT_ACCEPTABLE);
-}
-
-function unauthorized () {
-	return this.invoke(respond, statusCodes.UNAUTHORIZED);
-}
-
-function forbidden () {
-	return this.invoke(respond, statusCodes.FORBIDDEN);
-}
-
-function respond (statusCode) {
-	this.serverResponse.writeHead(statusCode);
-
-	return this.serverResponse.end();
+	if (options.finished) {
+		this.on("finish", options.finish);
+	}
 }
 
 module.exports = Response;

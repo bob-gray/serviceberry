@@ -56,6 +56,9 @@ LeafNode.method(
 		"arguments": [{
 			"name": "request",
 			"type": "object"
+		}, {
+			"name": "response",
+			"type": "object"
 		}],
 		"returns": "boolean"
 	}),
@@ -124,7 +127,7 @@ function isAcceptable (request, response) {
 		acceptable = accepts(request.incomingMessage).type(this.options.produces);
 	}
 
-	if (acceptable && !response.getHeader("Content-Type")) {
+	if (acceptable && response.withoutHeader("Content-Type")) {
 		response.setHeader("Content-Type", acceptable);
 	}
 

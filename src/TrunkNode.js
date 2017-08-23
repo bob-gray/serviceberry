@@ -4,6 +4,7 @@ require("solv/src/abstract/base");
 require("solv/src/array/first");
 require("solv/src/array/add");
 require("solv/src/array/contains");
+require("solv/src/array/is-empty");
 require("solv/src/function/constrict");
 
 const createClass = require("solv/src/class");
@@ -61,21 +62,20 @@ function init (options) {
 	this.catches = [];
 }
 
+function transition (request) {
+	request.remainingPath = request.path;
+}
+
 function chooseNext (request, response) {
 	var next;
 
-	if (request.found) {
-		next = this.invoke(chooseLeaf, request, response);
-	} else {
+	if (request.remainingPath.length) {
 		next = this.invoke(chooseBranch, request, response);
+	} else {
+		next = this.invoke(chooseLeaf, request, response);
 	}
 
 	return next;
-}
-
-function transition (request) {
-	request.remainingPath = request.path;
-	request.found = !request.remainingPath.length && this.leaves.length > 0;
 }
 
 function chooseBranch (request, response) {
@@ -89,21 +89,21 @@ function chooseLeaf (request, response) {
 		acceptable = supported.filter(leaf => leaf.isAcceptable(request, response)),
 		leaf;
 
-	if (!allowed.length && request.getMethod() === "OPTIONS") {
-		this.invoke(autoOptions, allowed);
-	} else if (!allowed.length && request.getMethod() === "HEAD") {
+	if (allowed.isEmpty() && request.getMethod() === "HEAD") {
 		allowed = this.leaves.filter(leaf => leaf.options.method === "GET");
-		// TODO: handle this differently if content-length is going to be automatic
-		response.getData = Function.prototype;
 	}
 
-	if (!allowed.length) {
+	if (this.leaves.isEmpty()) {
+		leaf = new ErrorNode(statusCodes.NOT_FOUND, request);
+	} else if (allowed.isEmpty() && request.getMethod() === "OPTIONS") {
+		leaf = this.invoke(autoOptions);		
+	} else if (allowed.isEmpty()) {
 		leaf = new ErrorNode(statusCodes.METHOD_NOT_ALLOWED, request, {
 			Allow: this.invoke(getAllow)
 		});
-	} else if (!supported.length) {
+	} else if (supported.isEmpty()) {
 		leaf = new ErrorNode(statusCodes.UNSUPPORTED_MEDIA_TYPE, request);
-	} else if (!acceptable.length) {
+	} else if (acceptable.isEmpty()) {
 		leaf = new ErrorNode(statusCodes.NOT_ACCEPTABLE, request);
 	} else {
 		leaf = acceptable.first();
@@ -126,13 +126,16 @@ function getAllow () {
 	return allow.join();
 }
 
-function autoOptions (allowed) {
+function autoOptions () {
 	var OptionsNode = require("./OptionsNode"),
-		allow = this.invoke(getAllow);
+		allow = this.invoke(getAllow),
+		options;
 
 	if (allow) {
-		allowed.push(new OptionsNode(methods));
+		options = new OptionsNode(allow);
 	}
+
+	return options;
 }
 
 module.exports = TrunkNode;

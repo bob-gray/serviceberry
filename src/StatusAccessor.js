@@ -2,12 +2,12 @@
 
 require("solv/src/object/copy");
 
-var StatusAccessor,
-	createClass = require("solv/src/class"),
-	meta = require("solv/src/meta"),
-	http = require("http");
+const createClass = require("solv/src/class");
+const meta = require("solv/src/meta");
+const http = require("http");
+const statusCodes = require("./statusCodes");
 
-StatusAccessor = createClass(
+const StatusAccessor = createClass(
 	meta({
 		"name": "StatusAccessor",
 		"type": "class",
@@ -17,11 +17,60 @@ StatusAccessor = createClass(
 
 StatusAccessor.method(
 	meta({
+		"name": "init",
+		"static": true,
+		"arguments": []
+	}),
+	init
+);
+
+StatusAccessor.method(
+	meta({
+		"name": "is",
+		"arguments": [{
+			"name": "text",
+			"type": "string"
+		}]
+	}),
+	isText
+);
+
+StatusAccessor.method(
+	meta({
+		"name": "is",
+		"arguments": [{
+			"name": "code",
+			"type": "number"
+		}]
+	}),
+	isCode
+);
+
+StatusAccessor.method(
+	meta({
 		"name": "getStatus",
 		"arguments": [],
 		"returns": "object"
 	}),
 	getStatus
+);
+
+StatusAccessor.method(
+	meta({
+		"name": "getStatusCode",
+		"arguments": [],
+		"returns": "number"
+	}),
+	getStatusCode
+);
+
+StatusAccessor.method(
+	meta({
+		"name": "getStatusText",
+		"arguments": [],
+		"returns": "string"
+	}),
+	getStatusText
 );
 
 StatusAccessor.method(
@@ -68,8 +117,30 @@ StatusAccessor.method(
 	setStatusText
 );
 
+function init () {
+	this.status = {};
+	this.setStatus(statusCodes.OK);
+}
+
+function isText (text) {
+	return text.toLowerCase() === this.status.text.toLowerCase() ||
+		statusCodes[text.toUpperCase()] === this.status.code;
+}
+
+function isCode (code) {
+	return code === this.status.code;
+}
+
 function getStatus () {
 	return Object.copy(this.status);
+}
+
+function getStatusCode () {
+	return this.status.code;
+}
+
+function getStatusText () {
+	return this.status.text;
 }
 
 function setStatus (status) {

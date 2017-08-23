@@ -102,6 +102,7 @@ Trunk(options)
         port <number>
         host <string>
         backlog <number>
+        serializers <object>
 
   - #start(callback)
 
@@ -192,14 +193,14 @@ Response(serverResponse)
   - #getStatus()
       - returns status object
 
-          code <number>
-          text <string>
+            code <number>
+            text <string>
 
   - #setStatus(status)
 
         status <number>|<object>
-          code <number>
-          text <string>
+            code <number>
+            text <string>
 
   - #setStatusCode(code)
 
@@ -214,6 +215,11 @@ Response(serverResponse)
   - #setHeaders(headers)
 
   - #setHeader(name, value)
+
+  - #getContentType()
+
+  - #getContent()
+      - returns buffer
 
   - #getBody()
 

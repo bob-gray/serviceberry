@@ -63,9 +63,9 @@ function respond (incomingMessage, serverResponse) {
 			route: new Route(this)
 		});
 
+	response.setSerializers(this.options.serializers);
 	this.invoke(plotRoute, request, response, this.node);
 
-	// TODO: need to test length here before calling proceed or add NotFoundNodes to the route so 404 still results in route queue length and handler being invoked
 	request.proceed();
 }
 

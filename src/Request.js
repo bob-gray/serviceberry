@@ -47,6 +47,15 @@ Request.method(
 
 Request.method(
 	meta({
+		"name": "getUrl",
+		"arguments": [],
+		"returns": "string"
+	}),
+	getUrl
+);
+
+Request.method(
+	meta({
 		"name": "getParam",
 		"arguments": [{
 			"name": "name",
@@ -163,6 +172,10 @@ function init () {
 
 function getMethod () {
 	return this.incomingMessage.method;
+}
+
+function getUrl () {
+	return this.incomingMessage.url;
 }
 
 function getParam (name) {

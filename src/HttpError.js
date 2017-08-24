@@ -1,16 +1,15 @@
 "use strict";
 
-require("solv/src/function/curry");
+const createClass = require("solv/src/class");
+const meta = require("solv/src/meta");
+const http = require("http");
+const StatusAccessor = require("./StatusAccessor");
+const HeadersAccessor = require("./HeadersAccessor");
 
-var HttpError,
-	createClass = require("solv/src/class"),
-	meta = require("solv/src/meta"),
-	http = require("http");
+meta.define("./StatusAccessor", StatusAccessor);
+meta.define("./HeadersAccessor", HeadersAccessor);
 
-meta.define("./StatusAccessor", require("./StatusAccessor"));
-meta.define("./HeadersAccessor", require("./HeadersAccessor"));
-
-HttpError = createClass(
+const HttpError = createClass(
 	meta({
 		"name": "HttpError",
 		"type": "class",
@@ -45,24 +44,22 @@ HttpError.method(
 );
 
 function init (error, status, headers) {
-	this.superCall();
-	this.message = error.message || error;
+	var initialized = error instanceof HttpError;
 
-	this.status = {};
-	this.setStatus(status || error.status);
-
-	if (!headers["Content-Type"]) {
-		headers["Content-Type"] = "text/plain";
+	if (initialized) {
+		Object.merge(this, error);
+	} else {
+		this.superCall();
+		this.message = error.message || error;
+		this.invoke(StatusAccessor.init, status|| error.status);
+		this.invoke(HeadersAccessor.init, headers);
 	}
 
-	if (!headers["Content-Length"]) {
-		headers["Content-Length"] = this.getMessage().length;
+	if (!initialized && this.withoutHeader("Content-Type")) {
+		this.setHeader("Content-Type", "text/plain; charset=utf-8");
 	}
 
-	this.headers = {};
-	this.setHeaders(headers);
-
-	if (error instanceof Error) {
+	if (!initialized && error.message) {
 		this.originalError = error;
 	}
 }

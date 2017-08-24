@@ -19,7 +19,11 @@ StatusAccessor.method(
 	meta({
 		"name": "init",
 		"static": true,
-		"arguments": []
+		"arguments": [{
+			"name": "status",
+			"type": "number|object",
+			"required": false
+		}]
 	}),
 	init
 );
@@ -117,9 +121,9 @@ StatusAccessor.method(
 	setStatusText
 );
 
-function init () {
+function init (status) {
 	this.status = {};
-	this.setStatus(statusCodes.OK);
+	this.setStatus(status || statusCodes.OK);
 }
 
 function isText (text) {

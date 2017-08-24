@@ -1,77 +1,113 @@
 "use strict";
 
-var Route,
-	createClass = require("solv/src/class"),
-	meta = require("solv/src/meta"),
-	HttpError = require("./HttpError");
+const createClass = require("solv/src/class");
+const HttpError = require("./HttpError");
 
-Route = createClass(
-	meta({
-		"name": "Route",
-		"type": "class",
-		"description": "A queue of handler functions",
-		"arguments": []
-	}),
+const Route = createClass(
+	{
+		name: "Route",
+		type: "class",
+		extends: require("solv/src/abstract/base"),
+		arguments: [{
+			name: "trunk",
+			type: "object"
+		}]
+	},
 	init
 );
 
 Route.method(
-	meta({
-		"name": "add",
-		"arguments": [{
-			"name": "handlers",
-			"type": "array"
+	{
+		name: "add",
+		arguments: [{
+			name: "handlers",
+			type: "array"
 		}]
-	}),
+	},
 	add
 );
 
 Route.method(
-	meta({
-		"name": "catch",
-		"arguments": [{
-			"name": "handlers",
-			"type": "array"
+	{
+		name: "catch",
+		arguments: [{
+			name: "handlers",
+			type: "array"
 		}]
-	}),
+	},
 	catch_
 );
 
 Route.method(
-	meta({
-		"name": "proceed",
-		"arguments": [{
-			"name": "request",
-			"type": "object"
-		}, {
-			"name": "response",
-			"type": "object"
+	{
+		name: "begin",
+		arguments: [{
+			name: "request",
+			type: "object"
 		}]
-	}),
+	},
+	begin
+);
+
+Route.method(
+	{
+		name: "proceed",
+		arguments: [{
+			name: "request",
+			type: "object"
+		}]
+	},
 	proceed
 );
 
 Route.method(
 	{
-		"name": "nextHandler",
-		"arguments": [],
-		"returns": "function|undefined"
+		name: "isOwner",
+		arguments: [{
+			name: "request",
+			type: "object"
+		}]
 	},
-	nextHandler
+	isOwner
 );
 
 Route.method(
 	{
-		"name": "fail",
-		"arguments": [{
-			"name": "error",
-			"type": "any"
-		}, {
-			"name": "request",
-			"type": "object"
-		}, {
-			"name": "response",
-			"type": "object"
+		name: "setRequest",
+		arguments: [{
+			name: "request",
+			type: "object"
+		}]
+	},
+	setRequest
+);
+
+Route.method(
+	{
+		name: "getNextHandler",
+		arguments: [],
+		returns: "function|undefined"
+	},
+	getNextHandler
+);
+
+Route.method(
+	{
+		name: "callHandler",
+		arguments: [{
+			name: "handler",
+			type: "function"
+		}]
+	},
+	callHandler
+);
+
+Route.method(
+	{
+		name: "fail",
+		arguments: [{
+			name: "error",
+			type: "any"
 		}]
 	},
 	fail
@@ -79,17 +115,17 @@ Route.method(
 
 Route.method(
 	{
-		"name": "next",
-		"arguments": [],
-		"returns": "function|object|undefined"
+		name: "recatch",
+		arguments: []
 	},
-	next
+	recatch
 );
 
 function init (trunk) {
 	this.trunk = trunk;
 	this.queue = [];
 	this.catches = [];
+	this.caught = [];
 }
 
 function add (handlers) {
@@ -100,22 +136,36 @@ function catch_ (handlers) {
 	this.queue = this.queue.concat(handlers.map(toErrorHandlers));
 }
 
-function proceed (request, response) {
-	var handler = this.nextHandler();
+function begin (request) {
+	this.request = request;
+	this.proceed(request);
+}
 
-	try {
-		if (handler) {
-			handler.call(this.trunk, request, response);
-		} else {
-			throw new Error("Route.proceed() called when handler queue was empty");
-		}
-	} catch (error) {
-		if (error instanceof HttpError) {
-			this.fail(error, request, response);
-		} else {
-			this.fail(new HttpError(error), request, response);
-		}
+function proceed (request) {
+	var handler,
+		owner = this.isOwner(request);
+
+	if (owner) {
+		this.recatch();
+		handler = this.getNextHandler();
 	}
+
+	if (handler) {
+		this.setRequest(request.copy());
+		this.callHandler(handler);
+	} else if (owner) {
+		this.fail(new HttpError("proceed() called while handler queue was empty"));
+	} else {
+		request.trigger("warning", "proceed() from outside the current handler");
+	}
+}
+
+function isOwner (request) {
+	return request === this.request;
+}
+
+function setRequest (request) {
+	this.request = request;
 }
 
 function toErrorHandlers (handler) {
@@ -124,26 +174,35 @@ function toErrorHandlers (handler) {
 	};
 }
 
-function nextHandler () {
-	var next = this.next();
+function getNextHandler () {
+	var next = this.queue.shift();
 
 	if (next.errorHandler) {
 		this.catches.push(next.errorHandler);
-		next = this.nextHandler();
+		next = this.getNextHandler();
 	}
 
 	return next;
 }
 
-function fail (error, request, response) {
+function callHandler (handler) {
+	try {
+		handler.call(this.trunk, this.request, this.request.response);
+	} catch (error) {
+		this.fail(new HttpError(error));
+	}
+}
+
+function fail (error) {
 	var handler = this.catches.pop();
 
-	request.error = error;
+	this.caught.unshift(handler);
+	this.request.error = error;
 
 	if (handler) {
-		handler.call(this.trunk, request, response);
+		this.callHandler(handler);
 	} else {
-		response.send({
+		this.request.response.send({
 			status: error.getStatus(),
 			headers: error.getHeaders(),
 			body: error.getMessage()
@@ -151,8 +210,8 @@ function fail (error, request, response) {
 	}
 }
 
-function next () {
-	return this.queue.shift();
+function recatch () {
+	this.catches = this.catches.concat(this.caught);
 }
 
 module.exports = Route;

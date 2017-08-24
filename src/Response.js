@@ -1,7 +1,6 @@
 "use strict";
 
 require("solv/src/abstract/base");
-require("solv/src/abstract/emitter");
 require("solv/src/object/merge");
 
 const createClass = require("solv/src/class");

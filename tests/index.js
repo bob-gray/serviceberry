@@ -1,5 +1,7 @@
 "use strict";
 
+require("solv/src/function/curry");
+
 var serviceberry = require("../src/"),
 	meta = require("solv/src/meta"),
 	service = serviceberry.createTrunk({
@@ -9,15 +11,16 @@ var serviceberry = require("../src/"),
 	widget = widgets.at("/{id}"),
 	auth = {
 		use: function (request, response) {
-			var authorization = request.getHeader("authorization");
+			var authorization = request.getHeader("Authorization");
 
 			if (authorization) {
 				request.proceed();
 
 			} else {
-				//response.unauthorized();
-				//console.log("unauthorized");
-				request.proceed();
+				throw new serviceberry.HttpError("Please log in", 401, {
+					Authorization: "Bearer"
+				});
+				//request.proceed();
 			}
 		}	
 	};
@@ -49,7 +52,7 @@ widget.on(
 	getWidget
 );
 
-service.start();
+service.start(console.log.curry("Service started!"));
 
 function serverError (request, response) {
 	console.log(request.error.getMessage());
@@ -76,16 +79,11 @@ function getWidget (request, response) {
 
 function createWidget (request, response) {
 	var widget = {
-			name: "baz"
-		}; //,
-		//content = JSON.stringify(widget);
+		name: "baz"
+	};
 
 	response.send({
 		status: 201,
-		headers: {
-			"Content-Type": "application/json;utf-8",
-			"Content-Length": content.length
-		},
-		body: content
+		body: widget
 	});
 }

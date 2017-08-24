@@ -3,31 +3,26 @@
 require("solv/src/object/merge");
 require("solv/src/object/copy");
 
-var Request,
-	createClass = require("solv/src/class"),
-	meta = require("solv/src/meta"),
-	url = require("url"),
-	querystring = require("querystring");
+const createClass = require("solv/src/class");
+const meta = require("solv/src/meta");
+const url = require("url");
+const querystring = require("querystring");
+const Route = require("./Route");
 
-Request = createClass(
+const Request = createClass(
 	meta({
 		"name": "Request",
 		"type": "class",
+		"mixins": "solv/src/abstract/emitter",
 		"description": "HTTP request object",
 		"arguments": [{
 			"name": "properties",
 			"type": "object",
 			"properties": {
-				"service": {
-					"type": "object"
-				},
 				"incomingMessage": {
 					"type": "object"
 				},
 				"response": {
-					"type": "object"
-				},
-				"route": {
 					"type": "object"
 				}
 			}
@@ -157,17 +152,60 @@ Request.method(
 );
 
 Request.method(
-	meta({
-		"name": "proceed",
-		"arguments": []
-	}),
+	{
+		name: "plotRoute",
+		arguments: [{
+			name: "trunk",
+			type: "object"
+		}]
+	},
+	plotRoute
+);
+
+Request.method(
+	{
+		name: "plot",
+		arguments: [{
+			name: "node",
+			type: "object"
+		}]
+	},
+	plot
+);
+
+Request.method(
+	{
+		name: "begin",
+		arguments: []
+	},
+	begin
+);
+
+Request.method(
+	{
+		name: "proceed",
+		arguments: []
+	},
 	proceed
 );
 
+Request.method(
+	{
+		name: "copy",
+		arguments: [],
+		returns: "object"
+	},
+	copy
+);
+
 function init () {
-	this.url = url.parse(this.incomingMessage.url);
-	this.path = this.url.pathname;
-	this.pathParams = {};
+	if (!this.begun) {
+		this.url = url.parse(this.incomingMessage.url);
+		this.path = this.url.pathname;
+		this.pathParams = {};
+	}
+
+	this.proceed = this.constructor.prototype.proceed.bind(this);
 }
 
 function getMethod () {
@@ -209,7 +247,7 @@ function getQueryParams () {
 function getHeader (name) {
 	var headers = this.getHeaders();
 
-	return headers[name];
+	return headers[name.toLowerCase()];
 }
 
 function getHeaders () {
@@ -224,8 +262,35 @@ function getAccept () {
 	return this.getHeader("accept");
 }
 
+function begin () {
+	this.begun = true;
+	this.route.begin(this);
+}
+
 function proceed () {
-	this.route.proceed(this, this.response);
+	this.route.proceed(this);
+}
+
+function copy () {
+	return new this.constructor(this);
+}
+
+function plotRoute (trunk) {
+	this.route = new Route(trunk);
+	this.plot(trunk.node);
+}
+
+function plot (node) {
+	var next;
+
+	this.route.add(node.handlers);
+	this.route.catch(node.catches);
+	node.transition(this, this.response);
+	next = node.chooseNext(this, this.response);
+
+	if (next) {
+		this.plot(next);
+	}
 }
 
 module.exports = Request;

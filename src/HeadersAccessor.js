@@ -20,9 +20,13 @@ HeadersAccessor.method(
 	meta({
 		"name": "init",
 		"static": true,
-		"arguments": []
+		"arguments": [{
+			"name": "header",
+			"type": "object",
+			"default": {}
+		}]
 	}),
-	clearHeaders
+	init
 );
 
 HeadersAccessor.method(
@@ -113,6 +117,11 @@ HeadersAccessor.method(
 	}),
 	clearHeaders
 );
+
+function init (headers) {
+	this.clearHeaders();
+	this.setHeaders(headers);
+}
 
 function getHeaders () {
 	return Object.copy(this.headers);

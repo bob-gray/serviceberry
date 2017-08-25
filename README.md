@@ -28,20 +28,23 @@ service.start();
 
 Routing
 -------
-Using the Serviceberry API builds a service tree. Starting with a trunk - branches and leaves
-are added. Middleware can be injected at stage. Each incoming request walks the tree to create
+Using Serviceberry builds a service tree. Starting with a trunk - branches and leaves
+are added. Middleware can be injected at any stage. Each incoming request walks the tree to create
 a queue of handlers. All handlers (middleware, catches and endpoint implementations) have the
 same signature `(request, response)` and each handler has equal opportunity to control the
 request and response. 
 
-Handler queues are cummulative. Each new branch builds onto the queue. If a request method,
-path, content type and accepted response type match the service tree, all queued handlers
-will be executed in sequence. If an error occurs while executing the queue it will be caught
-and fallback to the nearest catch. The thrown error will be available in the catch hander
-as `request.error`.
+Handler queues are cummulative. Each matching branch builds onto the queue. If an error occurs
+while executing the queue it will be caught and fallback to the nearest catch. Errors are
+available in the catch hander as `request.error`.
 
-Each handler in the queue must call `request.proceed()` to invoke the next handler
-or `response.send()` to end the response.
+Each handler in the queue must call `request.proceed()` to invoke the next handler or
+`response.send()` or `request.fail()` to end the request. Request `proceed()` and `fail()`
+are bound to the request internally so the can be called passed as callbacks - such as
+`.then(request.proceed).catch(request.fail)`. Once one of these methods is called, control
+is passed to the next handler which becomes the new request "owner". Only the current handler
+has a reference to the active request and response instances. Each handler is passed unique request
+and response instances (shallow copies).
 
 Auto Error Statuses
 -------------------
@@ -76,13 +79,13 @@ Auto Methods
 Serviceberry can respond automatically to OPTIONS and HEAD requests.
 To override these auto responses implement your own
 
-  - OPTIONS
+  - **OPTIONS**
 
     Any request path that implements methods will respond to OPTIONS
     requests with a status of 204 No Content and an Allow header.
     All middleware and catches in the queue will be executed as usual.
 
-  - HEAD
+  - **HEAD**
 
     Any request path that implements a GET method will respond to HEAD
     requests with the head written while executing the GET queue.
@@ -95,9 +98,9 @@ Interfaces
 
 usable `<object>|<function>`
 ------
-Any object with a property named "use" whose value is a handler function
-or a handler function. The handler signature is `(request, response)`.
-Usable objects will be invoked with the object as the calling context (`this`).
+A handler function or any object with a property named "use" whose value is a
+handler function. The handler signature is `(request, response)`. Usable
+objects use methods will be invoked with the object as the calling context (`this`).
 
 
 Classes

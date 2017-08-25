@@ -38,7 +38,7 @@ Trunk.method(
 function init (options) {
 	this.options = options;
 	this.server = http.createServer();
-	this.node = new TrunkNode();
+	this.node = new TrunkNode(options);
 }
 
 function start (callback) {

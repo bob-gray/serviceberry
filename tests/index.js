@@ -5,7 +5,8 @@ require("solv/src/function/curry");
 var serviceberry = require("../src/"),
 	meta = require("solv/src/meta"),
 	service = serviceberry.createTrunk({
-		port: 3000
+		port: 3000,
+		timeout: 2000
 	}),
 	widgets = service.at("/widgets"),
 	widget = widgets.at("/{id}"),
@@ -17,9 +18,9 @@ var serviceberry = require("../src/"),
 				request.proceed();
 
 			} else {
-				throw new serviceberry.HttpError("Please log in", 401, {
+				/*throw new serviceberry.HttpError("Please log in", 401, {
 					Authorization: "Bearer"
-				});
+				});*/
 				//request.proceed();
 			}
 		}	

@@ -64,6 +64,7 @@ function init (options) {
 
 function transition (request) {
 	request.remainingPath = request.path;
+	request.setOptions(this.options);
 }
 
 function chooseNext (request, response) {

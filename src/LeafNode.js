@@ -77,7 +77,7 @@ LeafNode.method(
 			"type": "object"
 		}]
 	}),
-	Function.prototype
+	transition
 );
 
 LeafNode.method(
@@ -94,6 +94,10 @@ LeafNode.method(
 	}),
 	Function.prototype
 );
+
+function transition (request, response) {
+	request.setOptions(this.options);
+}
 
 function isAllowed (request) {
 	var allowed = true;

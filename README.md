@@ -45,23 +45,31 @@ or `response.send()` to end the response.
 
 Auto Error Statuses
 -------------------
-Serviceberry will respond automatically to certain client errors in the following situations.
+Serviceberry will respond automatically to certain errors in the following situations.
 
-  - 404 Not Found
+  - **404 Not Found**
 
     When no route is found.
 
-  - 405 Method Not Allowed
+  - **405 Method Not Allowed**
 
     When an implementation of the request method does not exist.
 
-  - 415 Unsupported Media Type
+  - **415 Unsupported Media Type**
 
     When an implementation consuming the request content type does not exist.
 
-  - 406 Not Acceptable
+  - **406 Not Acceptable**
 
     When an implementation producing an acceptable content type does not exist.
+
+  - **500 Internal Server Error**
+
+    When an unhandled exception occurs.
+
+  - **503 Service Unavailable**
+
+    When a request times out. 
 
 Auto Methods
 ------------

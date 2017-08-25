@@ -168,9 +168,8 @@ function init (serverResponse) {
 	this.invoke(HeadersAccessor.init);
 	this.invoke(initSerializers);
 	this.setEncoding("utf-8");
-	this.sendBody = true;
-	serverResponse.on("finish", this.proxy("trigger", "finish"));
-	serverResponse.on("error", this.proxy("fail"));
+	serverResponse.on("finish", this.proxy("trigger", "finish"))
+		.on("error", this.proxy("fail"));
 	this.serverResponse = serverResponse;
 }
 
@@ -190,8 +189,8 @@ function send (options) {
 
 	serverResponse.writeHead(this.getStatusCode(), this.getStatusText(), this.getHeaders());
 
-	// TODO: maybe don't send the body on 204 and 304
-	if (content.length && this.sendBody) {
+	// TODO: maybe don't send the body on 204 and 304 - node might already not send HEAD body
+	if (content.length && this.request.getMethod() !== "HEAD") {
 		serverResponse.write(content, this.getEncoding());
 	}
 
@@ -265,14 +264,6 @@ function setEncoding (encoding) {
 	this.encoding = encoding;
 }
 
-function setSendBody (sendBody) {
-	this.sendBody = sendBody;
-}
-
-function getSendBody () {
-	return this.sendBody;
-}
-
 function set (options) {
 	if (options.status) {
 		this.setStatus(options.status);
@@ -288,10 +279,6 @@ function set (options) {
 
 	if ("body" in options) {
 		this.setBody(options.body);
-	}
-
-	if ("sendBody" in options) {
-		this.setSendBody(options.sendBody);
 	}
 
 	if (options.finished) {

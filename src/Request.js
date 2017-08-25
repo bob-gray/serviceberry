@@ -12,6 +12,8 @@ const querystring = require("querystring");
 const Route = require("./Route");
 const json = require("./serviceberry-json");
 const form = require("./serviceberry-form");
+const HttpError = require("./HttpError");
+const statusCodes = require("./statusCodes");
 
 const Request = createClass(
 	meta({
@@ -63,6 +65,29 @@ Request.method(
 	}),
 	setDeserializers
 );
+
+Request.method(
+	meta({
+		"name": "setOptions",
+		"arguments": [{
+			"name": "options",
+			"type": "object"
+		}]
+	}),
+	setOptions
+);
+
+Request.method(
+	meta({
+		"name": "setTimeout",
+		"arguments": [{
+			"name": "milliseconds",
+			"type": "number"
+		}]
+	}),
+	setTimeout_
+);
+
 
 Request.method(
 	meta({
@@ -275,6 +300,7 @@ function init () {
 	this.fail = this.constructor.prototype.fail.bind(this).constrict(0, 1);
 
 	if (!this.begun) {
+		this.time = Date.now();
 		this.invoke(parseContentType);
 		this.url = url.parse(this.incomingMessage.url);
 		this.path = this.url.pathname;
@@ -383,12 +409,39 @@ function setDeserializer (contentType, deserializer) {
 	this.deserializers[contentType] = deserializer;
 }
 
+function setOptions (options) {
+	Object.forEach(options, this.proxy(setOption));
+}
+
+function setOption (value, name) {
+	var setter = "set" + name.charAt(0).toUpperCase() + name.slice(1);
+
+	if (setter in this) {
+		this[setter](value);
+	}
+}
+
+function setTimeout_ (timeout) {
+	this.timeout = timeout;
+}
+
 function begin () {
 	this.begun = true;
+	this.invoke(setTimer);
 	this.incomingMessage.setEncoding(this.getEncoding());
 	new Promise(this.proxy(read))
 		.then(this.proxy(deserialize))
 		.then(this.proxy(beginRoute));
+}
+
+function setTimer () {
+	var timeout,
+		wait = this.timeout - (Date.now() - this.time);
+
+	if (this.timeout) {
+		timeout = setTimeout(() => this.fail(timeoutError()), wait);
+		timeout.unref();
+	}
 }
 
 function read (resolve) {
@@ -444,6 +497,10 @@ function plot (node) {
 	if (next) {
 		this.plot(next);
 	}
+}
+
+function timeoutError () {
+	return new HttpError("Request timed out", statusCodes.SERVICE_UNAVAILABLE);
 }
 
 module.exports = Request;

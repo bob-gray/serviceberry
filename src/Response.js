@@ -9,7 +9,7 @@ const statusCodes = require("./statusCodes");
 const StatusAccessor = require("./StatusAccessor");
 const HeadersAccessor = require("./HeadersAccessor");
 const contentType = require("content-type");
-const jsonSerializer = require("./jsonSerializer");
+const json = require("./serviceberry-json");
 
 meta.define("./StatusAccessor", StatusAccessor);
 meta.define("./HeadersAccessor", HeadersAccessor);
@@ -43,6 +43,17 @@ Response.method(
 		}]
 	}),
 	send
+);
+
+Response.method(
+	meta({
+		"name": "fail",
+		"arguments": [{
+			"name": "error",
+			"type": "any"
+		}]
+	}),
+	fail
 );
 
 Response.method(
@@ -156,9 +167,10 @@ function init (serverResponse) {
 	this.invoke(StatusAccessor.init);
 	this.invoke(HeadersAccessor.init);
 	this.invoke(initSerializers);
-	this.setEncoding("utf8");
+	this.setEncoding("utf-8");
 	this.sendBody = true;
 	serverResponse.on("finish", this.proxy("trigger", "finish"));
+	serverResponse.on("error", this.proxy("fail"));
 	this.serverResponse = serverResponse;
 }
 
@@ -186,9 +198,15 @@ function send (options) {
 	serverResponse.end();
 }
 
+function fail (error) {
+	if (this.request) {
+		this.request.fail(error);
+	}
+}
+
 function initSerializers () {
 	this.serializers = {};
-	this.setSerializer("application/json", jsonSerializer);
+	this.setSerializer("application/json", json.serialize);
 }
 
 function setSerializer (contentType, serializer) {
@@ -204,7 +222,7 @@ function serialize () {
 		serialized;
 
 	if (type in this.serializers) {
-		serialized = this.serializers[type](this);
+		serialized = this.serializers[type](this.request, this);
 	} else {
 		serialized = this.getBody();
 	}

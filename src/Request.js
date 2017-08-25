@@ -2,18 +2,25 @@
 
 require("solv/src/object/merge");
 require("solv/src/object/copy");
+require("solv/src/function/constrict");
 
 const createClass = require("solv/src/class");
 const meta = require("solv/src/meta");
+const type = require("solv/src/type");
 const url = require("url");
 const querystring = require("querystring");
 const Route = require("./Route");
+const json = require("./serviceberry-json");
+const form = require("./serviceberry-form");
 
 const Request = createClass(
 	meta({
 		"name": "Request",
 		"type": "class",
-		"mixins": "solv/src/abstract/emitter",
+		"mixins": [
+			"solv/src/abstract/base",
+			"solv/src/abstract/emitter"
+		],
 		"description": "HTTP request object",
 		"arguments": [{
 			"name": "properties",
@@ -29,6 +36,32 @@ const Request = createClass(
 		}]
 	}),
 	init
+);
+
+Request.method(
+	meta({
+		"name": "setDeserializer",
+		"arguments": [{
+			"name": "contentType",
+			"type": "string"
+		}, {
+			"name": "deserializer",
+			"type": "function"
+		}]
+	}),
+	setDeserializer
+);
+
+Request.method(
+	meta({
+		"name": "setDeserializers",
+		"arguments": [{
+			"name": "deserializers",
+			"type": "object",
+			"default": {}
+		}]
+	}),
+	setDeserializers
 );
 
 Request.method(
@@ -137,9 +170,18 @@ Request.method(
 	meta({
 		"name": "getContentType",
 		"arguments": [],
-		"returns": "string|undefined"
+		"returns": "string"
 	}),
 	getContentType
+);
+
+Request.method(
+	meta({
+		"name": "getEncoding",
+		"arguments": [],
+		"returns": "string"
+	}),
+	getEncoding
 );
 
 Request.method(
@@ -149,6 +191,24 @@ Request.method(
 		"returns": "string|undefined"
 	}),
 	getAccept
+);
+
+Request.method(
+	meta({
+		"name": "getContent",
+		"arguments": [],
+		"returns": "string"
+	}),
+	getContent
+);
+
+Request.method(
+	meta({
+		"name": "getBody",
+		"arguments": [],
+		"returns": "any"
+	}),
+	getBody
 );
 
 Request.method(
@@ -182,11 +242,22 @@ Request.method(
 );
 
 Request.method(
-	{
+	meta({
 		name: "proceed",
 		arguments: []
-	},
+	}),
 	proceed
+);
+
+Request.method(
+	meta({
+		"name": "fail",
+		"arguments": [{
+			"name": "error",
+			"type": "any"
+		}]
+	}),
+	fail
 );
 
 Request.method(
@@ -199,13 +270,21 @@ Request.method(
 );
 
 function init () {
+	this.response.request = this;
+	this.proceed = this.constructor.prototype.proceed.bind(this).constrict();
+	this.fail = this.constructor.prototype.fail.bind(this).constrict(0, 1);
+
 	if (!this.begun) {
+		this.invoke(parseContentType);
 		this.url = url.parse(this.incomingMessage.url);
 		this.path = this.url.pathname;
 		this.pathParams = {};
+		this.content = "";
+		this.deserializers = {};
+		this.setDeserializer(json.contentType, json.deserialize);
+		this.setDeserializer(form.contentType, form.deserialize);
+		this.incomingMessage.on("error", this.fail);
 	}
-
-	this.proceed = this.constructor.prototype.proceed.bind(this);
 }
 
 function getMethod () {
@@ -223,7 +302,15 @@ function getParam (name) {
 }
 
 function getParams () {
-	return Object.merge(this.getQueryParams(), this.pathParams);
+	var body = this.getBody();
+
+	if (body && type.is.not("object", body)) {
+		body = {body};
+	} else {
+		body = {};
+	}
+
+	return Object.merge({}, this.getQueryParams(), body, this.pathParams);
 }
 
 function getPathParam (name) {
@@ -244,6 +331,14 @@ function getQueryParams () {
 	return querystring.parse(this.url.query);
 }
 
+function getBody () {
+	return this.body;
+}
+
+function getContent () {
+	return this.content;
+}
+
 function getHeader (name) {
 	var headers = this.getHeaders();
 
@@ -254,21 +349,75 @@ function getHeaders () {
 	return this.incomingMessage.headers;
 }
 
+function parseContentType () {
+	// throws if missing header or header is malformed
+	try {
+		this.contentType = contentType.parse(this.incomingMessage);
+	} catch (error) {
+		this.contentType = {
+			type: "text/plain",
+			parameters: {
+				charset: "utf-8"
+			}
+		};
+	}
+}
+
 function getContentType () {
-	return this.getHeader("content-type");
+	return this.contentType.type;
+}
+
+function getEncoding () {
+	return this.contentType.parameters.charset || "utf-8";
 }
 
 function getAccept () {
-	return this.getHeader("accept");
+	return this.getHeader("Accept");
+}
+
+function setDeserializers (deserializers) {
+	Object.merge(this.deserializers, deserializers);
+}
+
+function setDeserializer (contentType, deserializer) {
+	this.deserializers[contentType] = deserializer;
 }
 
 function begin () {
 	this.begun = true;
-	this.route.begin(this);
+	this.incomingMessage.setEncoding(this.getEncoding());
+	new Promise(this.proxy(read))
+		.then(this.proxy(deserialize))
+		.then(this.proxy(beginRoute));
+}
+
+function read (resolve) {
+	this.incomingMessage.on("data", this.proxy(writeContent));
+	this.incomingMessage.on("end", resolve);
+}
+
+function writeContent (content) {
+	this.content += content;
+}
+
+function deserialize () {
+	var type = this.getContentType();
+
+	if (type in this.deserializers) {
+		this.body = this.deserializers[type](this, this.response);
+	}
+
+	if (!this.body) {
+		this.body = this.content;
+	}
 }
 
 function proceed () {
 	this.route.proceed(this);
+}
+
+function fail (error) {
+	this.route.fail(error);
 }
 
 function copy () {
@@ -278,6 +427,10 @@ function copy () {
 function plotRoute (trunk) {
 	this.route = new Route(trunk);
 	this.plot(trunk.node);
+}
+
+function beginRoute () {
+	this.route.begin(this);
 }
 
 function plot (node) {

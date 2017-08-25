@@ -58,6 +58,7 @@ function respond (incomingMessage, serverResponse) {
 
 	request.plotRoute(this);
 	response.setSerializers(this.options.serializers);
+	request.setDeserializers(this.options.deserializers);
 	request.begin();
 }
 

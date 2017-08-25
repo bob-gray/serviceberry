@@ -154,7 +154,7 @@ function proceed (request) {
 		this.setRequest(request.copy());
 		this.callHandler(handler);
 	} else if (owner) {
-		this.fail(new HttpError("proceed() called while handler queue was empty"));
+		this.fail("proceed() called while handler queue was empty");
 	} else {
 		request.trigger("warning", "proceed() from outside the current handler");
 	}
@@ -189,13 +189,14 @@ function callHandler (handler) {
 	try {
 		handler.call(this.trunk, this.request, this.request.response);
 	} catch (error) {
-		this.fail(new HttpError(error));
+		this.fail(error);
 	}
 }
 
 function fail (error) {
 	var handler = this.catches.pop();
 
+	error = new HttpError(error);
 	this.caught.unshift(handler);
 	this.request.error = error;
 

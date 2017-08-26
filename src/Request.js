@@ -267,25 +267,6 @@ Request.method(
 );
 
 Request.method(
-	meta({
-		name: "proceed",
-		arguments: []
-	}),
-	proceed
-);
-
-Request.method(
-	meta({
-		"name": "fail",
-		"arguments": [{
-			"name": "error",
-			"type": "any"
-		}]
-	}),
-	fail
-);
-
-Request.method(
 	{
 		name: "copy",
 		arguments: [],
@@ -294,12 +275,12 @@ Request.method(
 	copy
 );
 
-function init () {
+function init (copied) {
 	this.response.request = this;
-	this.proceed = this.constructor.prototype.proceed.bind(this).constrict();
-	this.fail = this.constructor.prototype.fail.bind(this).constrict(0, 1);
 
-	if (!this.begun) {
+	if (copied instanceof this.constructor) {
+		this.response = this.response.copy();
+	} else {
 		this.time = Date.now();
 		this.invoke(parseContentType);
 		this.url = url.parse(this.incomingMessage.url);
@@ -309,7 +290,7 @@ function init () {
 		this.deserializers = {};
 		this.setDeserializer(json.contentType, json.deserialize);
 		this.setDeserializer(form.contentType, form.deserialize);
-		this.incomingMessage.on("error", this.fail);
+		this.incomingMessage.on("error", this.proxy(lateBindFail));
 	}
 }
 
@@ -426,7 +407,6 @@ function setTimeout_ (timeout) {
 }
 
 function begin () {
-	this.begun = true;
 	this.invoke(setTimer);
 	this.incomingMessage.setEncoding(this.getEncoding());
 	new Promise(this.proxy(read))
@@ -439,7 +419,7 @@ function setTimer () {
 		wait = this.timeout - (Date.now() - this.time);
 
 	if (this.timeout) {
-		timeout = setTimeout(() => this.fail(timeoutError()), wait);
+		timeout = setTimeout((request) => request.invoke(lateBindFail, timeoutError()), wait, this);
 		timeout.unref();
 	}
 }
@@ -465,12 +445,10 @@ function deserialize () {
 	}
 }
 
-function proceed () {
-	this.route.proceed(this);
-}
-
-function fail (error) {
+// late bind because we need to fail the route directly and seal route owner out
+function lateBindFail (error) {
 	this.route.fail(error);
+	this.route.abort();
 }
 
 function copy () {

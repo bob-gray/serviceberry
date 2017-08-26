@@ -1,7 +1,10 @@
 "use strict";
 
+require("solv/src/array/empty");
+
 const createClass = require("solv/src/class");
 const HttpError = require("./HttpError");
+const type = require("solv/src/type");
 
 const Route = createClass(
 	{
@@ -51,6 +54,36 @@ Route.method(
 
 Route.method(
 	{
+		name: "bind",
+		arguments: [{
+			name: "request",
+			type: "object"
+		}]
+	},
+	bind
+);
+
+Route.method(
+	{
+		name: "abort",
+		arguments: []
+	},
+	abort
+);
+
+Route.method(
+	{
+		name: "hasControl",
+		arguments: [{
+			name: "request",
+			type: "object"
+		}]
+	},
+	hasControl
+);
+
+Route.method(
+	{
 		name: "proceed",
 		arguments: [{
 			name: "request",
@@ -62,48 +95,6 @@ Route.method(
 
 Route.method(
 	{
-		name: "isOwner",
-		arguments: [{
-			name: "request",
-			type: "object"
-		}]
-	},
-	isOwner
-);
-
-Route.method(
-	{
-		name: "setRequest",
-		arguments: [{
-			name: "request",
-			type: "object"
-		}]
-	},
-	setRequest
-);
-
-Route.method(
-	{
-		name: "getNextHandler",
-		arguments: [],
-		returns: "function|undefined"
-	},
-	getNextHandler
-);
-
-Route.method(
-	{
-		name: "callHandler",
-		arguments: [{
-			name: "handler",
-			type: "function"
-		}]
-	},
-	callHandler
-);
-
-Route.method(
-	{
 		name: "fail",
 		arguments: [{
 			name: "error",
@@ -111,14 +102,6 @@ Route.method(
 		}]
 	},
 	fail
-);
-
-Route.method(
-	{
-		name: "recatch",
-		arguments: []
-	},
-	recatch
 );
 
 function init (trunk) {
@@ -137,59 +120,34 @@ function catch_ (handlers) {
 }
 
 function begin (request) {
+	this.proceed(this.bind(request));
+}
+
+function bind (request) {
 	this.request = request;
-	this.proceed(request);
+	request.proceed = this.proxy(guard, "proceed", request);
+	request.fail = this.proxy(guard, "fail", request);
+
+	return request;
+}
+
+function abort () {
+	this.bind(this.request.copy());
+}
+
+function hasControl (request) {
+	return this.request === request;
 }
 
 function proceed (request) {
-	var handler,
-		owner = this.isOwner(request);
+	var handler = this.invoke(getNextHandler);
 
-	if (owner) {
-		this.recatch();
-		handler = this.getNextHandler();
-	}
+	this.invoke(recatch);
 
 	if (handler) {
-		this.setRequest(request.copy());
-		this.callHandler(handler);
-	} else if (owner) {
-		this.fail("proceed() called while handler queue was empty");
+		process.nextTick(this.proxy(callHandler, handler));
 	} else {
-		request.trigger("warning", "proceed() from outside the current handler");
-	}
-}
-
-function isOwner (request) {
-	return request === this.request;
-}
-
-function setRequest (request) {
-	this.request = request;
-}
-
-function toErrorHandlers (handler) {
-	return {
-		errorHandler: handler
-	};
-}
-
-function getNextHandler () {
-	var next = this.queue.shift();
-
-	if (next.errorHandler) {
-		this.catches.push(next.errorHandler);
-		next = this.getNextHandler();
-	}
-
-	return next;
-}
-
-function callHandler (handler) {
-	try {
-		handler.call(this.trunk, this.request, this.request.response);
-	} catch (error) {
-		this.fail(error);
+		this.fail("Request proceed called while handler queue was empty");
 	}
 }
 
@@ -201,7 +159,7 @@ function fail (error) {
 	this.request.error = error;
 
 	if (handler) {
-		this.callHandler(handler);
+		process.nextTick(this.proxy(callHandler, handler));
 	} else {
 		this.request.response.send({
 			status: error.getStatus(),
@@ -211,8 +169,52 @@ function fail (error) {
 	}
 }
 
+function toErrorHandlers (handler) {
+	return {
+		errorHandler: handler
+	};
+}
+
+function guard (method, request) {
+	if (this.hasControl(request)) {
+		this[method](this.bind(this.request.copy()));
+	} else {
+		request.trigger("warning", `Request ${method} was called through a handle which no longer controls the request`);
+	}
+}
+
+function getNextHandler () {
+	var next = this.queue.shift();
+
+	if (next.errorHandler) {
+		this.catches.push(next.errorHandler);
+		next = this.invoke(getNextHandler);
+	}
+
+	return next;
+}
+
 function recatch () {
 	this.catches = this.catches.concat(this.caught);
+	this.caught.empty();
+}
+
+function callHandler (handler) {
+	var result;
+
+	try {
+		result = handler.call(this.trunk, this.request, this.request.response);
+		this.invoke(chainThenable, result);
+	} catch (error) {
+		this.fail(error);
+	}
+}
+
+function chainThenable (result) {
+	if (result && type.is("function", result.then)) {
+		this.bind(this.request.copy());
+		result.then(this.request.proceed, this.request.fail);
+	}
 }
 
 module.exports = Route;

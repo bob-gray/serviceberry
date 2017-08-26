@@ -14,14 +14,13 @@ var serviceberry = require("../src/"),
 		use: function (request, response) {
 			var authorization = request.getHeader("Authorization");
 
-			if (authorization) {
-				request.proceed();
+			if (true) {
+				//request.proceed();
 
 			} else {
-				/*throw new serviceberry.HttpError("Please log in", 401, {
+				throw new serviceberry.HttpError("Please log in", 401, {
 					Authorization: "Bearer"
-				});*/
-				//request.proceed();
+				});
 			}
 		}	
 	};
@@ -56,13 +55,19 @@ widget.on(
 service.start(console.log.curry("Service started!"));
 
 function serverError (request, response) {
-	console.log(request.error.getMessage());
+	console.log(request.error);
 	throw request.error;
 }
 
 function getWidgets (request, response) {
 	response.send({
-		body: "Hello Widgets!"
+		body: [{
+			id: 1,
+			name: "foo"
+		}, {
+			id: 2,
+			name: "baz"
+		}]
 	});
 }
 

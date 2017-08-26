@@ -53,7 +53,7 @@ function start (callback) {
 }
 
 function respond (incomingMessage, serverResponse) {
-	var response = new Response(serverResponse),
+	var response = new Response({serverResponse}),
 		request = new Request({incomingMessage, response});
 
 	request.plotRoute(this);

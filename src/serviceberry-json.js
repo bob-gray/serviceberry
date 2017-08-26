@@ -14,7 +14,7 @@ function serializeJson (request, response) {
 		content = JSON.stringify(body);
 	}
 
-	return body;
+	return content;
 }
 
 function deserializeJson (request, response) {

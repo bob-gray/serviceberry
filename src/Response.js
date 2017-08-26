@@ -26,8 +26,13 @@ const Response = createClass(
 		],
 		"description": "HTTP response object",
 		"arguments": [{
-			"name": "serverResponse",
-			"type": "object"
+			"name": "properties",
+			"type": "object",
+			"properties": {
+				"serverResponse": {
+					"type": "object"
+				}
+			}
 		}]
 	}),
 	init
@@ -160,20 +165,62 @@ Response.method(
 	set
 );
 
-// TODO: support thenable async serializers
-// TODO: handle timeout and throw timeout error
+Response.method(
+	{
+		name: "copy",
+		arguments: [],
+		returns: "object"
+	},
+	copy
+);
 
-function init (serverResponse) {
-	this.invoke(StatusAccessor.init);
-	this.invoke(HeadersAccessor.init);
-	this.invoke(initSerializers);
-	this.setEncoding("utf-8");
-	serverResponse.on("finish", this.proxy("trigger", "finish"))
-		.on("error", this.proxy("fail"));
-	this.serverResponse = serverResponse;
+// TODO: support thenable async serializers
+
+function init (copied) {
+	this.send = this.proxy(guard, send);
+
+	if (copied instanceof this.constructor) {
+		this.invoke(takeControl, copied);
+	} else {
+		this.invoke(takeControl);
+		this.invoke(StatusAccessor.init);
+		this.invoke(HeadersAccessor.init);
+		this.invoke(initSerializers);
+		this.setEncoding("utf-8");
+		this.serverResponse.on("finish", this.proxy("trigger", "finish"))
+			.on("error", this.proxy("fail"));
+	}
+}
+
+function guard (method, options) {
+	if (this.invoke(hasControl)) {
+		this.invoke(method, options);
+	} else {
+		this.trigger("warning", `Reponse ${method} was called through a handle which no longer controls the request`);
+	}
+}
+
+function takeControl (copied) {
+	this.controller = this;
+
+	if (copied) {
+		copied.controller = null;
+	}
+}
+
+function hasControl () {
+	return this.controller === this;
 }
 
 function send (options) {
+	if (this.serverResponse.finished) {
+		this.trigger("warning", "Response send was called after response was finshed");
+	} else {
+		this.invoke(finish, options);
+	}
+}
+
+function finish (options) {
 	var serverResponse = this.serverResponse,
 		content;
 
@@ -284,6 +331,10 @@ function set (options) {
 	if (options.finished) {
 		this.on("finish", options.finish);
 	}
+}
+
+function copy () {
+	return new this.constructor(this);
 }
 
 module.exports = Response;

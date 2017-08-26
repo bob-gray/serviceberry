@@ -132,6 +132,7 @@ function isAcceptable (request, response) {
 	}
 
 	if (acceptable && response.withoutHeader("Content-Type")) {
+		// TODO: set content type charset
 		response.setHeader("Content-Type", acceptable);
 	}
 

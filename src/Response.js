@@ -10,6 +10,7 @@ const StatusAccessor = require("./StatusAccessor");
 const HeadersAccessor = require("./HeadersAccessor");
 const contentType = require("content-type");
 const json = require("./serviceberry-json");
+const Binder = require("./Binder");
 
 meta.define("./StatusAccessor", StatusAccessor);
 meta.define("./HeadersAccessor", HeadersAccessor);
@@ -180,36 +181,16 @@ function init (copied) {
 	this.send = this.proxy(guard, send);
 
 	if (copied instanceof this.constructor) {
-		this.invoke(takeControl, copied);
+		this.binder.bind(this);
 	} else {
-		this.invoke(takeControl);
 		this.invoke(StatusAccessor.init);
 		this.invoke(HeadersAccessor.init);
+		this.binder = new Binder(["send"]);
 		this.invoke(initSerializers);
 		this.setEncoding("utf-8");
 		this.serverResponse.on("finish", this.proxy("trigger", "finish"))
 			.on("error", this.proxy("fail"));
 	}
-}
-
-function guard (method, options) {
-	if (this.invoke(hasControl)) {
-		this.invoke(method, options);
-	} else {
-		this.trigger("warning", `Reponse ${method} was called through a handle which no longer controls the request`);
-	}
-}
-
-function takeControl (copied) {
-	this.controller = this;
-
-	if (copied) {
-		copied.controller = null;
-	}
-}
-
-function hasControl () {
-	return this.controller === this;
 }
 
 function send (options) {

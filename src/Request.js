@@ -317,7 +317,7 @@ function getParams () {
 		body = {};
 	}
 
-	return Object.merge({}, this.getQueryParams(), body, this.pathParams);
+	return Object.merge({}, body, this.getQueryParams(), this.pathParams);
 }
 
 function getPathParam (name) {
@@ -409,7 +409,7 @@ function setTimeout_ (timeout) {
 function begin () {
 	this.invoke(setTimer);
 	this.incomingMessage.setEncoding(this.getEncoding());
-	new Promise(this.proxy(read))
+	this.invoke(setContent)
 		.then(this.proxy(deserialize))
 		.then(this.proxy(beginRoute));
 }
@@ -424,9 +424,13 @@ function setTimer () {
 	}
 }
 
+function setContent () {
+	return new Promise(this.proxy(read));
+}
+
 function read (resolve) {
-	this.incomingMessage.on("data", this.proxy(writeContent));
-	this.incomingMessage.on("end", resolve);
+	this.incomingMessage.on("data", this.proxy(writeContent))
+		.on("end", resolve);
 }
 
 function writeContent (content) {
@@ -448,7 +452,7 @@ function deserialize () {
 // late bind because we need to fail the route directly and seal route owner out
 function lateBindFail (error) {
 	this.route.fail(error);
-	this.route.abort();
+	this.route.unbind();
 }
 
 function copy () {

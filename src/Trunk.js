@@ -42,23 +42,19 @@ function init (options) {
 }
 
 function start (callback) {
-	this.server.on("request", this.proxy(respond));
+	var options = this.options;
 
-	this.server.listen(
-		this.options.port,
-		this.options.host,
-		this.options.backlog,
-		callback
-	);
+	this.server.on("request", this.proxy(respond))
+		.listen(options.port, options.host, options.backlog, callback);
 }
 
 function respond (incomingMessage, serverResponse) {
-	var response = new Response({serverResponse}),
+	var response = new Response({serverResponse, trunk: this}),
 		request = new Request({incomingMessage, response});
 
-	request.plotRoute(this);
 	response.setSerializers(this.options.serializers);
 	request.setDeserializers(this.options.deserializers);
+	request.plotRoute(this);
 	request.begin();
 }
 

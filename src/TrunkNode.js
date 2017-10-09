@@ -64,12 +64,18 @@ function init (options) {
 
 function transition (request) {
 	request.remainingPath = request.path;
+
+	if (this.options.basePath) {
+		request.remainingPath = request.remainingPath.replace(this.options.basePath, "");
+	}
 }
 
 function chooseNext (request, response) {
 	var next;
 
-	if (request.remainingPath.length) {
+	if (this.options.basePath && !request.path.startsWith(this.options.basePath)) {
+		next = notFound(request);
+	} else if (request.remainingPath.length) {
 		next = this.invoke(chooseBranch, request, response);
 	} else {
 		next = this.invoke(chooseLeaf, request, response);
@@ -81,10 +87,8 @@ function chooseNext (request, response) {
 function chooseBranch (request, response) {
 	var branch = this.branches.find(branch => branch.test(request, response));
 
-	const ErrorNode = require("./ErrorNode");
-
 	if (!branch) {
-		branch = new ErrorNode(statusCodes.NOT_FOUND, request);
+		branch = notFound(request);
 	}
 
 	return branch;
@@ -103,7 +107,7 @@ function chooseLeaf (request, response) {
 	}
 
 	if (this.leaves.isEmpty()) {
-		leaf = new ErrorNode(statusCodes.NOT_FOUND, request);
+		leaf = notFound(request);
 	} else if (allowed.isEmpty() && request.getMethod() === "OPTIONS") {
 		leaf = this.invoke(autoOptions);
 	} else if (allowed.isEmpty()) {
@@ -145,6 +149,12 @@ function autoOptions () {
 	}
 
 	return options;
+}
+
+function notFound (request) {
+	const ErrorNode = require("./ErrorNode");
+
+	return new ErrorNode(statusCodes.NOT_FOUND, request);
 }
 
 module.exports = TrunkNode;

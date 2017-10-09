@@ -80,7 +80,7 @@ function bind () {
 
 	binder.bind(this.request, "proceed", binder.proxy("proceed"));
 	binder.bind(this.request, "fail", binder.proxy("fail"));
-	binder.bind(this.response, "send", this.proxy(send));
+	binder.bind(this.response, "send", this.proxy("delay", send));
 }
 
 function setDeserializeFail (error) {

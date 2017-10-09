@@ -20,7 +20,7 @@ const Route = createClass(
 			response: {
 				type: "object"
 			},
-			node: {
+			trunk: {
 				type: "object"
 			}
 		}
@@ -51,7 +51,7 @@ function init () {
 	this.catches = [];
 	this.caught = [];
 	this.options = {};
-	this.invoke(plot, this.node);
+	this.invoke(plot, this.trunk.node);
 }
 
 function plot (node) {

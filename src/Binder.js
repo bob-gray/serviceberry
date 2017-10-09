@@ -37,14 +37,6 @@ Binder.method(
 
 Binder.method(
 	{
-		name: "reset",
-		arguments: []
-	},
-	reset
-);
-
-Binder.method(
-	{
 		name: "execute",
 		arguments: [{
 			name: "handler",
@@ -103,6 +95,7 @@ function guard (steward, method) {
 	var args;
 
 	if (this.invoke(isSteward, steward)) {
+		this.invoke(reset);
 		args = Array.from(arguments).slice(guard.length);
 		method.apply(steward, args);
 	} else {
@@ -135,7 +128,7 @@ function callHandler (handler) {
 
 function handleResult (result) {
 	if (type.is.not("undefined", result)) {
-		this.reset();
+		this.invoke(reset);
 	}
 
 	if (result && type.is("function", result.then)) {

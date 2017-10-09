@@ -5,6 +5,7 @@ require("solv/src/function/curry");
 var serviceberry = require("../src/main"),
 	meta = require("solv/src/meta"),
 	service = serviceberry.createTrunk({
+		basePath: "/foo/berry",
 		port: 3000,
 		timeout: 3000
 	}),

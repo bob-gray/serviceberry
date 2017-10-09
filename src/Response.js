@@ -5,12 +5,9 @@ require("solv/src/object/merge");
 
 const createClass = require("solv/src/class");
 const meta = require("solv/src/meta");
-const statusCodes = require("./statusCodes");
 const StatusAccessor = require("./StatusAccessor");
 const HeadersAccessor = require("./HeadersAccessor");
 const contentType = require("content-type");
-const json = require("./serviceberry-json");
-const Binder = require("./Binder");
 
 meta.define("./StatusAccessor", StatusAccessor);
 meta.define("./HeadersAccessor", HeadersAccessor);
@@ -39,63 +36,14 @@ const Response = createClass(
 	init
 );
 
-Response.method(
-	meta({
-		"name": "send",
-		"arguments": [{
-			"name": "options",
-			"type": "object",
-			"default": {}
-		}]
-	}),
-	send
-);
-
-Response.method(
-	meta({
-		"name": "fail",
-		"arguments": [{
-			"name": "error",
-			"type": "any"
-		}]
-	}),
-	fail
-);
-
-Response.method(
-	meta({
-		"name": "setSerializer",
-		"arguments": [{
-			"name": "contentType",
-			"type": "string"
-		}, {
-			"name": "serializer",
-			"type": "function"
-		}]
-	}),
-	setSerializer
-);
-
-Response.method(
-	meta({
-		"name": "setSerializers",
-		"arguments": [{
-			"name": "serializers",
-			"type": "object",
-			"default": {}
-		}]
-	}),
-	setSerializers
-);
-
-Response.method(
-	meta({
-		"name": "serialize",
-		"arguments": [],
-		"returns": "any"
-	}),
-	serialize
-);
+/*meta({
+	"name": "send",
+	"arguments": [{
+		"name": "options",
+		"type": "object",
+		"default": {}
+	}]
+})*/
 
 Response.method(
 	meta({
@@ -115,6 +63,17 @@ Response.method(
 		}
 	}),
 	getContent
+);
+
+Response.method(
+	meta({
+		"name": "setContent",
+		"arguments": [{
+			"name": "content",
+			"type": "any"
+		}]
+	}),
+	setContent
 );
 
 Response.method(
@@ -175,86 +134,16 @@ Response.method(
 	copy
 );
 
-// TODO: support thenable async serializers
-
 function init (copied) {
-	this.send = this.proxy(guard, send);
-
 	if (copied instanceof this.constructor) {
-		this.binder.bind(this);
-	} else {
-		this.invoke(StatusAccessor.init);
-		this.invoke(HeadersAccessor.init);
-		this.binder = new Binder(["send"]);
-		this.invoke(initSerializers);
-		this.setEncoding("utf-8");
-		this.serverResponse.on("finish", this.proxy("trigger", "finish"))
-			.on("error", this.proxy("fail"));
-	}
-}
-
-function send (options) {
-	if (this.serverResponse.finished) {
-		this.trigger("warning", "Response send was called after response was finshed");
-	} else {
-		this.invoke(finish, options);
-	}
-}
-
-function finish (options) {
-	var serverResponse = this.serverResponse,
-		content;
-
-	this.set(options);
-
-	content = this.getContent();
-
-	if (!content.length && this.is("OK")) {
-		this.setStatus(statusCodes.NO_CONTENT);
-	} else if (content.length && this.withoutHeader("Content-Length")) {
-		this.setHeader("Content-Length", content.length);
+		return this;
 	}
 
-	serverResponse.writeHead(this.getStatusCode(), this.getStatusText(), this.getHeaders());
-
-	// TODO: maybe don't send the body on 204 and 304 - node might already not send HEAD body
-	if (content.length && this.request.getMethod() !== "HEAD") {
-		serverResponse.write(content, this.getEncoding());
-	}
-
-	serverResponse.end();
-}
-
-function fail (error) {
-	if (this.request) {
-		this.request.fail(error);
-	}
-}
-
-function initSerializers () {
-	this.serializers = {};
-	this.setSerializer("application/json", json.serialize);
-}
-
-function setSerializer (contentType, serializer) {
-	this.serializers[contentType] = serializer;
-}
-
-function setSerializers (serializers) {
-	Object.merge(this.serializers, serializers);
-}
-
-function serialize () {
-	var type = this.getContentType(),
-		serialized;
-
-	if (type in this.serializers) {
-		serialized = this.serializers[type](this.request, this);
-	} else {
-		serialized = this.getBody();
-	}
-
-	return serialized;
+	this.invoke(StatusAccessor.init);
+	this.invoke(HeadersAccessor.init);
+	this.setEncoding("utf-8");
+	this.serverResponse.on("finish", this.proxy("trigger", "finish"))
+		.on("error", this.proxy("trigger", "error"));
 }
 
 function getContentType () {
@@ -271,9 +160,11 @@ function getContentType () {
 }
 
 function getContent () {
-	var content = this.serialize() || "";
-	
-	return Buffer.from(content, this.getEncoding());
+	return Buffer.from(this.content, this.getEncoding());
+}
+
+function setContent (content) {
+	this.content = content;
 }
 
 function getBody () {
@@ -309,7 +200,7 @@ function set (options) {
 		this.setBody(options.body);
 	}
 
-	if (options.finished) {
+	if (options.finish) {
 		this.on("finish", options.finish);
 	}
 }

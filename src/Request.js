@@ -2,18 +2,12 @@
 
 require("solv/src/object/merge");
 require("solv/src/object/copy");
-require("solv/src/function/constrict");
 
 const createClass = require("solv/src/class");
 const meta = require("solv/src/meta");
 const type = require("solv/src/type");
 const url = require("url");
 const querystring = require("querystring");
-const Route = require("./Route");
-const json = require("./serviceberry-json");
-const form = require("./serviceberry-form");
-const HttpError = require("./HttpError");
-const statusCodes = require("./statusCodes");
 
 const Request = createClass(
 	meta({
@@ -42,32 +36,6 @@ const Request = createClass(
 
 Request.method(
 	meta({
-		"name": "setDeserializer",
-		"arguments": [{
-			"name": "contentType",
-			"type": "string"
-		}, {
-			"name": "deserializer",
-			"type": "function"
-		}]
-	}),
-	setDeserializer
-);
-
-Request.method(
-	meta({
-		"name": "setDeserializers",
-		"arguments": [{
-			"name": "deserializers",
-			"type": "object",
-			"default": {}
-		}]
-	}),
-	setDeserializers
-);
-
-Request.method(
-	meta({
 		"name": "setOptions",
 		"arguments": [{
 			"name": "options",
@@ -76,18 +44,6 @@ Request.method(
 	}),
 	setOptions
 );
-
-Request.method(
-	meta({
-		"name": "setTimeout",
-		"arguments": [{
-			"name": "milliseconds",
-			"type": "number"
-		}]
-	}),
-	setTimeout_
-);
-
 
 Request.method(
 	meta({
@@ -228,6 +184,17 @@ Request.method(
 );
 
 Request.method(
+	{
+		name: "setContent",
+		arguments: [{
+			name: "content",
+			type: "string"
+		}]
+	},
+	setContent
+);
+
+Request.method(
 	meta({
 		"name": "getBody",
 		"arguments": [],
@@ -237,33 +204,14 @@ Request.method(
 );
 
 Request.method(
-	{
-		name: "plotRoute",
-		arguments: [{
-			name: "trunk",
-			type: "object"
+	meta({
+		"name": "setBody",
+		"arguments": [{
+			"name": "body",
+			"type": "any"
 		}]
-	},
-	plotRoute
-);
-
-Request.method(
-	{
-		name: "plot",
-		arguments: [{
-			name: "node",
-			type: "object"
-		}]
-	},
-	plot
-);
-
-Request.method(
-	{
-		name: "begin",
-		arguments: []
-	},
-	begin
+	}),
+	setBody
 );
 
 Request.method(
@@ -276,22 +224,17 @@ Request.method(
 );
 
 function init (copied) {
-	this.response.request = this;
-
 	if (copied instanceof this.constructor) {
-		this.response = this.response.copy();
-	} else {
-		this.time = Date.now();
-		this.invoke(parseContentType);
-		this.url = url.parse(this.incomingMessage.url);
-		this.path = this.url.pathname;
-		this.pathParams = {};
-		this.content = "";
-		this.deserializers = {};
-		this.setDeserializer(json.contentType, json.deserialize);
-		this.setDeserializer(form.contentType, form.deserialize);
-		this.incomingMessage.on("error", this.proxy(lateBindFail));
+		return this;
 	}
+
+	this.time = Date.now();
+	this.invoke(parseContentType);
+	this.incomingMessage.setEncoding(this.getEncoding());
+	this.url = url.parse(this.incomingMessage.url);
+	this.path = this.url.pathname;
+	this.pathParams = {};
+	this.content = "";
 }
 
 function getMethod () {
@@ -331,7 +274,7 @@ function getPathParams () {
 function getQueryParam (name) {
 	var params = this.getQueryParams();
 
-	return params[name];	
+	return params[name];
 }
 
 function getQueryParams () {
@@ -342,8 +285,16 @@ function getBody () {
 	return this.body;
 }
 
+function setBody (body) {
+	this.body = body;
+}
+
 function getContent () {
 	return this.content;
+}
+
+function setContent (content) {
+	this.content = content;
 }
 
 function getHeader (name) {
@@ -382,14 +333,6 @@ function getAccept () {
 	return this.getHeader("Accept");
 }
 
-function setDeserializers (deserializers) {
-	Object.merge(this.deserializers, deserializers);
-}
-
-function setDeserializer (contentType, deserializer) {
-	this.deserializers[contentType] = deserializer;
-}
-
 function setOptions (options) {
 	Object.forEach(options, this.proxy(setOption));
 }
@@ -402,87 +345,8 @@ function setOption (value, name) {
 	}
 }
 
-function setTimeout_ (timeout) {
-	this.timeout = timeout;
-}
-
-function begin () {
-	this.invoke(setTimer);
-	this.incomingMessage.setEncoding(this.getEncoding());
-	this.invoke(setContent)
-		.then(this.proxy(deserialize))
-		.then(this.proxy(beginRoute));
-}
-
-function setTimer () {
-	var timeout,
-		wait = this.timeout - (Date.now() - this.time);
-
-	if (this.timeout) {
-		timeout = setTimeout((request) => request.invoke(lateBindFail, timeoutError()), wait, this);
-		timeout.unref();
-	}
-}
-
-function setContent () {
-	return new Promise(this.proxy(read));
-}
-
-function read (resolve) {
-	this.incomingMessage.on("data", this.proxy(writeContent))
-		.on("end", resolve);
-}
-
-function writeContent (content) {
-	this.content += content;
-}
-
-function deserialize () {
-	var type = this.getContentType();
-
-	if (type in this.deserializers) {
-		this.body = this.deserializers[type](this, this.response);
-	}
-
-	if (!this.body) {
-		this.body = this.content;
-	}
-}
-
-// late bind because we need to fail the route directly and seal route owner out
-function lateBindFail (error) {
-	this.route.fail(error);
-	this.route.unbind();
-}
-
 function copy () {
 	return new this.constructor(this);
-}
-
-function plotRoute (trunk) {
-	this.route = new Route(trunk);
-	this.plot(trunk.node);
-}
-
-function beginRoute () {
-	this.route.begin(this);
-}
-
-function plot (node) {
-	var next;
-
-	this.route.add(node.handlers);
-	this.route.catch(node.catches);
-	node.transition(this, this.response);
-	next = node.chooseNext(this, this.response);
-
-	if (next) {
-		this.plot(next);
-	}
-}
-
-function timeoutError () {
-	return new HttpError("Request timed out", statusCodes.SERVICE_UNAVAILABLE);
 }
 
 module.exports = Request;

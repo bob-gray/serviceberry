@@ -3,156 +3,121 @@
 require("solv/src/array/empty");
 
 const createClass = require("solv/src/class");
-const type = require("solv/src/type");
-const HttpError = require("./HttpError");
-const Binder = require("./Binder")
 
 const Route = createClass(
 	{
 		name: "Route",
 		type: "class",
-		extends: Binder,
+		extends: require("solv/src/abstract/base"),
 		arguments: [{
-			name: "trunk",
+			name: "properties",
 			type: "object"
-		}]
+		}],
+		properties: {
+			request: {
+				type: "object"
+			},
+			response: {
+				type: "object"
+			},
+			node: {
+				type: "object"
+			}
+		}
 	},
 	init
 );
 
 Route.method(
 	{
-		name: "add",
-		arguments: [{
-			name: "handlers",
-			type: "array"
-		}]
+		name: "getNextHandler",
+		arguments: [],
+		returns: "function|undefined"
 	},
-	add
+	getNextHandler
 );
 
 Route.method(
 	{
-		name: "catch",
-		arguments: [{
-			name: "handlers",
-			type: "array"
-		}]
+		name: "getNextFailHandler",
+		arguments: [],
+		returns: "function|undefined"
 	},
-	catch_
+	getNextFailHandler
 );
 
-Route.method(
-	{
-		name: "begin",
-		arguments: [{
-			name: "request",
-			type: "object"
-		}]
-	},
-	begin
-);
-
-Route.method(
-	{
-		name: "proceed",
-		arguments: []
-	},
-	proceed
-);
-
-Route.method(
-	{
-		name: "fail",
-		arguments: [{
-			name: "error",
-			type: "any"
-		}]
-	},
-	fail
-);
-
-function init (trunk) {
-	this.trunk = trunk;
+function init () {
 	this.queue = [];
 	this.catches = [];
 	this.caught = [];
-	this.invoke(Binder.init, [
-		"proceed",
-		"fail"
-	]);
+	this.options = {};
+	this.invoke(plot, this.node);
+}
+
+function plot (node) {
+	var next;
+
+	this.invoke(add, node.handlers);
+	this.invoke(addCatches, node.catches);
+	this.invoke(setOptions, node.options);
+	node.transition(this.request, this.response);
+
+	next = node.chooseNext(this.request, this.response);
+
+	if (next) {
+		this.invoke(plot, next);
+	}
+}
+
+function getNextHandler () {
+	this.invoke(recatch);
+
+	return this.invoke(getNext);
+}
+
+function getNextFailHandler () {
+	var handler = this.catches.pop();
+
+	this.caught.unshift(handler);
+
+	return handler;
 }
 
 function add (handlers) {
 	this.queue = this.queue.concat(handlers);
 }
 
-function catch_ (handlers) {
+function addCatches (handlers) {
 	this.queue = this.queue.concat(handlers.map(toErrorHandlers));
 }
 
-function begin (request) {
-	this.request = this.bind(request);
-	this.proceed();
+function setOptions (options) {
+	Object.merge(this.options, {
+		serializers: options.serializers,
+		deserializers: options.deserializers
+	});
 }
 
-function proceed () {
-	var handler = this.invoke(getNextHandler),
-		request = this.request,
-		result;
-
-	this.invoke(recatch);
-
-	if (handler) {
-		result = this.callHandler(handler, this.trunk, request, request.response);
-		this.request = this.target;
-	} else {
-		this.fail("Request proceed called while handler queue was empty");
-	}
-
-	if (result) {
-		result.then(request.proceed, request.fail);
-	}
+function recatch () {
+	this.catches = this.catches.concat(this.caught);
+	this.caught.empty();
 }
 
-function fail (error) {
-	var handler = this.catches.pop();
+function getNext () {
+	var next = this.queue.shift();
 
-	error = new HttpError(error);
-	this.caught.unshift(handler);
-	this.request.error = error;
-
-	if (handler) {
-		setImmediate(this.proxy(callHandler, handler));
-	} else {
-		this.request.response.send({
-			status: error.getStatus(),
-			headers: error.getHeaders(),
-			body: error.getMessage()
-		});
+	if (next && next.errorHandler) {
+		this.catches.push(next.errorHandler);
+		next = this.invoke(getNext);
 	}
+
+	return next;
 }
 
 function toErrorHandlers (handler) {
 	return {
 		errorHandler: handler
 	};
-}
-
-function getNextHandler () {
-	var next = this.queue.shift();
-
-	if (next && next.errorHandler) {
-		this.catches.push(next.errorHandler);
-		next = this.invoke(getNextHandler);
-	}
-
-	return next;
-}
-
-function recatch () {
-	this.catches = this.catches.concat(this.caught);
-	this.caught.empty();
 }
 
 module.exports = Route;

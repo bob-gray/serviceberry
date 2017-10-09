@@ -1,18 +1,37 @@
 "use strict";
 
+require("solv/src/function/curry");
+
 const createClass = require("solv/src/class");
+const form = require("./serviceberry-form");
+const json = require("./serviceberry-json");
 
 const Deserializer = createClass(
 	{
 		name: "Deserializer",
 		type: "class",
-		mixins: require("./Binder"),
+		extends: require("solv/src/abstract/base"),
 		arguments: [{
-			name: "request",
-			type: "object"
+			name: "handlers",
+			type: "object",
+			default: {
+				[form.contentType]: form.deserialize,
+				[json.contentType]: json.deserialize
+			}
 		}]
 	},
 	init
+);
+
+Deserializer.method(
+	{
+		name: "set",
+		arguments: [{
+			name: "handlers",
+			type: "object"
+		}]
+	},
+	setMany
 );
 
 Deserializer.method(
@@ -25,69 +44,66 @@ Deserializer.method(
 			name: "handler",
 			type: "function"
 		}]
-	}
+	},
+	set
 );
 
 Deserializer.method(
 	{
 		name: "deserialize",
-		arguments: [],
-		returns: {
-			name: "promise",
+		arguments: [{
+			name: "request",
 			type: "object"
-		}
-	}
+		}, {
+			name: "response",
+			type: "object"
+		}],
+		returns: "promise"
+	},
+	deserialize
 );
 
-function init (request) {
-	this.request = request;
-	this.handlers = {};
-	this.invoke(Binder.init, [
-		"deserialize"
-	]);
+function init (handlers) {
+	this.handlers = handlers;
+}
+
+function setMany (handlers) {
+	Object.merge(this.handlers, handlers);
 }
 
 function set (contentType, handler) {
 	this.handlers[contentType] = handler;
 }
 
-function deserialize () {
-	var request = this.request;
+function deserialize (request, response) {
+	var handler = this.invoke(getHandler, request);
 
-	return new Promise(this.proxy(read))
-		.then(this.proxy(getHandler))
-		.then(this.proxy(callHandler, request.trunk, request, request.response))
-		.then(this.proxy(setBody))
-		.then(this.proxy("unbind"));
+	if (!handler) {
+		handler = getRawContent;
+	}
+
+	return new Promise(this.proxy(read, request))
+		.then(handler.bind(this, request, response));
 }
 
-function read (resolve) {
-	this.request.content = "";
-	this.request.incomingMessage.on("data", this.proxy(writeContent))
+function read (request, resolve) {
+	request.content = "";
+	request.incomingMessage.on("data", this.proxy(writeContent, request))
 		.on("end", resolve);
 }
 
-function writeContent (content) {
-	this.request.content += content;
+function writeContent (request, content) {
+	request.content += content;
 }
 
-function getHandler () {
-	var type = this.request.getContentType(),
-		handler = this.handlers[type];
+function getHandler (request) {
+	var type = request.getContentType();
 
-	if (!handler) {
-		handler = this.proxy(getContent);
-	}
-
-	return handler;
+	return this.handlers[type];
 }
 
-function getContent () {
-	return this.content;
-}
-
-function setBody (body) {
-	this.request.body = body;
+function getRawContent (request) {
+	return request.content;
 }
 
 module.exports = Deserializer;

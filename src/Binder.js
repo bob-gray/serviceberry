@@ -1,5 +1,7 @@
 "use strict";
 
+require("solv/src/array/add");
+
 const createClass = require("solv/src/class");
 const type = require("solv/src/type");
 
@@ -9,31 +11,25 @@ const Binder = createClass(
 		type: "class",
 		extends: require("solv/src/abstract/base"),
 		arguments: [{
-			name: "bindings",
-			type: "array"
+			name: "context",
+			type: "object"
 		}]
 	},
-	init
-);
-
-Binder.method(
-	{
-		name: "init",
-		static: true,
-		arguments: [{
-			name: "bindings",
-			type: "array"
-		}]
-	},
-	init
+	reset
 );
 
 Binder.method(
 	{
 		name: "bind",
 		arguments: [{
-			name: "target",
+			name: "steward",
 			type: "object"
+		}, {
+			name: "name",
+			type: "string"
+		}, {
+			name: "method",
+			type: "function"
 		}]
 	},
 	bind
@@ -41,115 +37,124 @@ Binder.method(
 
 Binder.method(
 	{
-		name: "rebind",
+		name: "reset",
 		arguments: []
 	},
-	rebind
+	reset
 );
 
 Binder.method(
 	{
-		name: "unbind",
-		arguments: []
-	},
-	unbind
-);
-
-Binder.method(
-	{
-		name: "hasControl",
-		arguments: [{
-			name: "target",
-			type: "object"
-		}]
-	},
-	hasControl
-);
-
-Binder.method(
-	{
-		name: "callHandler",
+		name: "execute",
 		arguments: [{
 			name: "handler",
 			type: "function"
 		}, {
-			name: "context",
-			type: "object"
-		}, {
-			name: "args",
+			name: "nArgs",
 			type: "any",
 			required: false,
 			repeating: true
 		}]
 	},
-	callHandler
+	execute
 );
 
-function init (bindings) {
-	this.bindings = bindings;
+Binder.method(
+	{
+		name: "proceed",
+		arguments: [{
+			name: "result",
+			type: "any",
+			required: false
+		}]
+	},
+	proceed
+);
+
+Binder.method(
+	{
+		name: "fail",
+		arguments: [{
+			name: "error",
+			type: "any",
+			required: false
+		}]
+	},
+	fail
+);
+
+function bind (steward, name, method) {
+	this.stewards.add(steward);
+	steward[name] = this.proxy(guard, steward, method)
 }
 
-function bind (target) {
-	this.target = target;
-	this.bindings.forEach((method) => target[method] = this.proxy(guard, method, target));
-
-	return target;
+function reset () {
+	this.stewards = [];
 }
 
-function rebind () {
-	return this.bind(this.target.copy());
+function execute (handler) {
+	this.invoke(createPromise);
+	callHandler.apply(this, arguments);
+
+	return this.promise;
 }
 
-function unbind () {
-	return this.target = null;
-}
+function guard (steward, method) {
+	var args;
 
-function guard (method, target, ...rest) {
-	if (this.hasControl(target)) {
-		console.log(method);
-		this[method](this.rebind(), ...rest);
+	if (this.invoke(isSteward, steward)) {
+		args = Array.from(arguments).slice(guard.length);
+		method.apply(steward, args);
 	} else {
-		noControl(target, method);
+		steward.trigger("No Control");
 	}
 }
 
-function hasControl (target, method) {
-	return this.target === target;
+function createPromise () {
+	this.promise = new Promise((resolve, reject) => {
+		this.resolve = resolve;
+		this.reject = reject;
+	});
 }
 
-function noControl (target) {
-	var className = target.constructor.name;
-
-	target.trigger("warning", `${className} ${method} was called through a handler which no longer controls the ${className.toLowerCase()}`);
+function isSteward (steward) {
+	return this.stewards.indexOf(steward) > -1;
 }
 
-function callHandler (handler, context, ...args) {
-	var result;
+function callHandler (handler) {
+	var args = Array.from(arguments).slice(callHandler.length),
+		result;
 
 	try {
-		result = handler.apply(context, args);
+		result = handler.apply(this, args);
+		this.invoke(handleResult, result);
 	} catch (error) {
-		result = error;
+		this.fail(error);
 	}
-
-	return this.invoke(handleResult, result);
 }
 
 function handleResult (result) {
-	var promise;
-
-	if (result && type.is("function", result.then)) {
-		this.rebind();
-		promise = result;
-	} else if (result instanceof Error) {
-		promise = Promise.reject(result);
-	} else if (result) {
-		promise = Promise.resolve(result);
-	} else if (type.is.not("undefined", result)) {
-		promise = Promise.reject(result);
+	if (type.is.not("undefined", result)) {
+		this.reset();
 	}
 
-	return promise;
+	if (result && type.is("function", result.then)) {
+		result.then(this.proxy("proceed"), this.proxy("fail"));
+	} else if (result instanceof Error) {
+		this.fail(result);
+	} else if (result) {
+		this.proceed(result);
+	} else if (type.is.not("undefined", result)) {
+		this.fail(result);
+	}
+}
+
+function proceed (result) {
+	setImmediate(this.resolve, result);
+}
+
+function fail (error) {
+	setImmediate(this.reject, error);
 }
 
 module.exports = Binder;

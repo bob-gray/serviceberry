@@ -23,7 +23,7 @@ var serviceberry = require("../src/main"),
 					Authorization: "Bearer"
 				});
 			}
-		}	
+		}
 	};
 
 service.use(auth).catch(serverError);
@@ -56,7 +56,7 @@ widget.on(
 service.start(console.log.curry("Service started!"));
 
 function serverError (request, response) {
-	console.log(request.error);
+	console.error(request.error);
 	throw request.error;
 }
 

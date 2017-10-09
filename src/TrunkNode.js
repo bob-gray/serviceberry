@@ -64,7 +64,6 @@ function init (options) {
 
 function transition (request) {
 	request.remainingPath = request.path;
-	request.setOptions(this.options);
 }
 
 function chooseNext (request, response) {
@@ -80,15 +79,24 @@ function chooseNext (request, response) {
 }
 
 function chooseBranch (request, response) {
-	return this.branches.find(branch => branch.test(request, response));
+	var branch = this.branches.find(branch => branch.test(request, response));
+
+	const ErrorNode = require("./ErrorNode");
+
+	if (!branch) {
+		branch = new ErrorNode(statusCodes.NOT_FOUND, request);
+	}
+
+	return branch;
 }
 
 function chooseLeaf (request, response) {
-	var ErrorNode = require("./ErrorNode"),
-		allowed = this.leaves.filter(leaf => leaf.isAllowed(request)),
+	var allowed = this.leaves.filter(leaf => leaf.isAllowed(request)),
 		supported = allowed.filter(leaf => leaf.isSupported(request)),
 		acceptable = supported.filter(leaf => leaf.isAcceptable(request, response)),
 		leaf;
+
+	const ErrorNode = require("./ErrorNode");
 
 	if (allowed.isEmpty() && request.getMethod() === "HEAD") {
 		allowed = this.leaves.filter(leaf => leaf.options.method === "GET");
@@ -97,7 +105,7 @@ function chooseLeaf (request, response) {
 	if (this.leaves.isEmpty()) {
 		leaf = new ErrorNode(statusCodes.NOT_FOUND, request);
 	} else if (allowed.isEmpty() && request.getMethod() === "OPTIONS") {
-		leaf = this.invoke(autoOptions);		
+		leaf = this.invoke(autoOptions);
 	} else if (allowed.isEmpty()) {
 		leaf = new ErrorNode(statusCodes.METHOD_NOT_ALLOWED, request, {
 			Allow: this.invoke(getAllow)

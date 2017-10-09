@@ -6,6 +6,8 @@ const http = require("http");
 const TrunkNode = require("./TrunkNode");
 const Request = require("./Request");
 const Response = require("./Response");
+const Route = require("./Route");
+const Director = require("./Director");
 
 meta.define("./Branch", require("./Branch"));
 
@@ -14,7 +16,6 @@ const Trunk = createClass(
 		"name": "Trunk",
 		"type": "class",
 		"extends": "./Branch",
-		"description": "HTTP service trunk",
 		"arguments": [{
 			"name": "options",
 			"type": "object"
@@ -49,13 +50,12 @@ function start (callback) {
 }
 
 function respond (incomingMessage, serverResponse) {
-	var response = new Response({serverResponse, trunk: this}),
-		request = new Request({incomingMessage, response});
+	var request = new Request({incomingMessage}),
+		response = new Response({serverResponse}),
+		route = new Route({request, response, node: this.node}),
+		director = new Director({request, response});
 
-	response.setSerializers(this.options.serializers);
-	request.setDeserializers(this.options.deserializers);
-	request.plotRoute(this);
-	request.begin();
+	director.run(route);
 }
 
 module.exports = Trunk;

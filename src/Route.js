@@ -2,85 +2,53 @@
 
 require("solv/src/array/empty");
 
-const createClass = require("solv/src/class");
+const Base = require("solv/src/abstract/base");
 
-const Route = createClass(
-	{
-		name: "Route",
-		type: "class",
-		extends: require("solv/src/abstract/base"),
-		arguments: [{
-			name: "properties",
-			type: "object"
-		}],
-		properties: {
-			request: {
-				type: "object"
-			},
-			response: {
-				type: "object"
-			},
-			trunk: {
-				type: "object"
-			}
-		}
-	},
-	init
-);
+class Route extends Base {
+	constructor (root, ...args) {
+		Object.assign(super(), {
+			queue: [],
+			catches: [],
+			caught: [],
+			options: {}
+		});
 
-Route.method(
-	{
-		name: "getNextHandler",
-		arguments: [],
-		returns: "function|undefined"
-	},
-	getNextHandler
-);
+		this.invoke(plot, root, args);
+	}
 
-Route.method(
-	{
-		name: "getNextFailHandler",
-		arguments: [],
-		returns: "function|undefined"
-	},
-	getNextFailHandler
-);
+	getNextHandler () {
+		this.invoke(recatch);
 
-function init () {
-	this.queue = [];
-	this.catches = [];
-	this.caught = [];
-	this.options = {};
-	this.invoke(plot, this.trunk.node);
+		return this.invoke(getNext);
+	}
+
+	getNextFailHandler () {
+		var handler = this.catches.pop();
+
+		this.caught.unshift(handler);
+
+		return handler;
+	}
 }
 
-function plot (node) {
+function plot (node, args) {
 	var next;
 
 	this.invoke(add, node.handlers);
 	this.invoke(addCatches, node.catches);
 	this.invoke(setOptions, node.options);
-	node.transition(this.request, this.response);
+	node.transition.apply(node, args);
 
-	next = node.chooseNext(this.request, this.response);
+	next = node.chooseNext.apply(node, args);
 
 	if (next) {
-		this.invoke(plot, next);
+		this.invoke(plot, next, args);
 	}
 }
 
-function getNextHandler () {
-	this.invoke(recatch);
-
-	return this.invoke(getNext);
-}
-
-function getNextFailHandler () {
-	var handler = this.catches.pop();
-
-	this.caught.unshift(handler);
-
-	return handler;
+function recatch () {
+	this.catches = this.catches.concat(this.caught);
+	this.caught.empty();
 }
 
 function add (handlers) {
@@ -92,15 +60,7 @@ function addCatches (handlers) {
 }
 
 function setOptions (options) {
-	Object.merge(this.options, {
-		serializers: options.serializers,
-		deserializers: options.deserializers
-	});
-}
-
-function recatch () {
-	this.catches = this.catches.concat(this.caught);
-	this.caught.empty();
+	Object.assign(this.options, options);
 }
 
 function getNext () {

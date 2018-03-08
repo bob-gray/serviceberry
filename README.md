@@ -58,13 +58,13 @@ Serviceberry will respond automatically to certain errors in the following situa
 
     When an implementation of the request method does not exist.
 
-  - **415 Unsupported Media Type**
-
-    When an implementation consuming the request content type does not exist.
-
   - **406 Not Acceptable**
 
     When an implementation producing an acceptable content type does not exist.
+
+  - **415 Unsupported Media Type**
+
+    When an implementation consuming the request content type does not exist.
 
   - **500 Internal Server Error**
 

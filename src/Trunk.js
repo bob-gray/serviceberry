@@ -52,7 +52,7 @@ function start (callback) {
 function respond (incomingMessage, serverResponse) {
 	var request = new Request({incomingMessage}),
 		response = new Response({serverResponse}),
-		route = new Route({request, response, trunk: this}),
+		route = new Route(this.node, request, response),
 		director = new Director({request, response});
 
 	director.run(route);

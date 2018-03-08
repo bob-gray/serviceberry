@@ -26,5 +26,9 @@
     "accepts": "^1.3.3",
     "content-type": "^1.0.2",
     "solv": "^1.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "jasmine": "^3.1.0"
   }
 }

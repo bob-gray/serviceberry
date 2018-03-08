@@ -4,6 +4,7 @@ const createClass = require("solv/src/class");
 const type = require("solv/src/type");
 const HttpError = require("./HttpError");
 const Binder = require("./Binder");
+const Operator = require("./Operator");
 const Deserializer = require("./Deserializer");
 const Serializer = require("./Serializer");
 
@@ -22,13 +23,9 @@ const Director = createClass(
 			},
 			response: {
 				type: "object"
-			},
-			route: {
-				type: "object"
 			}
 		}
-	},
-	init
+	}
 );
 
 Director.method(
@@ -42,45 +39,42 @@ Director.method(
 	run
 );
 
-function init () {
-	this.binder = new Binder();
-	this.request.incomingMessage.on("error", this.proxy(fail));
-}
-
 function run (route) {
 	this.route = route;
-	this.invoke(deserialize).then(this.proxy(runRoute));
+	this.request.incomingMessage.on("error", this.proxy(fail));
+	this.operator = new Operator();
+	this.invoke(deserialize).then(this.proxy(proceed));
 }
 
 function deserialize () {
-	var deserializer = new Deserializer(this.route.options.deserializers);
+	var deserializer = new Deserializer(this.route.options.deserializers),
+		binder = this.invoke(bind);
 
-	this.invoke(bind);
-
-	return this.binder.execute(deserializer.proxy("deserialize"), this.request, this.response)
+	return this.operator.call(deserializer.proxy("deserialize"), this.request, this.response)
 		.then(this.request.proxy("setBody"))
-		.catch(this.proxy(setDeserializeFail));
+		.catch(this.proxy(setDeserializeFail))
+		.then(binder.proxy("unbind"));
 }
 
-function runRoute () {
+function proceed () {
 	var handler = this.route.getNextHandler();
 
 	if (handler) {
 		this.invoke(callHandler, handler);
 	} else {
-		this.invoke(fail, "Request proceed called when handler queue is empty");
+		this.invoke(fail, "Request proceed called when handler queue was empty");
 	}
 }
 
 function bind () {
-	var binder = this.binder;
+	var binder = new Binder();
 
 	this.request = this.request.copy();
 	this.response = this.response.copy();
 
-	binder.bind(this.request, "proceed", binder.proxy("proceed"));
-	binder.bind(this.request, "fail", binder.proxy("fail"));
-	binder.bind(this.response, "send", this.proxy("delay", send));
+	return binder.bind(this.request, "proceed", this.operator.resolve)
+		.bind(this.request, "fail", this.operator.reject)
+		.bind(this.response, "send", this.proxy("delay", send));
 }
 
 function setDeserializeFail (error) {
@@ -88,14 +82,16 @@ function setDeserializeFail (error) {
 }
 
 function callHandler (handler) {
-	this.invoke(bind);
-	setImmediate(this.proxy(execute, handler));
+	var binder = this.invoke(bind);
+
+	setImmediate(this.proxy(call, handler, binder));
 }
 
-function execute (handler) {
-	this.binder.execute(handler, this.request, this.response)
-		.then(this.proxy(runRoute))
-		.catch(this.proxy(fail));
+function call (handler, binder) {
+	this.operator.call(handler, this.request, this.response)
+		.then(this.proxy(proceed))
+		.catch(this.proxy(fail))
+		.then(binder.proxy("unbind"));
 }
 
 function fail (error) {
@@ -121,13 +117,13 @@ function send (options) {
 }
 
 function serialize () {
-	var serializer = new Serializer(this.route.options.serializers);
+	var serializer = new Serializer(this.route.options.serializers),
+		binder = this.invoke(bind);
 
-	this.invoke(bind);
-
-	return this.binder.execute(serializer.proxy("serialize"), this.request, this.response)
+	return this.operator.call(serializer.proxy("serialize"), this.request, this.response)
 		.then(this.response.proxy("setContent"))
-		.catch(this.proxy(fail));
+		.catch(this.proxy(fail))
+		.then(binder.proxy("unbind"));
 }
 
 function end () {

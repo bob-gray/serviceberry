@@ -4,7 +4,7 @@ const Base = require("solv/src/abstract/base");
 
 class Binder extends Base {
 	bind (steward, method, implementation) {
-		steward[method] = this.proxy(guard, steward, implementation);
+		steward[method] = this.proxy(guard, steward, implementation || method);
 		this.bound = true;
 
 		return this;
@@ -18,10 +18,18 @@ class Binder extends Base {
 function guard (steward, implementation, ...args) {
 	if (this.bound) {
 		this.unbind();
-		implementation.apply(steward, args);
+		this.invoke(execute, implementation, args);
 	} else {
-		steward.trigger("No Control");
+		steward.emit("No Control");
 	}
+}
+
+function execute (implementation, args) {
+	if (typeof implementation === "string") {
+		implementation = this[implementation];
+	}
+
+	implementation.apply(this, args);
 }
 
 module.exports = Binder;

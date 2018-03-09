@@ -1,11 +1,7 @@
 "use strict";
 
-const Trunk = require("./Trunk");
-
 module.exports = {
-	createTrunk: function (options) {
-		return new Trunk(options);
-	},
+	createTrunk: require("./Trunk").create,
 	statusCodes: require("./statusCodes"),
 	HttpError: require("./HttpError")
 };

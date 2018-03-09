@@ -3,8 +3,12 @@
 const Base = require("solv/src/abstract/base");
 
 class Operator extends Base {
-	call (handler, ...args) {
-		this.invoke(createPromise);
+	constructor () {
+		super();
+		this.promise = this.invoke(createPromise);
+	}
+
+	call (handler, args) {
 		this.invoke(callHandler, handler, args);
 
 		return this.promise;
@@ -12,7 +16,7 @@ class Operator extends Base {
 }
 
 function createPromise () {
-	this.promise = new Promise((resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		this.resolve = this.proxy("delay", resolve);
 		this.reject = this.proxy("delay", reject);
 	});
@@ -34,4 +38,4 @@ function handleResult (result) {
 	}
 }
 
- module.exports = Operator;
+module.exports = Operator;

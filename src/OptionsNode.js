@@ -1,41 +1,22 @@
 "use strict";
 
-require("solv/src/function/curry");
+const LeafNode = require("./LeafNode");
 
-var OptionsNode,
-	createClass = require("solv/src/class"),
-	meta = require("solv/src/meta");
+class OptionsNode extends LeafNode {
+	constructor (allow) {
+		super({
+			method: "OPTIONS"
+		});
 
-meta.define("./LeafNode", require("./LeafNode"));
-
-OptionsNode = createClass(
-	meta({
-		"name": "OptionsNode",
-		"type": "class",
-		"extends": "./LeafNode",
-		"arguments": [{
-			"name": "allow",
-			"type": "string"
-		}]
-	}),
-	init
-);
-
-function init (allow) {
-	this.superCall({
-		method: "OPTIONS"
-	});
-
-	this.handlers.push(respond.curry(allow));
-}
-
-function respond (allow, request, response) {
-	response.send({
-		status: 204,
-		headers: {
-			Allow: allow
-		}
-	});
+		this.handlers.push((request, response) => {
+			response.send({
+				status: 204,
+				headers: {
+					Allow: allow
+				}
+			});
+		});
+	}
 }
 
 module.exports = OptionsNode;

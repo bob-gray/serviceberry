@@ -1,71 +1,40 @@
 "use strict";
 
-const createClass = require("solv/src/class");
-const meta = require("solv/src/meta");
-const http = require("http");
-const StatusAccessor = require("./StatusAccessor");
-const HeadersAccessor = require("./HeadersAccessor");
+const StatusAccessor = require("./StatusAccessor"),
+	HeadersAccessor = require("./HeadersAccessor");
 
-meta.define("./StatusAccessor", StatusAccessor);
-meta.define("./HeadersAccessor", HeadersAccessor);
+class HttpError extends Error {
+	constructor (error, status = 500, headers = {}) {
+		var initialized = error instanceof HttpError;
 
-const HttpError = createClass(
-	meta({
-		"name": "HttpError",
-		"type": "class",
-		"extends": "Error",
-		"mixins": [
-			"./StatusAccessor",
-			"./HeadersAccessor"
-		],
-		"arguments": [{
-			"name": "error",
-			"type": "any"
-		}, {
-			"name": "status",
-			"type": "number|object",
-			"default": 500
-		}, {
-			"name": "headers",
-			"type": "object",
-			"default": {}
-		}]
-	}),
-	init
-);
+		super();
 
-HttpError.method(
-	meta({
-		"name": "getMessage",
-		"arguments": [],
-		"returns": "string"
-	}),
-	getMessage
-);
+		if (initialized) {
+			Object.assign(this, error);
+		} else {
+			this.message = error.message || error;
+			this.invoke(StatusAccessor.init, status || error.status);
+			this.invoke(HeadersAccessor.init, headers);
+		}
 
-function init (error, status, headers) {
-	var initialized = error instanceof HttpError;
+		if (!initialized && this.withoutHeader("Content-Type")) {
+			this.setHeader("Content-Type", "text/plain; charset=utf-8");
+		}
 
-	if (initialized) {
-		Object.merge(this, error);
-	} else {
-		this.superCall();
-		this.message = error.message || error;
-		this.invoke(StatusAccessor.init, status|| error.status);
-		this.invoke(HeadersAccessor.init, headers);
+		if (!initialized && error.message) {
+			this.originalError = error;
+		}
 	}
 
-	if (!initialized && this.withoutHeader("Content-Type")) {
-		this.setHeader("Content-Type", "text/plain; charset=utf-8");
-	}
-
-	if (!initialized && error.message) {
-		this.originalError = error;
+	getMessage () {
+		return this.message;
 	}
 }
 
-function getMessage () {
-	return this.message;
-}
+Object.assign(
+	HttpError.prototype,
+	StatusAccessor.prototype,
+	HeadersAccessor.prototype
+);
 
 module.exports = HttpError;

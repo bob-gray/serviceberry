@@ -1,59 +1,34 @@
 "use strict";
 
-const createClass = require("solv/src/class");
-const type = require("solv/src/type");
-const HttpError = require("./HttpError");
-const Binder = require("./Binder");
-const Operator = require("./Operator");
-const Deserializer = require("./Deserializer");
-const Serializer = require("./Serializer");
+const Base = require("solv/src/abstract/base"),
+	Binding = require("./Binding"),
+	Deserializer = require("./Deserializer"),
+	Serializer = require("./Serializer"),
+	statusCodes = require("./statusCodes"),
+	HttpError = require("./HttpError");
 
-const Director = createClass(
-	{
-		name: "Director",
-		type: "class",
-		extends: require("solv/src/abstract/base"),
-		arguments: [{
-			name: "properties",
-			type: "object"
-		}],
-		properties: {
-			request: {
-				type: "object"
-			},
-			response: {
-				type: "object"
-			}
-		}
+class Director extends Base {
+	constructor (request, reponse) {
+		super();
+		request.incomingMessage.on("error", this.proxy(fail));
+		this.request = request;
+		this.response = reponse;
 	}
-);
 
-Director.method(
-	{
-		name: "run",
-		arguments: [{
-			name: "route",
-			type: "object"
-		}]
-	},
-	run
-);
-
-function run (route) {
-	this.route = route;
-	this.request.incomingMessage.on("error", this.proxy(fail));
-	this.operator = new Operator();
-	this.invoke(deserialize).then(this.proxy(proceed));
+	run (route) {
+		this.route = route;
+		this.invoke(setTimer);
+		this.invoke(deserialize).then(this.proxy(proceed));
+	}
 }
 
 function deserialize () {
-	var deserializer = new Deserializer(this.route.options.deserializers),
-		binder = this.invoke(bind);
+	var deserializer = new Deserializer(this.route.options.deserializers);
 
-	return this.operator.call(deserializer.proxy("deserialize"), this.request, this.response)
+	return this.invoke(bind)
+		.call(deserializer.proxy("deserialize"), this.request, this.response)
 		.then(this.request.proxy("setBody"))
-		.catch(this.proxy(setDeserializeFail))
-		.then(binder.proxy("unbind"));
+		.catch(this.proxy(setDeserializeFail));
 }
 
 function proceed () {
@@ -64,34 +39,6 @@ function proceed () {
 	} else {
 		this.invoke(fail, "Request proceed called when handler queue was empty");
 	}
-}
-
-function bind () {
-	var binder = new Binder();
-
-	this.request = this.request.copy();
-	this.response = this.response.copy();
-
-	return binder.bind(this.request, "proceed", this.operator.resolve)
-		.bind(this.request, "fail", this.operator.reject)
-		.bind(this.response, "send", this.proxy("delay", send));
-}
-
-function setDeserializeFail (error) {
-	this.request.getBody = () => {throw error};
-}
-
-function callHandler (handler) {
-	var binder = this.invoke(bind);
-
-	setImmediate(this.proxy(call, handler, binder));
-}
-
-function call (handler, binder) {
-	this.operator.call(handler, this.request, this.response)
-		.then(this.proxy(proceed))
-		.catch(this.proxy(fail))
-		.then(binder.proxy("unbind"));
 }
 
 function fail (error) {
@@ -111,19 +58,39 @@ function fail (error) {
 	}
 }
 
+function serialize () {
+	var serializer = new Serializer(this.route.options.serializers);
+
+	return this.invoke(bind).call(serializer.proxy("serialize"), this.request, this.response)
+		.then(this.response.proxy("setContent"))
+		.catch(this.proxy(fail));
+}
+
+function bind () {
+	var binding = new Binding();
+
+	this.request = this.request.copy();
+	this.response = this.response.copy();
+
+	return binding.bind(this.request, "proceed")
+		.bind(this.request, "fail")
+		.bind(this.response, "send", this.proxy("delay", send));
+}
+
+function callHandler (handler) {
+	setImmediate(this.proxy(call, handler));
+}
+
+function call (handler) {
+	this.invoke(bind)
+		.call(handler, this.request, this.response)
+		.then(this.proxy(proceed))
+		.catch(this.proxy(fail));
+}
+
 function send (options) {
 	this.response.set(options);
 	this.invoke(serialize).then(this.proxy(end));
-}
-
-function serialize () {
-	var serializer = new Serializer(this.route.options.serializers),
-		binder = this.invoke(bind);
-
-	return this.operator.call(serializer.proxy("serialize"), this.request, this.response)
-		.then(this.response.proxy("setContent"))
-		.catch(this.proxy(fail))
-		.then(binder.proxy("unbind"));
 }
 
 function end () {
@@ -145,33 +112,33 @@ function end () {
 		response.getHeaders()
 	);
 
-	// TODO: maybe don't send the body on 204 and 304 - node might already not send HEAD body
-	if (content.length && this.request.getMethod() !== "HEAD") {
+	// TODO: maybe check status instead or as well (204, 304, ...)
+	if (content.length) {
 		serverResponse.write(content, response.getEncoding());
 	}
+
+	clearTimeout(this.timer);
 
 	serverResponse.end();
 }
 
-/*
-TODO: implement timeout option here in the director
-function setTimer () {
-	var timeout,
-		wait = this.timeout - (Date.now() - this.time);
+function setDeserializeFail (error) {
+	this.request.getBody = () => {
+		throw error;
+	};
+}
 
-	if (this.timeout) {
-		timeout = setTimeout(this.proxy(timeout), wait);
-		timeout.unref();
+function setTimer () {
+	var timeout = this.route.options.timeout;
+
+	if (timeout) {
+		this.timer = setTimeout(this.proxy(timedout), timeout);
+		this.timer.unref();
 	}
 }
 
-function timeoutError () {
-	return new HttpError("Request timed out", statusCodes.SERVICE_UNAVAILABLE);
+function timedout () {
+	this.invoke(fail, new HttpError("Request timed out", statusCodes.SERVICE_UNAVAILABLE));
 }
-
-function setTimeout_ (timeout) {
-	this.timeout = timeout;
-}
-*/
 
 module.exports = Director;

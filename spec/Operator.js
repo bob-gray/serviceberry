@@ -1,3 +1,5 @@
+/* eslint-env jasmine */
+
 "use strict";
 
 const Operator = require("../src/Operator");
@@ -19,7 +21,7 @@ describe("Operator", () => {
 	it("should forward arguments to the handler", () => {
 		var handler = jasmine.createSpy("handler");
 
-		operator.call(handler, 1, 2, 3);
+		operator.call(handler, [1, 2, 3]);
 
 		expect(handler).toHaveBeenCalledWith(1, 2, 3);
 	});
@@ -59,7 +61,7 @@ describe("Operator", () => {
 	it("should return a promise from call that remains unresolved when the handler returns undefined", () => {
 		var handler = jasmine.createSpy("handler");
 
-		operator.call(Function.prototype).then(handler);		
+		operator.call(Function.prototype).then(handler);
 
 		expect(handler).not.toHaveBeenCalled();
 	});

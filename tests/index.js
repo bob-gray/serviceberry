@@ -7,7 +7,7 @@ var serviceberry = require("../src/main"),
 	service = serviceberry.createTrunk({
 		basePath: "/foo/berry",
 		port: 3000,
-		timeout: 3000
+		timeout: 500
 	}),
 	widgets = service.at("/widgets"),
 	widget = widgets.at("/{id}"),
@@ -32,7 +32,8 @@ service.use(auth).catch(serverError);
 widgets.on(
 	meta({
 		method: "GET",
-		produces: "application/json"
+		produces: "application/json",
+		timeout: 0
 	}),
 	getWidgets
 );
@@ -82,7 +83,7 @@ function getWidget (request, response) {
 			"Content-Length": content.length
 		},
 		body: content
-	})
+	});
 }
 
 function createWidget (request, response) {

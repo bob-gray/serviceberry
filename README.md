@@ -21,30 +21,48 @@ widget.on("GET", getWidget);
 
 service.catch(onError);
 service.use(require("some/middleware/logger"));
-service.start();
 
 ...
+
+service.start();
 ```
 
 Routing
 -------
-Using Serviceberry builds a service tree. Starting with a trunk - branches and leaves
-are added. Middleware can be injected at any stage. Each incoming request walks the tree to create
-a queue of handlers. All handlers (middleware, catches and endpoint implementations) have the
-same signature `(request, response)` and each handler has equal opportunity to control the
-request and response. 
+Using Serviceberry builds a service tree. Starting with a trunk - branches and leaves are added. Middleware
+can be injected at any point. Each incoming request walks the tree to create a queue of handlers. Each matching branch
+builds onto the queue.  All handlers (middleware, catches and endpoint implementations) have the same signature
+`(request, response)` and each handler has equal opportunity to control the request - one after another.  
 
-Handler queues are cummulative. Each matching branch builds onto the queue. If an error occurs
-while executing the queue it will be caught and fallback to the nearest catch. Errors are
-available in the catch hander as `request.error`.
+All handlers must implement [useable](#useable-objectfunction) and must exercise control in one of the following ways.
 
-Each handler in the queue must call `request.proceed()` to invoke the next handler or
-`response.send()` or `request.fail()` to end the request. Request `proceed()` and `fail()`
-are bound to the request internally so the can be called passed as callbacks - such as
-`.then(request.proceed).catch(request.fail)`. Once one of these methods is called, control
-is passed to the next handler which becomes the new request "owner". Only the current handler
-has a reference to the active request and response instances. Each handler is passed unique request
-and response instances (shallow copies).
+  1. Return a promise (any thennable should work).
+  2. Return something other than `false` that is not thennable.
+  3. Return nothing and call `request.proceed()`.
+  4. Return nothing and call `response.send(options)`.
+  5. Return nothing and call `request.fail(error)`.
+  6. Throw an error.
+  7. Return `false`.
+
+These action will result in one of three possible outcomes. Each handler has exactly one opportunity to exercise control.
+Once action has been taken, control is transferred away from the handler.
+
+  1. Proceed with the request (typical for middleware).
+  2. Complete the request and send a response to the client (typical for endpoint implementation).
+  3. Failure encountered - fallback to a catch.
+
+Throwing an error, returning `false`, returning and promise that is rejected or calling `response.fail(error)` are
+all functionally equivalent. They will all result in control falling back to the nearest catch handler. Errors are
+available in catch handers as `request.error`. If no catch handler is found the request will be terminated.
+
+Returning a resolved promise, returning anything other than `false` or a thennable, or calling `request.proceed()` are
+all functionally equivalent. They will all result in control moving to the next handler in the queue. If the queue is
+empty proceeding with the request will result in an error.
+
+Calling `response.send(options)` will complete the request and send the response to the client.
+
+`request.proceed()`, `request.fail(error)` and `response.send(options)` are not required to be called with context so
+they can safely be passed as callbacks - such as `.then(request.proceed, request.fail)`.
 
 Auto Error Statuses
 -------------------

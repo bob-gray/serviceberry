@@ -1,7 +1,6 @@
 "use strict";
 
 module.exports = {
-	projectName: "Serviceberry",
 	title: "Serviceberry",
 	tagline: "A simple HTTP service framework for Node.js",
 	url: "https://serviceberry.js.org",
@@ -22,11 +21,12 @@ module.exports = {
 		primaryColor: "#2b1100",
 		secondaryColor: "#7e7e7e"
 	},
+	repoUrl: "https://github.com/bob-gray/serviceberry",
 	organizationName: "bob-gray",
+	projectName: "serviceberry",
 	highlight: {
 		theme: "agate",
 	},
-	repoUrl: "https://github.com/bob-gray/serviceberry",
 	customDocsPath: "website/docs",
 	scripts: [
 		"https://buttons.github.io/buttons.js"

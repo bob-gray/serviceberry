@@ -14,13 +14,31 @@ jobs:
           - v1-dependencies-{{ checksum "package.json" }}
           - v1-dependencies-
 
-      - run: yarn install
+      - run: npm install
 
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
         
-      - run: yarn test
+      - run: npm test
 
+  deploy-website:
+    docker:
+      - image: circleci/node:8.10
 
+    steps:
+      - checkout
+      - run: 
+          name: Deploying to GitHub Pages
+          command: |
+            git config --global user.email "gray.bob98@gmail.com"
+            git config --global user.name "Bob Gray"
+            echo "machine github.com login bob-gray password $GITHUB_TOKEN" > ~/.netrc
+            cd website && npm install && GIT_USER=bob-gray npm run publish-gh-pages
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - deploy-website

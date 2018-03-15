@@ -4,7 +4,7 @@
   "description": "Simple HTTP service framework",
   "main": "src/main.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,72 @@
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Trunk · Serviceberry</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Trunk · Serviceberry"/><meta property="og:type" content="website"/><meta property="og:url" content="https://serviceberry.js.org/index.html"/><meta property="og:description" content="### *class*"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css"/><link rel="alternate" type="application/atom+xml" href="https://serviceberry.js.org/blog/atom.xml" title="Serviceberry Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://serviceberry.js.org/blog/feed.xml" title="Serviceberry Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/serviceberry-horizontal.svg"/><h2 class="headerTitle">Serviceberry</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/docs/getting-started.html" target="_self">Guides</a></li><li><a href="/docs/serviceberry.html" target="_self">API Reference</a></li><li><a href="/blog" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>API Reference</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Guides</h3><ul><li class="navListItem"><a class="navItem" href="/docs/getting-started.html">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/docs/handlers.html">Handlers</a></li><li class="navListItem"><a class="navItem" href="/docs/plugins.html">Plugins</a></li></ul></div><div class="navGroup navGroupActive"><h3>API Reference</h3><ul><li class="navListItem"><a class="navItem" href="/docs/serviceberry.html">Serviceberry</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/docs/trunk.html">Trunk</a></li><li class="navListItem"><a class="navItem" href="/docs/branch.html">Branch</a></li><li class="navListItem"><a class="navItem" href="/docs/leaf.html">Leaf</a></li><li class="navListItem"><a class="navItem" href="/docs/request.html">Request</a></li><li class="navListItem"><a class="navItem" href="/docs/response.html">Response</a></li><li class="navListItem"><a class="navItem" href="/docs/httperror.html">HttpError</a></li></ul></div></div></section></div><script>
+          var toggler = document.getElementById('navToggler');
+          var nav = document.getElementById('docsNav');
+          toggler.onclick = function() {
+            nav.classList.toggle('docsSliderActive');
+          };
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Trunk</h1></header><article><div><span><h3><a class="anchor" aria-hidden="true" name="class"></a><a href="#class" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><em>class</em></h3>
+<p>Should be created using <code>serviceberry.createTrunk()</code>.
+It is the root of the service and the entry point of the framework. All branches and leaves originate at the trunk.</p>
+<h2><a class="anchor" aria-hidden="true" name="methods"></a><a href="#methods" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
+<ul>
+<li><a href="#usehandler">use(handler)</a></li>
+<li><a href="#catchhandler">catch(handler)</a></li>
+<li><a href="#atpath">at(path)</a></li>
+<li><a href="#onoptions-handler">on(options[, handler])</a></li>
+<li><a href="#onmethod-handler">on(method[, handler])</a></li>
+<li><a href="#startcallback">start([callback])</a></li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" name="reference"></a><a href="#reference" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reference</h2>
+<h3><a class="anchor" aria-hidden="true" name="usehandler"></a><a href="#usehandler" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>use(handler)</h3>
+<p>Returns <em>this trunk</em></p>
+<p>Adds a handler to this trunk.</p>
+<ul>
+<li><strong>handler</strong> <em>function or object</em></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" name="catchhandler"></a><a href="#catchhandler" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>catch(handler)</h3>
+<p>Returns <em>this trunk</em></p>
+<p>Adds an error handler to this trunk.</p>
+<ul>
+<li><strong>handler</strong> <em>function or object</em></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" name="atpath"></a><a href="#atpath" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>at(path)</h3>
+<p>Returns <em>new branch</em></p>
+<p>Routes requests at a path (segment) down a new branch. Path paramaters are delimited using a set of curly braces.
+Such as <code>foo/baz/{id}/</code>. The branch will parse the path parameters. They are available to all handlers on
+the request object.</p>
+<ul>
+<li><strong>path</strong> <em>string</em></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" name="onoptions-handler"></a><a href="#onoptions-handler" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>on(options[, handler])</h3>
+<p>Returns <em>new leaf</em></p>
+<p>Routes requests filtered by options to a new leaf.</p>
+<ul>
+<li><strong>options</strong> <em>object</em>
+<ul>
+<li><p><strong>method</strong> <em>string or array</em> [optional]</p>
+<p>HTTP method(s) to handle (GET, POST...). If not specified all methods are handled.</p></li>
+<li><p><strong>consumes</strong> <em>string or array</em> [optional]</p>
+<p>Request content type(s) to handle (application/json, text/xml...). If not specified all request content types are handled.</p></li>
+<li><p><strong>produces</strong> <em>string or array</em> [optional]</p>
+<p>Response content type(s) to handle (application/json, text/xml...). If not specified all response content types are handled.</p></li>
+</ul></li>
+</ul>
+<ul>
+<li><strong>handler</strong> <em>function or object</em> [optional]</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" name="onmethod-handler"></a><a href="#onmethod-handler" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>on(method[, handler])</h3>
+<p>Returns <em>new leaf</em></p>
+<p>Routes requests filtered by method to a new leaf.</p>
+<ul>
+<li><p><strong>method</strong> <em>string or array</em></p>
+<p>HTTP method(s) to handle (GET, POST...). If &quot;*&quot; all methods are handled.</p></li>
+</ul>
+<ul>
+<li><strong>handler</strong> <em>function or object</em> [optional]</li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" name="start-callback"></a><a href="#start-callback" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>start([callback])</h3>
+<p>Begin listening for requets.</p>
+<ul>
+<li><strong>callback</strong> <em>function</em> [optional]</li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="serviceberry.html">← Serviceberry</a><a class="docs-next button" href="branch.html">Branch →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"></a><div><h5>Guides</h5><a href="/docs/en/getting-started.html">Getting Started</a></div><div><h5>API Reference</h5><a href="/docs/en/serviceberry.html">Serviceberry</a><a href="/docs/en/handler.html">Handler</a><a href="/docs/en/trunk.html">Trunk</a><a href="/docs/en/branch.html">Branch</a><a href="/docs/en/leaf.html">Leaf</a><a href="/docs/en/request.html">Reqeust</a><a href="/docs/en/response.html">Response</a><a href="/docs/en/http-error.html">HttpError</a></div><div><h5>More</h5><a href="/blog">Blog</a><a href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section></footer></div></body></html>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+    <channel>
+        <title>Serviceberry Blog</title>
+        <link>https://serviceberry.js.org/blog</link>
+        <description>The best place to stay up-to-date with the latest Serviceberry news and events.</description>
+        <lastBuildDate>Mon, 14 Mar 2016 06:00:00 GMT</lastBuildDate>
+        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+        <generator>Feed for Node.js</generator>
+        <image>
+            <title>Serviceberry Blog</title>
+            <url>https://serviceberry.js.org/img/serviceberry-horizontal.svg</url>
+            <link>https://serviceberry.js.org/blog</link>
+        </image>
+        <item>
+            <title><![CDATA[Hosted Documentation]]></title>
+            <link>https://serviceberry.js.org/blog/2016/03/14/hosted-documentation.html</link>
+            <guid>https://serviceberry.js.org/blog/2016/03/14/hosted-documentation.html</guid>
+            <pubDate>Mon, 14 Mar 2016 06:00:00 GMT</pubDate>
+            <description><![CDATA[<p>Thanks to many great tools for open source software Serviceberry documentation is hosted. I'll be
+continuing to work on cleaning up. Please take a look at the <a href="/docs/getting-started.html">Guides</a>
+and the <a href="/docs/serviceberry.html">API Reference</a>.</p>
+]]></description>
+        </item>
+    </channel>
+</rss>

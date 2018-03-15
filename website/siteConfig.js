@@ -3,8 +3,8 @@
 module.exports = {
 	title: "Serviceberry",
 	tagline: "A simple HTTP service framework for Node.js",
-	url: "https://serviceberry.js.org",
-	baseUrl: "/",
+	url: "https://bob-gray.github.io",
+	baseUrl: "/serviceberry/",
 	headerLinks: [{
 		label: "Guides",
 		doc: "getting-started"

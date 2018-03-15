@@ -1,0 +1,116 @@
+name: Response
+type: class
+description: |
+  This object is created internally by Serviceberry and passed as the second argument to handler functions.
+  It is a wrapper object around `http.ServerResponse`.
+methods:
+- name: is
+  arguments:
+  - name: status
+    type: string|number
+  returns: a boolean
+
+- name: getStatus
+  returns: an object
+
+- name: getStatusCode
+  returns: a number
+
+- name: getStatusText
+  returns: a string
+
+- name: setStatus
+  arguments:
+  - name: status
+    type: object|number
+    properties:
+    - name: code
+      type: number
+    - name: text
+      type: string
+
+- name: setStatusCode
+  arguments:
+  - name: code
+    type: number
+
+- name: setStatusText
+  arguments:
+  - name: text
+    type: string
+
+- name: getHeaders
+  returns: an object
+
+- name: getHeader
+  arguments:
+  - name: name
+    type: string
+  returns: a string or array
+
+- name: setHeaders
+  arguments:
+  - name: headers
+    type: object
+
+- name: setHeader
+  arguments:
+  - name: name
+    type: string
+  - name: value
+    type: string|number|array
+
+- name: hasHeader
+  arguments:
+  - name: name
+    type: string
+  returns: a boolean
+
+- name: withoutHeader
+  arguments:
+  - name: name
+    type: string
+  returns: a boolean
+
+- name: removeHeader
+  arguments:
+  - name: name
+    type: string
+
+- name: clearHeaders
+
+- name: getBody
+  returns: unserialized body
+
+- name: setBody
+  arguments:
+  - name: body
+    type: any
+
+- name: getEncoding
+  returns: a string
+
+- name: setEncoding
+  arguments:
+  - name: encoding
+    type: string
+
+- name: getContentType
+  returns: a string
+
+- name: getContent
+  returns: a buffer
+
+- name: send
+  arguments:
+  - name: status
+    type: object|number
+    properties:
+    - name: code
+      type: number
+    - name: text
+      type: string
+  - name: headers
+    type: object
+  - name: body
+    type: any

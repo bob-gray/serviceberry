@@ -1,0 +1,17 @@
+name: Leaf
+type: class
+description: Created by calling `on` method on the service trunk or any service branch.
+methods:
+- name: use
+  returns: this leaf
+  description: Adds a handler to this leaf.
+  arguments:
+  - name: handler
+    type: function or object
+
+- name: catch
+  returns: this leaf
+  description: Adds an error handler to this leaf.
+  arguments:
+  - name: handler
+    type: function or object

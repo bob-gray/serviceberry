@@ -1,0 +1,71 @@
+name: Trunk
+type: class
+description: |
+  Should be created using `serviceberry.createTrunk()`.
+  It is the root of the service and the entry point of the framework. All branches and leaves originate at the trunk.
+methods:
+- name: use
+  returns: this trunk
+  description: Adds a handler to this trunk.
+  arguments:
+  - name: handler
+    type: function or object
+
+- name: catch
+  returns: this trunk
+  description: Adds an error handler to this trunk.
+  arguments:
+  - name: handler
+    type: function or object
+
+- name: at
+  returns: new branch
+  description: |
+    Routes requests at a path (segment) down a new branch. Path paramaters are delimited using a set of curly braces.
+    Such as `foo/baz/{id}/`. The branch will parse the path parameters. They are available to all handlers on
+    the request object.
+  arguments:
+  - name: path
+    type: string
+
+- name: on
+  returns: new leaf
+  description: Routes requests filtered by options to a new leaf.
+  arguments:
+  - name: options
+    type: object
+    properties:
+      - name: method
+        type: string or array
+        description: HTTP method(s) to handle (GET, POST...). If not specified all methods are handled.
+        required: false
+      - name: consumes
+        type: string or array
+        description: Request content type(s) to handle (application/json, text/xml...). If not specified all request content types are handled.
+        required: false
+      - name: produces
+        type: string or array
+        description: Response content type(s) to handle (application/json, text/xml...). If not specified all response content types are handled.
+        required: false
+  - name: handler
+    type: function or object
+    required: false
+
+- name: on
+  returns: new leaf
+  description: Routes requests filtered by method to a new leaf.
+  arguments:
+  - name: method
+    type: string or array
+    description: |
+      HTTP method(s) to handle (GET, POST...). If "*" all methods are handled.
+  - name: handler
+    type: function or object
+    required: false
+
+- name: start
+  description: Begin listening for requets.
+  arguments:
+  - name: callback
+    type: function
+    required: false

@@ -1,0 +1,79 @@
+---
+id: {{id}}
+title: {{title}}
+---
+
+### *{{type}}*
+
+{{{description}}}
+
+{{#if sample}}
+```javascript
+{{{sample}}}
+```
+{{/if}}
+
+{{!--
+{{#if constructor}}
+[new {{name}}({{constructor.signature}})](#constructor)
+{{/if}}
+--}}
+
+{{#if methods}}
+Methods
+-------
+
+{{#each methods}}
+  - [{{#if static}}{{../name}}.{{/if}}{{name}}({{signature}})](#{{hash}})
+{{/each}}
+{{/if}}
+
+{{#if properties}}
+Properties
+----------
+
+{{#each properties}}
+{{#if function}}
+  - [{{name}}({{signature}})](#{{hash}})
+{{else}}
+  - [{{name}} *{{type}}*](#{{hash}})
+{{/if}}
+{{/each}}
+{{/if}}
+
+Reference
+---------
+
+{{#each methods}}
+### {{#if static}}{{../name}}.{{/if}}{{name}}({{signature}})
+
+{{#if returns}}Returns *{{returns}}*{{/if}}
+
+{{{description}}}
+
+{{> arguments}}
+
+{{/each}}
+
+{{#each properties}}
+{{#if function}}
+### {{name}}({{signature}})
+
+{{#if returns}}Returns *{{returns}}*{{/if}}
+
+{{{description}}}
+
+{{> arguments}}
+
+{{else}}
+### {{name}}
+
+{{{description}}} {{#if hasDefault}}**Default:** {{default}}{{/if}}
+{{/if}}
+
+{{#if sample}}
+```javascript
+{{{sample}}}
+```
+{{/if}}
+{{/each}}

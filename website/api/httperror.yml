@@ -1,0 +1,102 @@
+name: HttpError
+type: class
+description: |
+  Extends Error and several methods for working with the status and headers
+  of the resulting response.
+constructor:
+  arguments:
+  - name: error
+    type: error|string
+    description: Error object or error message.
+  - name: status
+    type: object|number
+    properties:
+    - name: code
+      type: number
+    - name: text
+      type: string
+  - name: headers
+    type: object
+methods:
+- name: getMessage
+  returns: a string
+
+- name: is
+  arguments:
+  - name: status
+    type: string|number
+  returns: a boolean
+
+- name: getStatus
+  returns: an object
+
+- name: getStatusCode
+  returns: a number
+
+- name: getStatusText
+  returns: a string
+
+- name: setStatus
+  arguments:
+  - name: status
+    type: object|number
+    properties:
+    - name: code
+      type: number
+    - name: text
+      type: string
+
+- name: setStatusCode
+  arguments:
+  - name: code
+    type: number
+
+- name: setStatusText
+  arguments:
+  - name: text
+    type: string
+
+- name: getHeaders
+  returns: an object
+
+- name: getHeader
+  arguments:
+  - name: name
+    type: string
+  returns: a string or array
+
+- name: setHeaders
+  arguments:
+  - name: headers
+    type: object
+
+- name: setHeader
+  arguments:
+  - name: name
+    type: string
+  - name: value
+    type: string|number|array
+
+- name: hasHeader
+  arguments:
+  - name: name
+    type: string
+  returns: a boolean
+
+- name: withoutHeader
+  arguments:
+  - name: name
+    type: string
+  returns: a boolean
+
+- name: removeHeader
+  arguments:
+  - name: name
+    type: string
+
+- name: clearHeaders
+
+properties:
+- name: originalError
+  type: Error
+  required: false

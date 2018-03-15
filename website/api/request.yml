@@ -1,0 +1,77 @@
+name: Request
+type: class
+description: |
+  This object is created internally by Serviceberry and passed as the first argument to handler functions.
+  It is a wrapper object around `http.IncomingMessage`.
+methods:
+- name: getMethod
+  returns: a string
+
+- name: getUrl
+  returns: a string
+
+- name: getAccept
+  returns: a string
+
+- name: getContentType
+  returns: a string
+
+- name: getEncoding
+  returns: a string
+
+- name: getHeaders
+  returns: an object
+
+- name: getHeader
+  arguments:
+  - name: name
+    type: string
+  returns: a string or array
+
+- name: hasHeader
+  arguments:
+  - name: name
+    type: string
+  returns: a boolean
+
+- name: withoutHeader
+  arguments:
+  - name: name
+    type: string
+  returns: a boolean
+
+- name: getParams
+  returns: an object
+
+- name: getParam
+  arguments:
+  - name: name
+    type: string
+  returns: a string
+
+- name: getPathParams
+  returns: an object
+
+- name: getPathParam
+  arguments:
+  - name: name
+    type: string
+  returns: a string
+
+- name: getQueryParams
+  returns: an object
+
+- name: getQueryParam
+  arguments:
+  - name: name
+  returns: a string
+
+- name: getContent
+  returns: a buffer
+
+- name: getBody
+  returns: unserialized body
+
+properties:
+- name: incomingMessage
+  type: incomingMessage

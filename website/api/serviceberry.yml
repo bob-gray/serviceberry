@@ -1,0 +1,53 @@
+name: Serviceberry
+type: object
+properties:
+- name: createTrunk
+  type: function
+  description: |
+    Creating a trunk using this factory function is the first thing you'll do when createing a service. This is the entry
+    point to the framework and every request. All branches and leaves will originate from here.
+  sample: |
+    const service = serviceberry.createTrunk({
+      port: 3000,
+      basePath: "api",
+      timeout: 10000
+    });
+  arguments:
+  - name: options
+    type: object
+    required: false
+    properties:
+    - name: port
+      type: number
+      default: 3000
+    - name: host
+      type: string
+      required: false
+    - name: basePath
+      type: string
+      default: "/"
+    - name: backlog
+      type: number
+      required: false
+    - name: timeout
+      type: number
+      required: false
+    - name: deserializers
+      type: object
+      required: false
+    - name: serializers
+      type: object
+      required: false
+    - name: callback
+      type: function
+      required: false
+
+- name: statusCodes
+  type: object
+  description: |
+    All the status in [http.STATUS_CODES](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_http_status_codes)
+    in addition to codes keyed by constant case status text such as `statusCodes.OK === 200` and `statusCodes.NOT_FOUND === 404`.
+
+- name: HttpError
+  type: class
+  description: A constructor function for creating HTTP specific error objects. [HttpError](httperror.hml)

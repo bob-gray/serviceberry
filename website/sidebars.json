@@ -1,0 +1,18 @@
+{
+  "doc": {
+    "Guides": [
+      "getting-started",
+      "handlers",
+      "plugins"
+    ],
+    "API Reference": [
+      "serviceberry",
+      "trunk",
+      "branch",
+      "leaf",
+      "request",
+      "response",
+      "httperror"
+    ]
+  }
+}

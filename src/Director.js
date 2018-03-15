@@ -37,7 +37,9 @@ function proceed () {
 	if (handler) {
 		this.invoke(callHandler, handler);
 	} else {
-		this.invoke(fail, "Request proceed called when handler queue was empty");
+		this.invoke(send, {
+			body: this.request.latestResult
+		});
 	}
 }
 
@@ -61,7 +63,8 @@ function fail (error) {
 function serialize () {
 	var serializer = new Serializer(this.route.options.serializers);
 
-	return this.invoke(bind).call(serializer.proxy("serialize"), this.request, this.response)
+	return this.invoke(bind)
+		.call(serializer.proxy("serialize"), this.request, this.response)
 		.then(this.response.proxy("setContent"))
 		.catch(this.proxy(fail));
 }
@@ -84,6 +87,7 @@ function callHandler (handler) {
 function call (handler) {
 	this.invoke(bind)
 		.call(handler, this.request, this.response)
+		.then(this.proxy(setLatestResult))
 		.then(this.proxy(proceed))
 		.catch(this.proxy(fail));
 }
@@ -120,6 +124,10 @@ function end () {
 	clearTimeout(this.timer);
 
 	serverResponse.end();
+}
+
+function setLatestResult (result) {
+	this.request.latestResult = result;
 }
 
 function setDeserializeFail (error) {

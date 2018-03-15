@@ -6,17 +6,31 @@ const Branch = require("./Branch"),
 	Request = require("./Request"),
 	Response = require("./Response"),
 	Route = require("./Route"),
-	Director = require("./Director");
+	Director = require("./Director"),
+	defaultOptions = {
+		port: 3000,
+		basePath: "/",
+		autoStart: true,
+		timeout: 10000
+	};
 
 class Trunk extends Branch {
 	static create (options) {
 		return new Trunk(options);
 	}
 
-	constructor (options) {
+	constructor (options = {}) {
+		options = Object.assign({}, defaultOptions, options);
 		super(options);
-		this.options = options;
 		this.server = http.createServer();
+
+		if (options.autoStart) {
+			process.nextTick(this.proxy("start"));
+		}
+
+		if (options.callback) {
+			this.server.on("listening", options.callback);
+		}
 	}
 
 	createNode (options) {

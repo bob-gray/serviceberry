@@ -8,6 +8,7 @@ const Base = require("solv/src/abstract/base"),
 class Leaf extends Base {
 	constructor (options) {
 		super();
+		this.options = options;
 		this.createNode(options);
 	}
 

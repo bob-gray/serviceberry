@@ -101,6 +101,14 @@ class Request extends EventEmitter {
 		return this.incomingMessage.headers;
 	}
 
+	hasHeader (name) {
+		return this.invoke(findName, name) !== undefined;
+	}
+
+	withoutHeader (name) {
+		return !this.hasHeader(name);
+	}
+
 	getContentType () {
 		return this.contentType && this.contentType.type;
 	}
@@ -116,6 +124,12 @@ function parseContentType () {
 	} catch (error) {
 		// throws if missing header or header is malformed
 	}
+}
+
+function findName (name) {
+	name = name.toLowerCase();
+
+	return Object.keys(this.incomingMessage.headers).find(key => key.toLowerCase() === name);
 }
 
 Object.assign(Request.prototype, Base.prototype);

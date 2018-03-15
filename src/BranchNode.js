@@ -12,6 +12,7 @@ class BranchNode extends TrunkNode {
 		this.invoke(createPattern);
 		this.invoke(setPlaceholders);
 	}
+
 	test (request) {
 		return this.pattern.test(request.remainingPath);
 	}

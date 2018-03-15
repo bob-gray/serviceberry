@@ -66,7 +66,7 @@ function chooseLeaf (request, response) {
 	acceptable = supported.filter(leaf => leaf.isAcceptable(request, response));
 
 	if (this.leaves.isEmpty()) {
-		leaf = notFound(request);
+		leaf = notFound();
 	} else if (allowed.isEmpty() && request.getMethod() === "OPTIONS") {
 		leaf = this.invoke(autoOptions);
 	} else if (allowed.isEmpty()) {
@@ -110,10 +110,10 @@ function autoOptions () {
 	return options;
 }
 
-function notFound (request) {
+function notFound () {
 	const ErrorNode = require("./ErrorNode");
 
-	return new ErrorNode(statusCodes.NOT_FOUND, request);
+	return new ErrorNode(statusCodes.NOT_FOUND);
 }
 
 module.exports = TrunkNode;

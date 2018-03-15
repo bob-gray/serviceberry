@@ -5,10 +5,19 @@ const TrunkNode = require("./TrunkNode"),
 
 class LeafNode extends TrunkNode {
 	isAllowed (request) {
-		var allowed = true;
+		var allowed = true,
+			method = this.options.method;
 
-		if (this.options.method) {
-			allowed = request.getMethod() === this.options.method;
+		if (method === "*") {
+			method = null;
+		}
+
+		if (!Array.isArray(method) && method) {
+			method = [method];
+		}
+
+		if (method) {
+			allowed = method.includes(request.getMethod());
 		}
 
 		return allowed;
@@ -19,7 +28,7 @@ class LeafNode extends TrunkNode {
 			consumes = this.options.consumes,
 			contentType = request.getContentType();
 
-		if (consumes && !Array.isArray(consumes)) {
+		if (!Array.isArray(consumes) && consumes) {
 			consumes = [consumes];
 		}
 

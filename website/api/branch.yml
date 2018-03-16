@@ -1,17 +1,17 @@
 name: Branch
 type: class
-description: Created by calling `at` method on the service trunk or any service branch.
+description: Created by calling method `.at()` on the service [trunk](trunk.html) or any service branch.
 methods:
 - name: use
   returns: this branch
-  description: Adds a handler to this branch.
+  description: Adds a plugin [handler](handlers.html) to this branch.
   arguments:
   - name: handler
     type: function or object
 
 - name: catch
   returns: this branch
-  description: Adds an error handler to this branch.
+  description: Adds an error [handler](handlers.html) to this branch.
   arguments:
   - name: handler
     type: function or object
@@ -19,15 +19,15 @@ methods:
 - name: at
   returns: new branch
   description: |
-    Routes requests at a path (segment) down a new branch. Path paramaters are delimited using a set of curly braces.
-    Such as `foo/baz/{id}/`. The branch will parse the path parameters. They are available to all handlers on
-    the request object.
+    Routes requests at a path (segment) down a new [branch](branch.html). Path paramaters are delimited using
+    a pair of curly braces. Such as `foo/baz/{id}/`. The branch will parse the path parameters. They are
+    available to all handlers through the request object.
   arguments:
   - name: path
     type: string
 
 - name: on
-  returns: new leaf
+  returns: new [leaf](leaf.html)
   description: Routes requests filtered by options to a new leaf.
   arguments:
   - name: options
@@ -35,7 +35,7 @@ methods:
     properties:
       - name: method
         type: string or array
-        description: HTTP method(s) to handle (GET, POST...). If not specified all methods are handled.
+        description: HTTP method(s) to handle (`GET`, `POST`...). If not specified or is "*", all methods are handled.
         required: false
       - name: consumes
         type: string or array
@@ -45,18 +45,24 @@ methods:
         type: string or array
         description: Response content type(s) to handle (application/json, text/xml...). If not specified all response content types are handled.
         required: false
+      - name: serializers
+        type: object
+        description: Property names must be content types (such as `application/json`) and values must be [serializers](plugins.html#serializers-and-deserializers) plugins.
+      - name: deserializers
+        type: object
+        description: Property names must be content types (such as `application/json`) and values must be [deserializers](plugins.html#serializers-and-deserializers) plugins.
   - name: handler
     type: function or object
     required: false
 
 - name: on
-  returns: new leaf
+  returns: new [leaf](leaf.html)
   description: Routes requests filtered by method to a new leaf.
   arguments:
   - name: method
     type: string or array
     description: |
-      HTTP method(s) to handle (GET, POST...). If "*" all methods are handled.
+      HTTP method(s) to handle (`GET`, `POST`...). If "*", all methods are handled.
   - name: handler
     type: function or object
     required: false

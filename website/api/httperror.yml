@@ -6,10 +6,10 @@ description: |
 constructor:
   arguments:
   - name: error
-    type: error|string
+    type: error or string
     description: Error object or error message.
   - name: status
-    type: object|number
+    type: object or number
     properties:
     - name: code
       type: number
@@ -24,7 +24,7 @@ methods:
 - name: is
   arguments:
   - name: status
-    type: string|number
+    type: string or number
   returns: a boolean
 
 - name: getStatus
@@ -39,7 +39,7 @@ methods:
 - name: setStatus
   arguments:
   - name: status
-    type: object|number
+    type: object or number
     properties:
     - name: code
       type: number
@@ -75,7 +75,7 @@ methods:
   - name: name
     type: string
   - name: value
-    type: string|number|array
+    type: string or number or array
 
 - name: hasHeader
   arguments:
@@ -99,4 +99,5 @@ methods:
 properties:
 - name: originalError
   type: Error
-  required: false
+  description: |
+    Error passed into constructor

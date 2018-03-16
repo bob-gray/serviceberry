@@ -127,7 +127,7 @@ const FeatureCallout = props => (
   <div
     className="productShowcaseSection paddingBottom"
     style={{textAlign: 'center'}}>
-    <h2>The best API for building HTTP APIs</h2>
+    <h2>The Best API for Building HTTP APIs</h2>
     <MarkdownBlock>
       Serviceberry is designed to be flexible, extensible and easy to use. It doesn't mandate
       boilerplate or configuration or demand to marry your application. It helps you do HTTP well facilitating

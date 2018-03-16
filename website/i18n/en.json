@@ -9,6 +9,7 @@
     "handlers": "Handlers",
     "httperror": "HttpError",
     "leaf": "Leaf",
+    "license": "License (MIT)",
     "plugins": "Plugins",
     "request": "Request",
     "response": "Response",

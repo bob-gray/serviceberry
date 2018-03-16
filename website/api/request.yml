@@ -1,9 +1,40 @@
 name: Request
 type: class
 description: |
-  This object is created internally by Serviceberry and passed as the first argument to handler functions.
-  It is a wrapper object around `http.IncomingMessage`.
+  This object is created internally by Serviceberry and passed as the first argument to [handler](handlers.html) functions.
+  It is a wrapper object around Node's [`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/).
 methods:
+- name: proceed
+  description: |
+    Call this method to transfer control of the request to the next handler. See [handlers](handlers.html) guide.
+  arguments:
+    - name: result
+      type: any
+      required: false
+      description: |
+        Set as [`latestResult`](#latestresult) property with the exception of when a request is being serialized
+        or deserialized. Then the result is the response content or request body respectively.
+
+- name: fail
+  description: |
+    Call this method to transfer control of the request the next handler. See [handlers](handlers.html) guide.
+  arguments:
+    - name: error
+      type: string or error
+      description: |
+        Can be a error message or an error object.
+    - name: status
+      type: number or object
+      default: 500
+      description: |
+        Can be a status code or an object with properties `code` and `text`.
+    - name: headers
+      type: object
+      required: false
+      description: |
+        Response headers if fail results in the end of the request. These headers are not set on the
+        response if a catch handlers the fail and the request continues.
+
 - name: getMethod
   returns: a string
 
@@ -64,6 +95,7 @@ methods:
 - name: getQueryParam
   arguments:
   - name: name
+    type: string
   returns: a string
 
 - name: getContent
@@ -74,4 +106,14 @@ methods:
 
 properties:
 - name: incomingMessage
-  type: incomingMessage
+  type: http.IncomingMessage
+  description: |
+    The preferred way to interact with a request is the methods above, however if a need arises
+    that is not addressed with an existing method, then direct access to the
+    [`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/) is available here.
+- name: error
+  type: HttpError
+  description: Available within catch handlers.
+- name: latestResult
+  type: any
+  description: The resolved result of the latest finished handler.

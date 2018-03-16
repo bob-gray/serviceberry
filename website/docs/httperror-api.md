@@ -52,7 +52,7 @@ Returns *a boolean*
 
 
 
-  - **status** *string|number* 
+  - **status** *string or number* 
 
 
 ### getStatus()
@@ -82,7 +82,7 @@ Returns *a string*
 
 
 
-  - **status** *object|number* 
+  - **status** *object or number* 
     - **code** *number* 
   
     - **text** *string* 
@@ -140,7 +140,7 @@ Returns *a string or array*
 
   - **name** *string* 
 
-  - **value** *string|number|array* 
+  - **value** *string or number or array* 
 
 
 ### hasHeader(name)
@@ -180,5 +180,6 @@ Returns *a boolean*
 
 ### originalError
 
+Error passed into constructor
  
 

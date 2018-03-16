@@ -5,8 +5,8 @@ title: Response
 
 ### *class*
 
-This object is created internally by Serviceberry and passed as the second argument to handler functions.
-It is a wrapper object around `http.ServerResponse`.
+This object is created internally by Serviceberry and passed as the second argument to [handler](handlers.html) functions.
+It is a wrapper object around Node's [`http.ServerResponse`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_serverresponse).
 
 
 
@@ -14,6 +14,7 @@ It is a wrapper object around `http.ServerResponse`.
 Methods
 -------
 
+  - [send([options])](#sendoptions)
   - [is(status)](#isstatus)
   - [getStatus()](#getstatus)
   - [getStatusCode()](#getstatuscode)
@@ -35,11 +36,37 @@ Methods
   - [setEncoding(encoding)](#setencodingencoding)
   - [getContentType()](#getcontenttype)
   - [getContent()](#getcontent)
-  - [send(status, headers, body)](#sendstatus-headers-body)
 
 
 Reference
 ---------
+
+### send([options])
+
+
+
+Sends a response back to the client. A response can also be implicity sent when the request proceeds and
+there are no more handlers in the queue.
+
+
+  - **options** *object* [optional]
+
+    Sets response options before finishing request and sending response.
+ 
+    - **status** *number or object* [optional]
+  
+    - **headers** *object* [optional]
+  
+    - **body** *any* [optional]
+  
+    - **encoding** *string* [optional]
+  
+    - **finish** *function* [optional]
+  
+      Listener for `http.ServerResponse` event `finish`
+   
+  
+
 
 ### is(status)
 
@@ -47,7 +74,7 @@ Returns *a boolean*
 
 
 
-  - **status** *string|number* 
+  - **status** *string or number* 
 
 
 ### getStatus()
@@ -77,7 +104,7 @@ Returns *a string*
 
 
 
-  - **status** *object|number* 
+  - **status** *object or number* 
     - **code** *number* 
   
     - **text** *string* 
@@ -135,7 +162,7 @@ Returns *a string or array*
 
   - **name** *string* 
 
-  - **value** *string|number|array* 
+  - **value** *string or number or array* 
 
 
 ### hasHeader(name)
@@ -216,23 +243,6 @@ Returns *a string*
 Returns *a buffer*
 
 
-
-
-### send(status, headers, body)
-
-
-
-
-
-  - **status** *object|number* 
-    - **code** *number* 
-  
-    - **text** *string* 
-  
-
-  - **headers** *object* 
-
-  - **body** *any* 
 
 
 

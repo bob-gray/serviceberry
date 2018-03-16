@@ -1,35 +1,35 @@
 name: Trunk
 type: class
 description: |
-  Should be created using `serviceberry.createTrunk()`.
-  It is the root of the service and the entry point of the framework. All branches and leaves originate at the trunk.
+  Should be created using `serviceberry.createTrunk()`. All [branches](branch.html) and [leaves](leaf.html)
+  originate from the trunk. Each service has only one trunk.
 methods:
 - name: use
   returns: this trunk
-  description: Adds a handler to this trunk.
+  description: Adds a plugin [handler](handlers.html) to this trunk.
   arguments:
   - name: handler
     type: function or object
 
 - name: catch
   returns: this trunk
-  description: Adds an error handler to this trunk.
+  description: Adds an error [handler](handlers.html) to this trunk.
   arguments:
   - name: handler
     type: function or object
 
 - name: at
-  returns: new branch
+  returns: new [branch](branch.html)
   description: |
-    Routes requests at a path (segment) down a new branch. Path paramaters are delimited using a set of curly braces.
-    Such as `foo/baz/{id}/`. The branch will parse the path parameters. They are available to all handlers on
-    the request object.
+    Routes requests at a path (segment) down a new [branch](branch.html). Path paramaters are delimited using
+    a pair of curly braces. Such as `foo/baz/{id}/`. The branch will parse the path parameters. They are
+    available to all handlers through the request object.
   arguments:
   - name: path
     type: string
 
 - name: on
-  returns: new leaf
+  returns: new [leaf](leaf.html)
   description: Routes requests filtered by options to a new leaf.
   arguments:
   - name: options
@@ -37,7 +37,7 @@ methods:
     properties:
       - name: method
         type: string or array
-        description: HTTP method(s) to handle (GET, POST...). If not specified all methods are handled.
+        description: HTTP method(s) to handle (`GET`, `POST`...). If not specified or is "*", all methods are handled.
         required: false
       - name: consumes
         type: string or array
@@ -47,18 +47,24 @@ methods:
         type: string or array
         description: Response content type(s) to handle (application/json, text/xml...). If not specified all response content types are handled.
         required: false
+      - name: serializers
+        type: object
+        description: Property names must be content types (such as `application/json`) and values must be [serializers](plugins.html#serializers-and-deserializers) plugins.
+      - name: deserializers
+        type: object
+        description: Property names must be content types (such as `application/json`) and values must be [deserializers](plugins.html#serializers-and-deserializers) plugins.
   - name: handler
     type: function or object
     required: false
 
 - name: on
-  returns: new leaf
+  returns: new [leaf](leaf.html)
   description: Routes requests filtered by method to a new leaf.
   arguments:
   - name: method
     type: string or array
     description: |
-      HTTP method(s) to handle (GET, POST...). If "*" all methods are handled.
+      HTTP method(s) to handle (`GET`, `POST`...). If "*", all methods are handled.
   - name: handler
     type: function or object
     required: false

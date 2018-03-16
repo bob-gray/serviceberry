@@ -5,7 +5,7 @@ const React = require('react');
 class Footer extends React.Component {
   docUrl(doc, language) {
     const baseUrl = this.props.config.baseUrl;
-    return baseUrl + 'docs/' + (language ? language + '/' : '') + doc;
+    return baseUrl + 'docs/' + doc;
   }
 
   pageUrl(doc, language) {
@@ -31,17 +31,18 @@ class Footer extends React.Component {
           <div>
             <h5>Guides</h5>
             <a href={this.docUrl('getting-started.html', this.props.language)}>Getting Started</a>
+            <a href={this.docUrl('handlers.html', this.props.language)}>Handlers</a>
+            <a href={this.docUrl('plugins.html', this.props.language)}>Plugins</a>
           </div>
           <div>
             <h5>API Reference</h5>
             <a href={this.docUrl('serviceberry.html', this.props.language)}>Serviceberry</a>
-            <a href={this.docUrl('handler.html', this.props.language)}>Handler</a>
             <a href={this.docUrl('trunk.html', this.props.language)}>Trunk</a>
             <a href={this.docUrl('branch.html', this.props.language)}>Branch</a>
             <a href={this.docUrl('leaf.html', this.props.language)}>Leaf</a>
             <a href={this.docUrl('request.html', this.props.language)}>Reqeust</a>
             <a href={this.docUrl('response.html', this.props.language)}>Response</a>
-            <a href={this.docUrl('http-error.html', this.props.language)}>HttpError</a>
+            <a href={this.docUrl('httperror.html', this.props.language)}>HttpError</a>
           </div>
           <div>
             <h5>More</h5>
@@ -57,6 +58,7 @@ class Footer extends React.Component {
               aria-label="Star this project on GitHub">
               Star
             </a>
+            <a href={this.docUrl('license.html', this.props.language)}>License</a>
           </div>
         </section>
       </footer>

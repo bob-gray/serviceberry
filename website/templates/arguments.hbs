@@ -1,7 +1,7 @@
 {{#each arguments}}
   - **{{name}}** *{{type}}* {{#unless required}}[optional]{{/unless}}{{#if description}}
 
-    {{description}} {{#if hasDefault}}**Default:** {{default}}{{/if}}{{/if}}
+    {{{description}}} {{#if hasDefault}}**Default:** {{default}}{{/if}}{{/if}}
   {{> properties}}
 
 {{/each}}

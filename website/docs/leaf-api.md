@@ -5,7 +5,7 @@ title: Leaf
 
 ### *class*
 
-Created by calling `on` method on the service trunk or any service branch.
+Created by calling `.on()` method on the service trunk or any service branch.
 
 
 
@@ -23,7 +23,7 @@ Reference
 
 Returns *this leaf*
 
-Adds a handler to this leaf.
+Adds a plugin [handler](handlers.html) to this leaf.
 
   - **handler** *function or object* 
 
@@ -32,7 +32,7 @@ Adds a handler to this leaf.
 
 Returns *this leaf*
 
-Adds an error handler to this leaf.
+Adds an error [handler](handlers.html) to this leaf.
 
   - **handler** *function or object* 
 

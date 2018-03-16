@@ -5,7 +5,7 @@ title: Branch
 
 ### *class*
 
-Created by calling `at` method on the service trunk or any service branch.
+Created by calling method `.at()` on the service [trunk](trunk.html) or any service branch.
 
 
 
@@ -26,7 +26,7 @@ Reference
 
 Returns *this branch*
 
-Adds a handler to this branch.
+Adds a plugin [handler](handlers.html) to this branch.
 
   - **handler** *function or object* 
 
@@ -35,7 +35,7 @@ Adds a handler to this branch.
 
 Returns *this branch*
 
-Adds an error handler to this branch.
+Adds an error [handler](handlers.html) to this branch.
 
   - **handler** *function or object* 
 
@@ -44,9 +44,9 @@ Adds an error handler to this branch.
 
 Returns *new branch*
 
-Routes requests at a path (segment) down a new branch. Path paramaters are delimited using a set of curly braces.
-Such as `foo/baz/{id}/`. The branch will parse the path parameters. They are available to all handlers on
-the request object.
+Routes requests at a path (segment) down a new [branch](branch.html). Path paramaters are delimited using
+a pair of curly braces. Such as `foo/baz/{id}/`. The branch will parse the path parameters. They are
+available to all handlers through the request object.
 
 
   - **path** *string* 
@@ -54,14 +54,14 @@ the request object.
 
 ### on(options[, handler])
 
-Returns *new leaf*
+Returns *new [leaf](leaf.html)*
 
 Routes requests filtered by options to a new leaf.
 
   - **options** *object* 
     - **method** *string or array* [optional]
   
-      HTTP method(s) to handle (GET, POST...). If not specified all methods are handled. 
+      HTTP method(s) to handle (`GET`, `POST`...). If not specified or is "*", all methods are handled. 
   
     - **consumes** *string or array* [optional]
   
@@ -71,19 +71,27 @@ Routes requests filtered by options to a new leaf.
   
       Response content type(s) to handle (application/json, text/xml...). If not specified all response content types are handled. 
   
+    - **serializers** *object* 
+  
+      Property names must be content types (such as `application/json`) and values must be [serializers](plugins.html#serializers-and-deserializers) plugins. 
+  
+    - **deserializers** *object* 
+  
+      Property names must be content types (such as `application/json`) and values must be [deserializers](plugins.html#serializers-and-deserializers) plugins. 
+  
 
   - **handler** *function or object* [optional]
 
 
 ### on(method[, handler])
 
-Returns *new leaf*
+Returns *new [leaf](leaf.html)*
 
 Routes requests filtered by method to a new leaf.
 
   - **method** *string or array* 
 
-    HTTP method(s) to handle (GET, POST...). If &quot;*&quot; all methods are handled.
+    HTTP method(s) to handle (`GET`, `POST`...). If "*", all methods are handled.
  
 
   - **handler** *function or object* [optional]

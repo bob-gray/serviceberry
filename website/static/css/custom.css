@@ -22,6 +22,10 @@ body,
 
 }
 
+.mainContainer .wrapper code {
+	max-width: 50rem;
+}
+
 .docMainWrapper.wrapper {
 	margin-bottom: 0;
 }
@@ -57,10 +61,16 @@ body,
 	color: #026e00;
 }
 
+.mainContainer .wrapper ul ul {
+	list-style-type: circle;
+}
+
 .docsNavContainer {
 	background: #fbfbfb;
 	border-right: 1px solid #ccc;
 	margin-top: 0;
+    width: 33%;
+    max-width: 280px;
 }
 
 .docsNavContainer .toc {
@@ -78,6 +88,10 @@ body,
     font-style: italic;
     font-size: 1.3em;
     padding-bottom: 0;
+}
+
+nav.toc .toggleNav ul li a {
+	font-size: 100%;
 }
 
 a {

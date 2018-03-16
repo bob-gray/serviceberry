@@ -1,13 +1,42 @@
 name: Response
 type: class
 description: |
-  This object is created internally by Serviceberry and passed as the second argument to handler functions.
-  It is a wrapper object around `http.ServerResponse`.
+  This object is created internally by Serviceberry and passed as the second argument to [handler](handlers.html) functions.
+  It is a wrapper object around Node's [`http.ServerResponse`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_serverresponse).
 methods:
+- name: send
+  description: |
+    Sends a response back to the client. A response can also be implicity sent when the request proceeds and
+    there are no more handlers in the queue.
+  arguments:
+    - name: options
+      type: object
+      required: false
+      description: |
+        Sets response options before finishing request and sending response.
+      properties:
+        - name: status
+          type: number or object
+          default: 200
+        - name: headers
+          type: object
+          required: false
+        - name: body
+          type: any
+          required: false
+        - name: encoding
+          type: string
+          default: utf8
+        - name: finish
+          type: function
+          required: false
+          description: |
+            Listener for `http.ServerResponse` event `finish`
+
 - name: is
   arguments:
   - name: status
-    type: string|number
+    type: string or number
   returns: a boolean
 
 - name: getStatus
@@ -22,7 +51,7 @@ methods:
 - name: setStatus
   arguments:
   - name: status
-    type: object|number
+    type: object or number
     properties:
     - name: code
       type: number
@@ -58,7 +87,7 @@ methods:
   - name: name
     type: string
   - name: value
-    type: string|number|array
+    type: string or number or array
 
 - name: hasHeader
   arguments:
@@ -100,17 +129,3 @@ methods:
 
 - name: getContent
   returns: a buffer
-
-- name: send
-  arguments:
-  - name: status
-    type: object|number
-    properties:
-    - name: code
-      type: number
-    - name: text
-      type: string
-  - name: headers
-    type: object
-  - name: body
-    type: any

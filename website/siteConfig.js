@@ -21,6 +21,7 @@ module.exports = {
 		primaryColor: "#2b1100",
 		secondaryColor: "#7e7e7e"
 	},
+	onPageNav: "separate",
 	repoUrl: "https://github.com/bob-gray/serviceberry",
 	organizationName: "bob-gray",
 	projectName: "serviceberry",

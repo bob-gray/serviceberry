@@ -1,6 +1,6 @@
 {
   "name": "serviceberry",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "Simple HTTP service framework",
   "main": "src/main.js",
   "scripts": {

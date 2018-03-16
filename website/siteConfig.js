@@ -5,6 +5,7 @@ module.exports = {
 	tagline: "A simple HTTP service framework for Node.js",
 	url: "https://bob-gray.github.io",
 	baseUrl: "/serviceberry/",
+	cname: "serviceberry.js.org",
 	headerLinks: [{
 		label: "Guides",
 		doc: "getting-started"

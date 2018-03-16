@@ -1,68 +1,9 @@
 Serviceberry
 ============
 
-Simple HTTP service framework for Node.js
+[Documentation](https://bob-gray.github.io/serviceberry)
 
-  - #createTrunk(options)
-      - returns new trunk
-
-``` javascript
-const serviceberry = require("serviceberry");
-const service = serviceberry.createTrunk({
-    port: 3000
-});
-const widgets = service.at("/widgets")
-    .use(require("some/middleware/auth"));
-const widget = widgets.at("/{id}");
-
-widgets.on("GET", getWidgets);
-widgets.on("POST", createWidget);
-widget.on("GET", getWidget);
-
-service.catch(onError);
-service.use(require("some/middleware/logger"));
-
-...
-
-service.start();
-```
-
-Routing
--------
-Using Serviceberry builds a service tree. Starting with a trunk - branches and leaves are added. Middleware
-can be injected at any point. Each incoming request walks the tree to create a queue of handlers. Each matching branch
-builds onto the queue.  All handlers (middleware, catches and endpoint implementations) have the same signature
-`(request, response)` and each handler has equal opportunity to control the request - one after another.  
-
-All handlers must implement [useable](#useable-objectfunction) and must exercise control in one of the following ways.
-
-  1. Return a promise (any thennable should work).
-  2. Return something other than `false` that is not thennable.
-  3. Return nothing and call `request.proceed()`.
-  4. Return nothing and call `response.send(options)`.
-  5. Return nothing and call `request.fail(error)`.
-  6. Throw an error.
-  7. Return `false`.
-
-These action will result in one of three possible outcomes. Each handler has exactly one opportunity to exercise control.
-Once action has been taken, control is transferred away from the handler.
-
-  1. Proceed with the request (typical for middleware).
-  2. Complete the request and send a response to the client (typical for endpoint implementation).
-  3. Failure encountered - fallback to a catch.
-
-Throwing an error, returning `false`, returning and promise that is rejected or calling `response.fail(error)` are
-all functionally equivalent. They will all result in control falling back to the nearest catch handler. Errors are
-available in catch handers as `request.error`. If no catch handler is found the request will be terminated.
-
-Returning a resolved promise, returning anything other than `false` or a thennable, or calling `request.proceed()` are
-all functionally equivalent. They will all result in control moving to the next handler in the queue. If the queue is
-empty proceeding with the request will result in an error.
-
-Calling `response.send(options)` will complete the request and send the response to the client.
-
-`request.proceed()`, `request.fail(error)` and `response.send(options)` are not required to be called with context so
-they can safely be passed as callbacks - such as `.then(request.proceed, request.fail)`.
+Serviceberry is a simple HTTP service framework.
 
 Auto Error Statuses
 -------------------
@@ -110,154 +51,46 @@ To override these auto responses implement your own
     All middleware, catches and handlers in the GET queue will be
     executed.
 
-
-Interfaces
-==========
-
-usable `<object>|<function>`
-------
-A handler function or any object with a property named "use" whose value is a
-handler function. The handler signature is `(request, response)`. Usable
-objects use methods will be invoked with the object as the calling context (`this`).
-
-
-Classes
-=======
-
-Trunk(options)
---------------
-  - options
-
-        port <number>
-        host <string>
-        backlog <number>
-        serializers <object>
-
-  - #start(callback)
-
-  - #use(usable)
-      - returns this trunk
-
-  - #catch(usable)
-      - returns this trunk
-
-  - #at(path)
-      - returns new branch
-
-Branch(node)
+Architecture
 ------------
-  - #use(usable)
-      - returns this branch
 
-  - #catch(usable)
-      - returns this branch
+Serviceberry can be thought about in three phases
 
-  - #at(path)
-      - returns new branch
+```
+          ----------------------------------------------------------------------------------------
+         |                                                                                        |
+         |        You use serviceberry's API to build a service tree (see example above).         |
+Phase 1  |                                                                                        |
+         |               This phase runs once each time your service is started.                  |
+         |                                                                                        |
+          ----------------------------------------------------------------------------------------
 
-  - #on(method[, usable])
-      - returns new leaf
+                    After phase 1 the service is listening for requests to respond to...
 
-  - #on(options[, usable])
-      - options
+          ----------------------------------------------------------------------------------------
+         |                                                                                        |
+         |        Your service receives a request and serviceberry walks the service tree         |
+Phase 2  |                          and builds a queue of handlers.                               |
+         |                                                                                        |
+         |                 This phase runs once for each incoming request.                        |
+         |                                                                                        |
+          ----------------------------------------------------------------------------------------
+                                                     |
+                                                     v
+          ----------------------------------------------------------------------------------------
+         |                                                                                        |
+         |        Serviceberry runs through the handler queue transferring control of the         |
+Phase 3  |                 request to each handler one after the other.                           |
+         |                                                                                        |
+         |      This phase runs once for each incoming request and immediately follows phase 2.   |
+         |                                                                                        |
+          ----------------------------------------------------------------------------------------
 
-            method <string>
-            consumes <string>
-            produces <string>
+                                          -- or stated more simply --
+                                                   
+Phase 1: You call serviceberry to build a start a service
 
-      - returns new leaf
+Phase 2: Serviceberry walks your service tree for each incoming request
 
-Leaf(node)
-----------
-  - #use(usable)
-      - returns this leaf
-
-  - #catch(usable)
-      - returns this leaf
-
-Request(incomingMessage)
-------------------------
-  - #getMethod()
-      - returns string
-
-  - #getHeaders()
-      - returns object of header names and values - names are lower case
-
-  - #getHeader(name)
-      - returns value - can be string or array
-
-  - #getParams()
-      - returns object - path and query string - path params take precedence - values
-        are strings
-
-  - #getParam(name)
-      - returns string value
-
-  - #getPathParams()
-      - returns object
-
-  - #getPathParam(name)
-      - returns string value
-
-  - #getQueryParams()
-      - returns object - parsed from query string
-
-  - #getQueryParam(name)
-      - returns string value
-
-  - #proceed()
-      - each handler must call proceed before the request proceeds to the
-        next handler in the queue
-
-Response(serverResponse)
-------------------------
-  - #send([options])
-
-        status <number>|<object>
-          code <number>
-          text <string>
-        headers <object>
-        body <any>
-
-  - #getStatus()
-      - returns status object
-
-            code <number>
-            text <string>
-
-  - #setStatus(status)
-
-        status <number>|<object>
-            code <number>
-            text <string>
-
-  - #setStatusCode(code)
-
-  - #setStatusText(text)
-
-  - #getHeaders()
-      - returns object
-
-  - #getHeader(name)
-      - return string or array
-
-  - #setHeaders(headers)
-
-  - #setHeader(name, value)
-
-  - #getContentType()
-
-  - #getContent()
-      - returns buffer
-
-  - #getBody()
-
-  - #setBody(body)
-      body <any>
-
-  - #getEncoding()
-      - returns string
-
-  - #setEncoding(encoding)
- 
-        encoding <string>
+Phase 3: Serviceberry calls your handlers giving each control of the request
+```

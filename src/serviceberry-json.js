@@ -14,7 +14,7 @@ module.exports = {
 			content = JSON.stringify(body);
 		}
 
-		return content;
+		request.proceed(content);
 	},
 
 	deserialize (request, response) {
@@ -30,7 +30,7 @@ module.exports = {
 			
 		}
 
-		return body;
+		request.proceed(body);
 	}
 };
 

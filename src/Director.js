@@ -43,10 +43,10 @@ function proceed () {
 	}
 }
 
-function fail (error) {
+function fail (error, status, headers) {
 	var handler = this.route.getNextFailHandler();
 
-	error = new HttpError(error);
+	error = new HttpError(...arguments);
 	this.request.error = error;
 
 	if (handler) {
@@ -92,7 +92,7 @@ function call (handler) {
 		.catch(this.proxy(fail));
 }
 
-function send (options) {
+function send (options = {}) {
 	this.response.set(options);
 	this.invoke(serialize).then(this.proxy(end));
 }

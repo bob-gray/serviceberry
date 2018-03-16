@@ -5,58 +5,60 @@
             nav.classList.toggle('docsSliderActive');
           };
         </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Handlers</h1></header><article><div><span><p>Understanding handlers is central to creating a service using Serviceberry. All things that
-interact with service requests do so through a common handler API. This means
-serializers, deserialiers, plugins and endpoint are all created in the same way.</p>
-<p>A handlers can be a function or an object that has a <code>use</code> method that is a handler function. Handler
-functions all have the same signature <code>(request, response)</code>. Request and response are wrapper objects
-for the <a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage"><em>http.IncomingRequest</em></a>
-and <a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_serverresponse"><em>http.ServiceResponse</em></a>
-arguments passed to the underlining <a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_server"><em>http.Server</em></a>
-&quot;request&quot; event listener.</p>
-<h2><a class="anchor" aria-hidden="true" name="handler-function"></a><a href="#handler-function" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Handler Function</h2>
+interact with service requests do so through a common handler API. This means your endpoints,
+plugins, catches, serializers and deserializers are all created in the same way.</p>
+<p>A handler can be a <a href="#handler-function">function</a> or an <a href="#handler-object">object</a>. Handler objects
+can be any object with a <code>use</code> method that is a handler function.</p>
+<h2><a class="anchor" aria-hidden="true" name="handler-functions"></a><a href="#handler-functions" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Handler Functions</h2>
+<p>Handler functions all have the same arguments signature <code>(request, response)</code>.
+<a href="request.html">Request</a> and <a href="response.html">response</a> are wrapper objects for the
+<a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage">http.IncomingRequest</a>
+and <a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_serverresponse">http.ServiceResponse</a>
+arguments passed to the underlining <a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_server">http.Server</a>
+<code>request</code> event listener.</p>
 <ul>
-<li>request <em>object</em></li>
-<li>response <em>object</em></li>
+<li><a href="request.html">request</a> <em>object</em></li>
+<li><a href="response.html">response</a> <em>object</em></li>
 </ul>
-<p>Handler functions are added to your service's nodes when defining the service. Then Serviceberry
-routes each request through your service and builds a queue of handlers. Each handler in the queue is
-then called one after the other. Each given control of the request and response until control is
-passed to the next handler. Handlers communicate control decisions to Serviceberry through their
-return value or by throwing an error.</p>
-<ol>
-<li>Return a <code>promise</code> (any thennable should work).</li>
-<li>Return something other than <code>false</code> that is not thennable.</li>
-<li>Return nothing and call <code>request.proceed()</code>.</li>
-<li>Return nothing and call <code>response.send(options)</code>.</li>
-<li>Return nothing and call <code>request.fail(error)</code>.</li>
-<li>Return <code>false</code>.</li>
-<li>Throw an <code>error</code>.</li>
-</ol>
-<p>These action will result in one of three possible outcomes. Each handler has exactly one opportunity to exercise control.
-Once action has been taken, control is transferred away from the handler.</p>
+<p>Handlers are added to the <a href="trunk.html">trunk</a>, <a href="branch.html">branches</a> and <a href="leaf.html">leaves</a>
+of your service using Serviceberry's API. When Serviceberry routes each request through your service, it builds a queue of handlers. Each handler in the queue is then called one after the other. Each given control of the
+request and response until control is passed to the next handler. Handlers exercise control through
+their return value or by throwing an error.</p>
+<h3><a class="anchor" aria-hidden="true" name="three-possible-outcomes"></a><a href="#three-possible-outcomes" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Three Possible Outcomes</h3>
+<p>Each handler has exactly one opportunity to exercise control. Once action has been taken, control
+is transferred away from the handler. There are three possible outcomes.</p>
 <ol>
 <li>Proceed with the request (typical for a plugin).</li>
-<li>Complete the request and send a response to the client (typical for endpoint implementation).</li>
-<li>Failure encountered - fallback to a catch.</li>
+<li>Complete the request and send a response to the client (typical for an endpoint).</li>
+<li>Fallback to the nearest catch.</li>
 </ol>
-<p>Throwing an <code>error</code>, returning <code>false</code>, returning a rejected <code>promise</code> or calling <code>response.fail(error)</code> are
-all functionally equivalent. They will all result in control falling back to the nearest catch handler. Errors are
-available in catch handers as <code>request.error</code>. If no catch handler is found the request will be ended.</p>
-<p>Returning a resolved <code>promise</code>, returning anything other than <code>false</code> or a thennable, or calling <code>request.proceed()</code> are
-all functionally equivalent. They will all result in handing control to the next handler in the queue.</p>
-<p>Calling <code>response.send(options)</code> will complete the request and send the response to the client.</p>
-<p><code>request.proceed()</code>, <code>request.fail(error)</code> and <code>response.send(options)</code> are not required to be called with context so
-they can safely be passed as callbacks - such as <code>.then(request.proceed, request.fail)</code>. Once control is handed to the
-next handler, these request and response methods given to the prior handler are rendered useless.</p>
-<h2><a class="anchor" aria-hidden="true" name="handler-object"></a><a href="#handler-object" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Handler Object</h2>
-<p>Everywhere a handler is accepted as an argument, an object having a <code>use</code> method that is a handler function can passed.
-When Serviceberry is passed a handler object it binds the object's <code>use</code> method to the object so that handlers
-can easily be stateful. This plugins can be implemented as classes that are instanced and configured then passed
-as handlers to Serviceberry.</p>
-<pre><code class="hljs css javascript"><span class="hljs-comment">// AuthPlugin, key and service all defined above</span>
-
-<span class="hljs-keyword">const</span> auth = <span class="hljs-keyword">new</span> AuthPlugin({key, <span class="hljs-attr">scheme</span>: <span class="hljs-string">"bearer"</span>});
-
-service.use(auth);
-</code></pre>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="getting-started.html">← Getting Started</a><a class="docs-next button" href="plugins.html">Plugins →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/serviceberry/" class="nav-home"></a><div><h5>Guides</h5><a href="/serviceberry/docs/en/getting-started.html">Getting Started</a></div><div><h5>API Reference</h5><a href="/serviceberry/docs/en/serviceberry.html">Serviceberry</a><a href="/serviceberry/docs/en/handler.html">Handler</a><a href="/serviceberry/docs/en/trunk.html">Trunk</a><a href="/serviceberry/docs/en/branch.html">Branch</a><a href="/serviceberry/docs/en/leaf.html">Leaf</a><a href="/serviceberry/docs/en/request.html">Reqeust</a><a href="/serviceberry/docs/en/response.html">Response</a><a href="/serviceberry/docs/en/http-error.html">HttpError</a></div><div><h5>More</h5><a href="/serviceberry/blog">Blog</a><a href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section></footer></div></body></html>
+<h3><a class="anchor" aria-hidden="true" name="controlling-the-outcome"></a><a href="#controlling-the-outcome" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Controlling the Outcome</h3>
+<p>Which outcome occurs depends primarily on the value returned from the handler. The handler can exercise
+control over the request and response by the following actions.</p>
+<ol>
+<li>Return a <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>promise</code></a>
+(any thennable should work).</li>
+<li>Return something other than <code>false</code> that is not thennable.</li>
+<li>Return nothing and call <a href="request.html#proceedvalue"><code>request.proceed()</code></a>.</li>
+<li>Return nothing and call <a href="response.html#sendoptions"><code>response.send()</code></a>.</li>
+<li>Return nothing and call <a href="request.html#failerror-status-headers"><code>request.fail()</code></a>.</li>
+<li>Return <code>false</code>.</li>
+<li>Throw an error.</li>
+</ol>
+<p>Returning a <code>promise</code> that is resolved or eventually resolved, returning anything other than <code>false</code> or a
+thennable, or returning nothing and calling <code>request.proceed()</code> are all functionally equivalent. They all result in the request
+proceeding. Control will be given to the next handler in the queue. If the queue has no more handlers,
+the request will end.</p>
+<p>Returning nothing and calling <code>response.send()</code> will complete the request and send the response to the client.</p>
+<p>Returning a <code>promise</code> that is rejected or eventually rejected, returning <code>false</code>, throwing an error, or returning
+nothing and calling <code>response.fail()</code> are all functionally equivalent. They all result in control falling back to the nearest catch handler. If no catch handler is found the request will be ended. Errors are available in catch handlers
+at <code>request.error</code>.</p>
+<p><code>request.proceed()</code>, <code>request.fail()</code> and <code>response.send()</code> can all be called asynchronously as long
+as the handler doesn't return a value. Additionally none are required to be called with context so
+each can be safely passed directly as callbacks - such as <code>.then(request.proceed, request.fail)</code>. When control is handed to the
+next handler, request and response methods given to the prior handler are rendered useless.</p>
+<h2><a class="anchor" aria-hidden="true" name="handler-objects"></a><a href="#handler-objects" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Handler Objects</h2>
+<p>Everywhere a handler is accepted as an argument, an object can be used. It can be any object that has a <code>use</code>
+method that is a handler function. When Serviceberry is passed a handler object it binds the object's <code>use</code> method to the object so that handlers can be stateful. This can be particularly useful for plugins.</p>
+<p>To learn about using and creating plugins, checkout the next guide.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="getting-started.html">← Getting Started</a><a class="docs-next button" href="plugins.html">Plugins →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/serviceberry/" class="nav-home"></a><div><h5>Guides</h5><a href="/serviceberry/docs/getting-started.html">Getting Started</a><a href="/serviceberry/docs/handlers.html">Handlers</a><a href="/serviceberry/docs/plugins.html">Plugins</a></div><div><h5>API Reference</h5><a href="/serviceberry/docs/serviceberry.html">Serviceberry</a><a href="/serviceberry/docs/trunk.html">Trunk</a><a href="/serviceberry/docs/branch.html">Branch</a><a href="/serviceberry/docs/leaf.html">Leaf</a><a href="/serviceberry/docs/request.html">Reqeust</a><a href="/serviceberry/docs/response.html">Response</a><a href="/serviceberry/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/serviceberry/blog">Blog</a><a href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/serviceberry/docs/license.html">License</a></div></section></footer></div></body></html>

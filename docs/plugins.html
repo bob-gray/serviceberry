@@ -1,24 +1,23 @@
-<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Plugins · Serviceberry</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Plugins · Serviceberry"/><meta property="og:type" content="website"/><meta property="og:url" content="https://bob-gray.github.io/serviceberry/index.html"/><meta property="og:description" content="This guide will walk you through creating using plugins a simple Serviceberry plugin."/><link rel="shortcut icon" href="/serviceberry/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css"/><link rel="alternate" type="application/atom+xml" href="https://bob-gray.github.io/blog/atom.xml" title="Serviceberry Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://bob-gray.github.io/blog/feed.xml" title="Serviceberry Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/serviceberry/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/serviceberry/"><img class="logo" src="/serviceberry/img/serviceberry-horizontal.svg"/><h2 class="headerTitle">Serviceberry</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/serviceberry/docs/getting-started.html" target="_self">Guides</a></li><li><a href="/serviceberry/docs/serviceberry.html" target="_self">API Reference</a></li><li><a href="/serviceberry/blog" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Guides</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Guides</h3><ul><li class="navListItem"><a class="navItem" href="/serviceberry/docs/getting-started.html">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/handlers.html">Handlers</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/serviceberry/docs/plugins.html">Plugins</a></li></ul></div><div class="navGroup navGroupActive"><h3>API Reference</h3><ul><li class="navListItem"><a class="navItem" href="/serviceberry/docs/serviceberry.html">Serviceberry</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/trunk.html">Trunk</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/branch.html">Branch</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/leaf.html">Leaf</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/request.html">Request</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/response.html">Response</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/httperror.html">HttpError</a></li></ul></div></div></section></div><script>
+<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Plugins · Serviceberry</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Plugins · Serviceberry"/><meta property="og:type" content="website"/><meta property="og:url" content="https://bob-gray.github.io/serviceberry/index.html"/><meta property="og:description" content="This guide will walk you through creating and using a simple Serviceberry plugin."/><link rel="shortcut icon" href="/serviceberry/img/favicon.ico"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css"/><link rel="alternate" type="application/atom+xml" href="https://bob-gray.github.io/blog/atom.xml" title="Serviceberry Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://bob-gray.github.io/blog/feed.xml" title="Serviceberry Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/serviceberry/css/main.css"/></head><body class="sideNavVisible"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/serviceberry/"><img class="logo" src="/serviceberry/img/serviceberry-horizontal.svg"/><h2 class="headerTitle">Serviceberry</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li><a href="/serviceberry/docs/getting-started.html" target="_self">Guides</a></li><li><a href="/serviceberry/docs/serviceberry.html" target="_self">API Reference</a></li><li><a href="/serviceberry/blog" target="_self">Blog</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Guides</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Guides</h3><ul><li class="navListItem"><a class="navItem" href="/serviceberry/docs/getting-started.html">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/handlers.html">Handlers</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/serviceberry/docs/plugins.html">Plugins</a></li></ul></div><div class="navGroup navGroupActive"><h3>API Reference</h3><ul><li class="navListItem"><a class="navItem" href="/serviceberry/docs/serviceberry.html">Serviceberry</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/trunk.html">Trunk</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/branch.html">Branch</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/leaf.html">Leaf</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/request.html">Request</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/response.html">Response</a></li><li class="navListItem"><a class="navItem" href="/serviceberry/docs/httperror.html">HttpError</a></li></ul></div></div></section></div><script>
           var toggler = document.getElementById('navToggler');
           var nav = document.getElementById('docsNav');
           toggler.onclick = function() {
             nav.classList.toggle('docsSliderActive');
           };
-        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Plugins</h1></header><article><div><span><p>This guide will walk you through creating using plugins a simple Serviceberry plugin.</p>
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Plugins</h1></header><article><div><span><p>This guide will walk you through creating and using a simple Serviceberry plugin.</p>
 <h2><a class="anchor" aria-hidden="true" name="plugins-are-handlers"></a><a href="#plugins-are-handlers" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Plugins Are Handlers</h2>
 <p>Plugins are handlers that are designed for reuse. <em>If you haven't read the <a href="handlers.html">Handlers</a>
 guide you may want to back up and start there.</em> The great thing about plugins being handlers is
-creating a plugin is no more difficult than creating a handler for your endpoint. To show you what
+that creating a plugin is just as easy as creating a handler for your endpoint. To show you what
 I mean, let's create a plugin.</p>
 <h2><a class="anchor" aria-hidden="true" name="json-schema-plugin"></a><a href="#json-schema-plugin" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>JSON Schema Plugin</h2>
-<p>We'll create a plugin for validating the post request body with a <a href="http://json-schema.org/">JSON Schema</a>.
-All the heavy lifting will be done by <a href="https://www.npmjs.com/package/jsonschema">jsonschema</a> - an npm package
-that we'll install. Our plugin will just be a thin wrapper that responds with an appropriate error
-when validation fails.</p>
-<p>Create a folder. From within the folder run <code>npm install jsonschema</code>. Create a file named
-<code>serviceberryJsonSchema.js</code>, save it in the folder and copy the JavaScript below into it.</p>
-<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> validate = <span class="hljs-built_in">require</span>(<span class="hljs-string">"jsonschema"</span>).validate;
-<span class="hljs-keyword">const</span> serviceberry = <span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>);
+<p>We'll create a plugin for validating a <code>POST</code> request body with a <a href="http://json-schema.org/">JSON Schema</a>.
+All the heavy lifting will be done by <a href="https://www.npmjs.com/package/jsonschema">jsonschema</a> which
+we'll install using <a href="https://www.npmjs.com">npm</a>. Our plugin will be a thin wrapper that responds
+with an appropriate error when validation fails.</p>
+<p>Create a folder. In the folder run <code>npm install jsonschema</code>. Create a file named <code>validate.js</code> and save
+it in the folder. Copy the JavaScript below into it.</p>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> { validate } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"jsonschema"</span>);
 
 <span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-params">schema</span> =&gt;</span> request =&gt; {
     <span class="hljs-keyword">const</span> result = validate(request.getBody(), schema);
@@ -26,28 +25,23 @@ when validation fails.</p>
     <span class="hljs-keyword">if</span> (result.valid) {
         request.proceed();
     } <span class="hljs-keyword">else</span> {
-        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> serviceberry.HttpError(result.errors, <span class="hljs-number">422</span>, {
+        request.fail(result.errors, <span class="hljs-number">422</span>, {
             <span class="hljs-string">"Content-Type"</span>: <span class="hljs-string">"application/json"</span>
         });
     }
 };
 </code></pre>
-<p>First our plugin requires <code>jsonschema</code> and assigns it's validate function to a variable. Then it exports a
-function that accepts a schema and returns a handler function. The handler function will validate the request
-body of each request that runs through it. The request proceeds if it's body is valid or fails if it's
-body does not match the schema.</p>
-<p>Let's create a simple service to use our plugin. Create a file named <code>echo.js</code>, save it in the
-same folder as <code>serviceberryJsonSchema.js</code> and copy the JavaScript below into it.</p>
+<p>Let's breakdown how this plugin works.</p>
+<p>First our plugin requires <code>jsonschema</code> and assigns its validate function to a variable. Then it exports a
+function that accepts a schema and returns a handler function. The handler function will validate the
+body of each request using <code>jsonschema</code> and the schema passed in to our plugin. The request proceeds
+if it's body matches the schema and fails with information about why if it does not match.</p>
+<p>Let's create a simple service to allow us to use our plugin. Create a file named <code>echo.js</code> and save it in the
+same folder as <code>validate.js</code>. Copy the JavaScript below into it.</p>
 <pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> serviceberry = <span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>);
-<span class="hljs-keyword">const</span> validate = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./serviceberryJsonSchema"</span>);
+<span class="hljs-keyword">const</span> validate = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./validate"</span>);
 <span class="hljs-keyword">const</span> service = serviceberry.createTrunk();
-
-service.at(<span class="hljs-string">"echo"</span>).on({
-    <span class="hljs-attr">method</span>: <span class="hljs-string">"POST"</span>,
-    <span class="hljs-attr">consumes</span>: <span class="hljs-string">"application/json"</span>,
-    <span class="hljs-attr">produces</span>: <span class="hljs-string">"application/json"</span>
-})
-.use(validate({
+<span class="hljs-keyword">const</span> schema = {
     <span class="hljs-attr">type</span>: <span class="hljs-string">"object"</span>,
     <span class="hljs-attr">properties</span>: {
         <span class="hljs-attr">name</span>: {
@@ -57,13 +51,40 @@ service.at(<span class="hljs-string">"echo"</span>).on({
         <span class="hljs-attr">age</span>: {
             <span class="hljs-attr">type</span>: <span class="hljs-string">"integer"</span>,
             <span class="hljs-attr">minimum</span>: <span class="hljs-number">0</span>
-        },
-        <span class="hljs-attr">email</span>: {
-            <span class="hljs-attr">type</span>: <span class="hljs-string">"string"</span>
         }
     }
-}))
+};
+
+service.at(<span class="hljs-string">"echo"</span>).on({
+    <span class="hljs-attr">method</span>: <span class="hljs-string">"POST"</span>,
+    <span class="hljs-attr">consumes</span>: <span class="hljs-string">"application/json"</span>,
+    <span class="hljs-attr">produces</span>: <span class="hljs-string">"application/json"</span>
+})
+.use(validate(schema))
 .use(<span class="hljs-function"><span class="hljs-params">request</span> =&gt;</span> request.getBody());
 </code></pre>
-<p>Now run <code>node echo</code> to start your service and send a POST request to <a href="http://localhost:3000/echo">http://localhost:3000/echo</a> with a JSON body.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="handlers.html">← Handlers</a><a class="docs-next button" href="serviceberry.html">Serviceberry →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/serviceberry/" class="nav-home"></a><div><h5>Guides</h5><a href="/serviceberry/docs/en/getting-started.html">Getting Started</a></div><div><h5>API Reference</h5><a href="/serviceberry/docs/en/serviceberry.html">Serviceberry</a><a href="/serviceberry/docs/en/handler.html">Handler</a><a href="/serviceberry/docs/en/trunk.html">Trunk</a><a href="/serviceberry/docs/en/branch.html">Branch</a><a href="/serviceberry/docs/en/leaf.html">Leaf</a><a href="/serviceberry/docs/en/request.html">Reqeust</a><a href="/serviceberry/docs/en/response.html">Response</a><a href="/serviceberry/docs/en/http-error.html">HttpError</a></div><div><h5>More</h5><a href="/serviceberry/blog">Blog</a><a href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section></footer></div></body></html>
+<p>Run <code>node echo</code> to start your service. Send a <code>POST</code> request to <a href="http://localhost:3000/echo">http://localhost:3000/echo</a> with a JSON body
+to see the response. If your request JSON matches the schema, you should see it echoed back to you.
+If it doesn't match the schema, the request should fail with a 422 status and information about why it
+didn't match.</p>
+<p><em>TIP: A couple good options for sending HTTP requests are <a href="https://www.getpostman.com">Postman</a>
+and <a href="https://www.getpostman.com">curl</a></em></p>
+<h2><a class="anchor" aria-hidden="true" name="serializers-and-deserializers"></a><a href="#serializers-and-deserializers" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Serializers and Deserializers</h2>
+<p>Serializers and deserializers are plugins which means they are handlers but they have a specific mission.
+Serializers transform the response body into response content. Deserializers transform the request content
+into the request body. The returned or resolved value of each is set to the response content and request body
+respectively. Because they are handlers, they can be asychronous and produces errors in the same ways as
+other plugins. See <a href="https://www.npmjs.com/package/serviceberry-json"><code>serviceberry-json</code></a> for an example.</p>
+<p>One tricky detail about deserializers that is unlikely to be an issue but still worth noting is that their
+control of the request is &quot;replayed&quot; out of sequence. This means that although the deserializer is executed
+prior to any handlers in the queue, if it results in the request failing, the error will only surface if
+and when <code>request.getBody()</code> is called from a handler. This allows deserializers to be asychronous and
+deserializing error handling to be more intuitive.</p>
+<h2><a class="anchor" aria-hidden="true" name="authoring-plugins"></a><a href="#authoring-plugins" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Authoring Plugins</h2>
+<p>If you create a plugin for Serviceberry that you think could be useful to someone else please consider
+publishing it on <a href="https://npmjs.com">npm</a> with a package name that's prefixed with <code>serviceberry-</code> (such as
+<a href="https://www.npmjs.com/package/serviceberry-json"><code>serviceberry-json</code></a>). In the future I'd like to show
+a list of plugins on this site.</p>
+<p>Searching npm for Serviceberry plugins is a good way to see examples of plugins as a reference when
+creating your own.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="handlers.html">← Handlers</a><a class="docs-next button" href="serviceberry.html">Serviceberry →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/serviceberry/" class="nav-home"></a><div><h5>Guides</h5><a href="/serviceberry/docs/getting-started.html">Getting Started</a><a href="/serviceberry/docs/handlers.html">Handlers</a><a href="/serviceberry/docs/plugins.html">Plugins</a></div><div><h5>API Reference</h5><a href="/serviceberry/docs/serviceberry.html">Serviceberry</a><a href="/serviceberry/docs/trunk.html">Trunk</a><a href="/serviceberry/docs/branch.html">Branch</a><a href="/serviceberry/docs/leaf.html">Leaf</a><a href="/serviceberry/docs/request.html">Reqeust</a><a href="/serviceberry/docs/response.html">Response</a><a href="/serviceberry/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/serviceberry/blog">Blog</a><a href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/serviceberry/docs/license.html">License</a></div></section></footer></div></body></html>

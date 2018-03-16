@@ -2,17 +2,17 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://bob-gray.github.io/serviceberry/blog</id>
     <title>Serviceberry Blog</title>
-    <updated>2016-03-14T06:00:00Z</updated>
+    <updated>2018-03-15T06:00:00Z</updated>
     <generator>Feed for Node.js</generator>
     <link rel="alternate" href="https://bob-gray.github.io/serviceberry/blog"/>
     <subtitle>The best place to stay up-to-date with the latest Serviceberry news and events.</subtitle>
     <logo>https://bob-gray.github.io/serviceberry/img/serviceberry-horizontal.svg</logo>
     <entry>
         <title type="html"><![CDATA[Hosted Documentation]]></title>
-        <id>https://bob-gray.github.io/serviceberry/blog/2016/03/14/hosted-documentation.html</id>
-        <link href="https://bob-gray.github.io/serviceberry/blog/2016/03/14/hosted-documentation.html">
+        <id>https://bob-gray.github.io/serviceberry/blog/2018/03/15/hosted-documentation.html</id>
+        <link href="https://bob-gray.github.io/serviceberry/blog/2018/03/15/hosted-documentation.html">
         </link>
-        <updated>2016-03-14T06:00:00Z</updated>
+        <updated>2018-03-15T06:00:00Z</updated>
         <summary type="html"><![CDATA[<p>Thanks to many great tools for open source software Serviceberry documentation is hosted. I'll be
 continuing to work on cleaning up. Please take a look at the <a href="/docs/getting-started.html">Guides</a>
 and the <a href="/docs/serviceberry.html">API Reference</a>.</p>

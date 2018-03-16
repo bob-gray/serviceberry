@@ -5,10 +5,11 @@
             nav.classList.toggle('docsSliderActive');
           };
         </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Response</h1></header><article><div><span><h3><a class="anchor" aria-hidden="true" name="class"></a><a href="#class" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><em>class</em></h3>
-<p>This object is created internally by Serviceberry and passed as the second argument to handler functions.
-It is a wrapper object around <code>http.ServerResponse</code>.</p>
+<p>This object is created internally by Serviceberry and passed as the second argument to <a href="handlers.html">handler</a> functions.
+It is a wrapper object around Node's <a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_serverresponse"><code>http.ServerResponse</code></a>.</p>
 <h2><a class="anchor" aria-hidden="true" name="methods"></a><a href="#methods" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
 <ul>
+<li><a href="#sendoptions">send([options])</a></li>
 <li><a href="#isstatus">is(status)</a></li>
 <li><a href="#getstatus">getStatus()</a></li>
 <li><a href="#getstatuscode">getStatusCode()</a></li>
@@ -30,13 +31,27 @@ It is a wrapper object around <code>http.ServerResponse</code>.</p>
 <li><a href="#setencodingencoding">setEncoding(encoding)</a></li>
 <li><a href="#getcontenttype">getContentType()</a></li>
 <li><a href="#getcontent">getContent()</a></li>
-<li><a href="#sendstatus-headers-body">send(status, headers, body)</a></li>
 </ul>
 <h2><a class="anchor" aria-hidden="true" name="reference"></a><a href="#reference" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reference</h2>
+<h3><a class="anchor" aria-hidden="true" name="send-options"></a><a href="#send-options" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>send([options])</h3>
+<p>Sends a response back to the client. A response can also be implicity sent when the request proceeds and
+there are no more handlers in the queue.</p>
+<ul>
+<li><p><strong>options</strong> <em>object</em> [optional]</p>
+<p>Sets response options before finishing request and sending response.</p>
+<ul>
+<li><p><strong>status</strong> <em>number or object</em> [optional]</p></li>
+<li><p><strong>headers</strong> <em>object</em> [optional]</p></li>
+<li><p><strong>body</strong> <em>any</em> [optional]</p></li>
+<li><p><strong>encoding</strong> <em>string</em> [optional]</p></li>
+<li><p><strong>finish</strong> <em>function</em> [optional]</p>
+<p>Listener for <code>http.ServerResponse</code> event <code>finish</code></p></li>
+</ul></li>
+</ul>
 <h3><a class="anchor" aria-hidden="true" name="isstatus"></a><a href="#isstatus" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>is(status)</h3>
 <p>Returns <em>a boolean</em></p>
 <ul>
-<li><strong>status</strong> <em>string|number</em></li>
+<li><strong>status</strong> <em>string or number</em></li>
 </ul>
 <h3><a class="anchor" aria-hidden="true" name="getstatus"></a><a href="#getstatus" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getStatus()</h3>
 <p>Returns <em>an object</em></p>
@@ -46,7 +61,7 @@ It is a wrapper object around <code>http.ServerResponse</code>.</p>
 <p>Returns <em>a string</em></p>
 <h3><a class="anchor" aria-hidden="true" name="setstatusstatus"></a><a href="#setstatusstatus" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>setStatus(status)</h3>
 <ul>
-<li><strong>status</strong> <em>object|number</em>
+<li><strong>status</strong> <em>object or number</em>
 <ul>
 <li><p><strong>code</strong> <em>number</em></p></li>
 <li><p><strong>text</strong> <em>string</em></p></li>
@@ -74,7 +89,7 @@ It is a wrapper object around <code>http.ServerResponse</code>.</p>
 <h3><a class="anchor" aria-hidden="true" name="setheadername-value"></a><a href="#setheadername-value" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>setHeader(name, value)</h3>
 <ul>
 <li><p><strong>name</strong> <em>string</em></p></li>
-<li><p><strong>value</strong> <em>string|number|array</em></p></li>
+<li><p><strong>value</strong> <em>string or number or array</em></p></li>
 </ul>
 <h3><a class="anchor" aria-hidden="true" name="hasheadername"></a><a href="#hasheadername" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>hasHeader(name)</h3>
 <p>Returns <em>a boolean</em></p>
@@ -107,16 +122,4 @@ It is a wrapper object around <code>http.ServerResponse</code>.</p>
 <p>Returns <em>a string</em></p>
 <h3><a class="anchor" aria-hidden="true" name="getcontent"></a><a href="#getcontent" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getContent()</h3>
 <p>Returns <em>a buffer</em></p>
-<h3><a class="anchor" aria-hidden="true" name="sendstatus-headers-body"></a><a href="#sendstatus-headers-body" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>send(status, headers, body)</h3>
-<ul>
-<li><strong>status</strong> <em>object|number</em>
-<ul>
-<li><p><strong>code</strong> <em>number</em></p></li>
-<li><p><strong>text</strong> <em>string</em></p></li>
-</ul></li>
-</ul>
-<ul>
-<li><p><strong>headers</strong> <em>object</em></p></li>
-<li><p><strong>body</strong> <em>any</em></p></li>
-</ul>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="request.html">← Request</a><a class="docs-next button" href="httperror.html">HttpError →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/serviceberry/" class="nav-home"></a><div><h5>Guides</h5><a href="/serviceberry/docs/en/getting-started.html">Getting Started</a></div><div><h5>API Reference</h5><a href="/serviceberry/docs/en/serviceberry.html">Serviceberry</a><a href="/serviceberry/docs/en/handler.html">Handler</a><a href="/serviceberry/docs/en/trunk.html">Trunk</a><a href="/serviceberry/docs/en/branch.html">Branch</a><a href="/serviceberry/docs/en/leaf.html">Leaf</a><a href="/serviceberry/docs/en/request.html">Reqeust</a><a href="/serviceberry/docs/en/response.html">Response</a><a href="/serviceberry/docs/en/http-error.html">HttpError</a></div><div><h5>More</h5><a href="/serviceberry/blog">Blog</a><a href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section></footer></div></body></html>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="request.html">← Request</a><a class="docs-next button" href="httperror.html">HttpError →</a></div></div></div></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/serviceberry/" class="nav-home"></a><div><h5>Guides</h5><a href="/serviceberry/docs/getting-started.html">Getting Started</a><a href="/serviceberry/docs/handlers.html">Handlers</a><a href="/serviceberry/docs/plugins.html">Plugins</a></div><div><h5>API Reference</h5><a href="/serviceberry/docs/serviceberry.html">Serviceberry</a><a href="/serviceberry/docs/trunk.html">Trunk</a><a href="/serviceberry/docs/branch.html">Branch</a><a href="/serviceberry/docs/leaf.html">Leaf</a><a href="/serviceberry/docs/request.html">Reqeust</a><a href="/serviceberry/docs/response.html">Response</a><a href="/serviceberry/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/serviceberry/blog">Blog</a><a href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/serviceberry/docs/license.html">License</a></div></section></footer></div></body></html>

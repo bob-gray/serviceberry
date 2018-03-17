@@ -17,9 +17,10 @@
             <link>https://serviceberry.js.org/blog/2018/03/15/hosted-documentation.html</link>
             <guid>https://serviceberry.js.org/blog/2018/03/15/hosted-documentation.html</guid>
             <pubDate>Thu, 15 Mar 2018 06:00:00 GMT</pubDate>
-            <description><![CDATA[<p>Thanks to many great tools for open source software Serviceberry documentation is hosted. I'll be
+            <description><![CDATA[<p>Thanks to many great tools for open source software, Serviceberry documentation is hosted. I'll be
 continuing to work on cleaning up. Please take a look at the <a href="/docs/getting-started.html">Guides</a>
-and the <a href="/docs/serviceberry.html">API Reference</a>.</p>
+and the <a href="/docs/serviceberry.html">API Reference</a>. Feel free to let me know what you think or let
+me know if you notice any errors or ommissions.</p>
 ]]></description>
         </item>
     </channel>

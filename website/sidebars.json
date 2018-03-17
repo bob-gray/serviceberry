@@ -3,7 +3,9 @@
     "Guides": [
       "getting-started",
       "handlers",
-      "plugins"
+      "plugins",
+      "auto-responses",
+      "how-it-works"
     ],
     "API Reference": [
       "serviceberry",

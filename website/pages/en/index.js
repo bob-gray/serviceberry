@@ -130,7 +130,7 @@ const FeatureCallout = props => (
     <h2>The Best API for Building HTTP APIs</h2>
     <MarkdownBlock>
       Serviceberry is designed to be flexible, extensible and easy to use. It doesn't mandate
-      boilerplate or configuration or demand to marry your application. It helps you do HTTP well facilitating
+      boilerplate or configuration or demand to marry your application. It helps you do HTTP well by facilitating
       a thin HTTP frontend to your backend where statuses, methods and headers have meaning.
     </MarkdownBlock>
   </div>

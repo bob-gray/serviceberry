@@ -16,6 +16,10 @@ module.exports = {
 		label: "Blog",
 		blog: true
 	}],
+	algolia: {
+		apiKey: "d8f71d3fca61a88437ddb93081120da2",
+		indexName: "serviceberry",
+	},
 	headerIcon: "img/serviceberry-horizontal.svg",
 	favicon: "img/favicon.ico",
 	colors: {
@@ -29,6 +33,8 @@ module.exports = {
 	highlight: {
 		theme: "agate",
 	},
+	ogImage: "img/serviceberry.svg",
+	twitter: true,
 	customDocsPath: "website/docs",
 	scripts: [
 		"https://buttons.github.io/buttons.js"

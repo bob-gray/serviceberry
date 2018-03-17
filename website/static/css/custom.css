@@ -15,11 +15,36 @@ code.hljs {
 	background: #2b1100;
 }
 
+.reactNavSearchWrapper input#search_input_react {
+	border-radius: 2px;
+	background-color: rgba(242, 196, 178, 0.25);
+	line-height: 25px;
+}
+
+.navSearchWrapper::before {
+	border-width: 2px;
+}
+
+.navSearchWrapper::after {
+	width: 2px;
+}
+
+.navigationWrapper .slidingNav > ul > li > a {
+	background: #2b1100;
+}
+
 body,
 .mainContainer {
 	background: none;
 	padding-bottom: 80px;
+}
 
+.container.paddingTop {
+    padding-top: 50px;
+}
+
+.container.paddingBottom {
+    padding-bottom: 50px;
 }
 
 .mainContainer .wrapper code {
@@ -49,7 +74,7 @@ body,
 }
 
 .container .wrapper h3 {
-	margin-top: 1.5em;
+	margin-top: 1em;
 }
 
 .mainContainer .wrapper .post {
@@ -65,16 +90,28 @@ body,
 	list-style-type: circle;
 }
 
-.docsNavContainer {
-	background: #fbfbfb;
-	border-right: 1px solid #ccc;
-	margin-top: 0;
-    width: 33%;
-    max-width: 280px;
+.docsNavContainer nav.toc .navBreadcrumb {
+	height: 50px;
 }
 
-.docsNavContainer .toc {
-	margin: 40px 0 0 20px;
+.docsNavContainer nav.toc .navBreadcrumb .navToggle i,
+.docsNavContainer nav.toc .navBreadcrumb .navToggle::before,
+.docsNavContainer nav.toc .navBreadcrumb .navToggle::after {
+	display: none;
+}
+
+.docsNavContainer nav.toc .navBreadcrumb .navToggle  {
+	background: no-repeat center url(/img/menu-bars.svg);
+	width: 40px;
+	height: 40px;
+}
+
+.navBreadcrumb h2 {
+	display: none;
+}
+
+.docsNavContainer .toc .toggleNav .navGroups {
+	padding-top: 90px;
 }
 
 .docsNavContainer .toc .toggleNav,
@@ -90,12 +127,20 @@ body,
     padding-bottom: 0;
 }
 
+.docsNavContainer .toc {
+	width: auto;
+}
+
 nav.toc .toggleNav ul li a {
 	font-size: 100%;
 }
 
 a {
 	color: #026e00;
+}
+
+a:hover {
+	text-decoration: underline;
 }
 
 .button {
@@ -108,24 +153,53 @@ a {
 	background-color: #026e00;
 }
 
+.docs-prev {
+	display: inline-block;
+}
+
+.read-more,
+.blog-recent,
+.docs-prevnext {
+	margin-left: -4px;
+	margin-right: -4px;
+}
+
 footer.nav-footer {
 	box-shadow: inset 0 20px 30px 0 rgba(0,0,0,0.05)
 }
 
-@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+@media (min-device-width: 360px) and (max-device-width: 736px) {
 	.logo {
 		display: block;
 	}
 }
 
-@media only screen and (min-width: 1024px) {
-}
+@media (min-width: 736px) {
+	.mainContainer {
+		padding-left: 40px;
+		padding-right: 40px;
+	}
 
-@media only screen and (max-width: 1023px) {
-}
+	.separateOnPageNav .docMainWrapper .docsNavContainer {
+		background: #fbfbfb;
+		border-right: 1px solid #ccc;
+		margin: 0;
+		width: 33%;
+		min-width: 205px;
+		max-width: 280px;
+	}
 
-@media only screen and (min-width: 1400px) {
-}
+	.docsNavContainer .toc {
+		margin: 40px 0 0 20px;
+		width: auto;
+	}
 
-@media only screen and (min-width: 1500px) {
+	.docsNavContainer .toc .toggleNav .navGroups {
+		padding-top: 0;
+	}
+
+	.blogContainer {
+		padding-left: 40px;
+		padding-right: 40px;
+	}
 }

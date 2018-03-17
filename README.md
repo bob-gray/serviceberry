@@ -1,11 +1,35 @@
-![Serviceberry](https://raw.githubusercontent.com/bob-gray/serviceberry/master/website/static/img/serviceberry.svg)
+![Serviceberry](https://serviceberry.js.org/img/serviceberry.svg)
 
 [![CircleCI](https://circleci.com/gh/bob-gray/serviceberry.svg?style=svg)](https://circleci.com/gh/bob-gray/serviceberry)
+[![npm version](https://badge.fury.io/js/serviceberry.svg)](https://badge.fury.io/js/serviceberry)
 
-[Documentation](https://bob-gray.github.io/serviceberry) [![JS.ORG](http://logo.js.org/dark_tiny.png)](https://js.org)
+[Documentation](https://serviceberry.js.org)
 
 A simple HTTP service framework for Node.js
 
 ```javascript
 require("serviceberry").createTrunk().on("*", () => "Hello World!");
 ```
+
+Handlers
+--------
+
+Serializers, deserializer, plugins and endpoints all handle requests in the same way.
+
+
+Plugins
+-------
+
+Powerful plugins that are easy to use and easy to create.
+
+Tree
+----
+
+Flexible tree structure reduces duplication by allowing plugins at any node.
+
+The Best API for Building HTTP APIs
+-----------------------------------
+
+Serviceberry is designed to be flexible, extensible and easy to use. It doesn't mandate
+boilerplate or configuration or demand to marry your application. It helps you do HTTP well by facilitating
+a thin HTTP frontend to your backend where statuses, methods and headers have meaning.

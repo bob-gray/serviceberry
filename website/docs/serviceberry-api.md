@@ -6,7 +6,7 @@ title: Serviceberry
 ### *object*
 
 When you require `serviceberry` this is the object that you recieve. The most important property is `createTrunk()`.
-A service is created as a [trunk](trunk.html) then [branches](branches.html) and [leaves](leaf.html) are added using
+A service is created as a [trunk](trunk.html) then [branches](branch.html) and [leaves](leaf.html) are added using
 `.at()` and `.on()` of the trunk and resulting branches. All parts of the tree can have plugins and error handlers attached
 with `.use()` and `.catch()`.
 

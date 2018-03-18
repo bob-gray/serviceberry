@@ -3,8 +3,8 @@
 require("solv/src/function/curry");
 
 const createClass = require("solv/src/class");
-const form = require("./serviceberry-form");
-const json = require("./serviceberry-json");
+const form = require("serviceberry-form");
+const json = require("serviceberry-json");
 
 const Deserializer = createClass(
 	{

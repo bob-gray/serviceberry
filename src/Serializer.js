@@ -1,7 +1,7 @@
 "use strict";
 
 const createClass = require("solv/src/class");
-const json = require("./serviceberry-json");
+const json = require("serviceberry-json");
 
 const Serializer = createClass(
 	{

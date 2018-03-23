@@ -1,89 +1,40 @@
 "use strict";
 
-require("solv/src/function/curry");
+const Base = require("solv/src/abstract/base"),
+	form = require("serviceberry-form"),
+	json = require("serviceberry-json"),
+	defaultHandlers = {
+		[form.contentType]: form.deserialize,
+		[json.contentType]: json.deserialize
+	};
 
-const createClass = require("solv/src/class");
-const form = require("serviceberry-form");
-const json = require("serviceberry-json");
-
-const Deserializer = createClass(
-	{
-		name: "Deserializer",
-		type: "class",
-		extends: require("solv/src/abstract/base"),
-		arguments: [{
-			name: "handlers",
-			type: "object",
-			default: {
-				[form.contentType]: form.deserialize,
-				[json.contentType]: json.deserialize
-			}
-		}]
-	},
-	init
-);
-
-Deserializer.method(
-	{
-		name: "set",
-		arguments: [{
-			name: "handlers",
-			type: "object"
-		}]
-	},
-	setMany
-);
-
-Deserializer.method(
-	{
-		name: "set",
-		arguments: [{
-			name: "contentType",
-			type: "string"
-		}, {
-			name: "handler",
-			type: "function"
-		}]
-	},
-	set
-);
-
-Deserializer.method(
-	{
-		name: "deserialize",
-		arguments: [{
-			name: "request",
-			type: "object"
-		}, {
-			name: "response",
-			type: "object"
-		}],
-		returns: "promise"
-	},
-	deserialize
-);
-
-function init (handlers) {
-	this.handlers = handlers;
-}
-
-function setMany (handlers) {
-	Object.merge(this.handlers, handlers);
-}
-
-function set (contentType, handler) {
-	this.handlers[contentType] = handler;
-}
-
-function deserialize (request, response) {
-	var handler = this.invoke(getHandler, request);
-
-	if (!handler) {
-		handler = getRawContent;
+class Deserializer extends Base {
+	constructor (handlers = {}) {
+		super();
+		this.handlers = {...defaultHandlers, ...handlers};
 	}
 
-	return new Promise(this.proxy(read, request))
-		.then(handler.bind(this, request, response));
+	set (contentType, handler) {
+		var handlers;
+
+		if (arguments.length === 1) {
+			handlers = arguments[0];
+			Object.assign(this.handers, handlers);
+		} else {
+			this.handlers[contentType] = handler;
+		}
+	}
+
+	deserialize (request, response) {
+		var handler = this.invoke(getHandler, request);
+
+		if (!handler) {
+			handler = getRawContent;
+		}
+
+		return new Promise(this.proxy(read, request))
+			.then(handler.bind(this, request, response));
+	}
 }
 
 function read (request, resolve) {

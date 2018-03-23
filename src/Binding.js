@@ -4,10 +4,10 @@ const Binder = require("./Binder"),
 	Operator = require("./Operator");
 
 class Binding extends Binder {
-	constructor (...args) {
+	constructor () {
 		var unbind;
 
-		super(...args);
+		super(...arguments);
 
 		this.operator = new Operator();
 		unbind = this.proxy("unbind");

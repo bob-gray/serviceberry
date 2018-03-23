@@ -46,7 +46,7 @@ function parsePathParams (request) {
 	values.shift();
 
 	this.placeholders.forEach((placeholder, index) => {
-		params[placeholder] = values[index];
+		params[placeholder] = decodeURIComponent(values[index]);
 	});
 
 	return params;

@@ -43,8 +43,8 @@ function proceed () {
 	}
 }
 
-function fail (error, status, headers) {
-	var handler = this.route.getNextFailHandler();
+function fail (error) {
+	const handler = this.route.getNextFailHandler();
 
 	error = new HttpError(...arguments);
 	this.request.error = error;
@@ -76,7 +76,7 @@ function bind () {
 	this.response = this.response.copy();
 
 	return binding.bind(this.request, "proceed")
-		.bind(this.request, "fail")
+		.bind(this.request, "fail", this.proxy(fail))
 		.bind(this.response, "send", this.proxy("delay", send));
 }
 

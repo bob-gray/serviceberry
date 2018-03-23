@@ -1,17 +1,16 @@
 "use strict";
 
-const Base = require("solv/src/abstract/base"),
-	EventEmitter = require("events"),
+const EventEmitter = require("events"),
 	StatusAccessor = require("./StatusAccessor"),
 	HeadersAccessor = require("./HeadersAccessor"),
 	contentType = require("content-type");
 
-class Response extends Base {
+class Response extends EventEmitter {
 	constructor (serverResponse) {
 		super();
 		this.serverResponse = serverResponse;
-		this.invoke(StatusAccessor.init);
-		this.invoke(HeadersAccessor.init);
+		this.initStatus();
+		this.initHeaders();
 		this.setEncoding("utf-8");
 		this.serverResponse.on("finish", this.proxy("emit", "finish"))
 			.on("error", this.proxy("emit", "error"));
@@ -84,9 +83,8 @@ class Response extends Base {
 
 Object.assign(
 	Response.prototype,
-	EventEmitter.prototype,
-	StatusAccessor.prototype,
-	HeadersAccessor.prototype
+	StatusAccessor,
+	HeadersAccessor
 );
 
 module.exports = Response;

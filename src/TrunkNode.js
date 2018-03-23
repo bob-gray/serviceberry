@@ -1,3 +1,5 @@
+/* eslint no-shadow: "warn" */
+
 "use strict";
 
 require("solv/src/array/first");
@@ -50,6 +52,7 @@ function chooseBranch (request, response) {
 	return branch;
 }
 
+// eslint-disable-next-line complexity
 function chooseLeaf (request, response) {
 	var allowed = this.leaves.filter(leaf => leaf.isAllowed(request)),
 		supported,

@@ -1,163 +1,54 @@
 "use strict";
 
-require("solv/src/object/copy");
+require("solv/src/object/clone");
 require("solv/src/object/for-each");
-require("solv/src/abstract/base");
 
-const createClass = require("solv/src/class");
-const meta = require("solv/src/meta");
+const Base = require("solv/src/abstract/base");
 
-const HeadersAccessor = createClass(
-	meta({
-		"name": "HeadersAccessor",
-		"type": "class",
-		"mixins": "solv/src/abstract/base",
-		"arguments": []
-	})
-);
+module.exports = {
+	...Base.prototype,
 
-HeadersAccessor.method(
-	meta({
-		"name": "init",
-		"static": true,
-		"arguments": [{
-			"name": "header",
-			"type": "object",
-			"default": {}
-		}]
-	}),
-	init
-);
+	initHeaders (headers = {}) {
+		this.clearHeaders();
+		this.setHeaders(headers);
+	},
 
-HeadersAccessor.method(
-	meta({
-		"name": "getHeaders",
-		"arguments": [],
-		"returns": "object"
-	}),
-	getHeaders
-);
+	getHeaders () {
+		return Object.clone(this.headers);
+	},
 
-HeadersAccessor.method(
-	meta({
-		"name": "getHeader",
-		"arguments": [{
-			"name": "name",
-			"type": "string"
-		}],
-		"returns": "string|number|array|undefined"
-	}),
-	getHeader
-);
+	getHeader (name) {
+		return this.headers[this.invoke(findName, name)].slice();
+	},
 
-HeadersAccessor.method(
-	meta({
-		"name": "hasHeader",
-		"arguments": [{
-			"name": "name",
-			"type": "string"
-		}],
-		"returns": "boolean"
-	}),
-	hasHeader
-);
+	hasHeader (name) {
+		return this.invoke(findName, name) !== undefined;
+	},
 
-HeadersAccessor.method(
-	meta({
-		"name": "withoutHeader",
-		"arguments": [{
-			"name": "name",
-			"type": "string"
-		}],
-		"returns": "boolean"
-	}),
-	withoutHeader
-);
+	withoutHeader (name) {
+		return !this.hasHeader(name);
+	},
 
-HeadersAccessor.method(
-	meta({
-		"name": "setHeaders",
-		"arguments": [{
-			"name": "headers",
-			"type": "object"
-		}]
-	}),
-	setHeaders
-);
+	setHeaders (headers) {
+		Object.forEach(headers, (value, name) => this.setHeader(name, value));
+	},
 
-HeadersAccessor.method(
-	meta({
-		"name": "setHeader",
-		"arguments": [{
-			"name": "name",
-			"type": "string"
-		}, {
-			"name": "value",
-			"type": "string|number|array"
-		}]
-	}),
-	setHeader
-);
+	setHeader (name, value) {
+		if (value === null) {
+			delete this.headers[this.invoke(findName, name)];
+		} else {
+			this.headers[name] = clean(value);
+		}
+	},
 
-HeadersAccessor.method(
-	meta({
-		"name": "removeHeader",
-		"arguments": [{
-			"name": "name",
-			"type": "string"
-		}]
-	}),
-	removeHeader
-);
+	removeHeader (name) {
+		this.setHeader(name, null);
+	},
 
-HeadersAccessor.method(
-	meta({
-		"name": "clearHeaders",
-		"arguments": []
-	}),
-	clearHeaders
-);
-
-function init (headers) {
-	this.clearHeaders();
-	this.setHeaders(headers);
-}
-
-function getHeaders () {
-	return Object.copy(this.headers);
-}
-
-function getHeader (name) {
-	return this.headers[this.invoke(findName, name)];
-}
-
-function hasHeader (name) {
-	return this.invoke(findName, name) !== undefined;
-}
-
-function withoutHeader (name) {
-	return !this.hasHeader(name);
-}
-
-function setHeaders (headers) {
-	Object.forEach(headers, (value, name) => this.setHeader(name, value));
-}
-
-function setHeader (name, value) {
-	if (value === null) {
-		delete this.headers[this.invoke(findName, name)];
-	} else {
-		this.headers[name] = value;
+	clearHeaders () {
+		this.headers = {};
 	}
-}
-
-function removeHeader (name) {
-	this.setHeader(name, null);
-}
-
-function clearHeaders () {
-	this.headers = {};
-}
+};
 
 function findName (name) {
 	name = name.toLowerCase();
@@ -165,4 +56,12 @@ function findName (name) {
 	return Object.keys(this.headers).find(key => key.toLowerCase() === name);
 }
 
-module.exports = HeadersAccessor;
+function clean (value) {
+	if (Array.isArray(value)) {
+		value = value.slice();
+	} else {
+		value = String(value);
+	}
+
+	return value;
+}

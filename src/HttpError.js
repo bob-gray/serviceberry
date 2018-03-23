@@ -1,10 +1,11 @@
 "use strict";
 
 const StatusAccessor = require("./StatusAccessor"),
-	HeadersAccessor = require("./HeadersAccessor");
+	HeadersAccessor = require("./HeadersAccessor"),
+	statusCodes = require("./statusCodes");
 
 class HttpError extends Error {
-	constructor (error, status = 500, headers = {}) {
+	constructor (error = "") {
 		var initialized = error instanceof HttpError;
 
 		super();
@@ -12,17 +13,7 @@ class HttpError extends Error {
 		if (initialized) {
 			Object.assign(this, error);
 		} else {
-			this.message = error.message || error;
-			this.invoke(StatusAccessor.init, status || error.status);
-			this.invoke(HeadersAccessor.init, headers);
-		}
-
-		if (!initialized && this.withoutHeader("Content-Type")) {
-			this.setHeader("Content-Type", "text/plain; charset=utf-8");
-		}
-
-		if (!initialized && error.message) {
-			this.originalError = error;
+			init.apply(this, arguments);
 		}
 	}
 
@@ -33,8 +24,22 @@ class HttpError extends Error {
 
 Object.assign(
 	HttpError.prototype,
-	StatusAccessor.prototype,
-	HeadersAccessor.prototype
+	StatusAccessor,
+	HeadersAccessor
 );
+
+function init (error, status, headers = {}) {
+	this.message = error.message || error;
+	this.initStatus(status || error.status || statusCodes.INTERNAL_SERVER_ERROR);
+	this.initHeaders(headers);
+
+	if (this.withoutHeader("Content-Type")) {
+		this.setHeader("Content-Type", "text/plain; charset=utf-8");
+	}
+
+	if (error.message) {
+		this.originalError = error;
+	}
+}
 
 module.exports = HttpError;

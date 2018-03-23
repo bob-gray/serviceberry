@@ -4,6 +4,7 @@
 <url> <loc>https://serviceberry.js.org/blog/2018/03/15/hosted-documentation.html</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>https://serviceberry.js.org/docs/auto-responses.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/auto-responses.html" /> </url>
 <url> <loc>https://serviceberry.js.org/docs/branch.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/branch.html" /> </url>
+<url> <loc>https://serviceberry.js.org/docs/contributing.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/contributing.html" /> </url>
 <url> <loc>https://serviceberry.js.org/docs/getting-started.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/getting-started.html" /> </url>
 <url> <loc>https://serviceberry.js.org/docs/handlers.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/handlers.html" /> </url>
 <url> <loc>https://serviceberry.js.org/docs/how-it-works.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/how-it-works.html" /> </url>

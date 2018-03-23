@@ -20,6 +20,7 @@ module.exports = {
 		apiKey: "d8f71d3fca61a88437ddb93081120da2",
 		indexName: "serviceberry",
 	},
+	gaTrackingId: "UA-116036661-1",
 	headerIcon: "img/serviceberry-horizontal.svg",
 	favicon: "img/favicon.ico",
 	colors: {

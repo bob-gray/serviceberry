@@ -20,6 +20,8 @@ createDoc(request);
 createDoc(response);
 createDoc(httperror);
 
+createContributing();
+
 function createDoc (doc) {
 	doc.id = doc.name.toLowerCase().replace(/\W+/g, "-");
 	doc.title = doc.name;
@@ -85,4 +87,10 @@ function createDoc (doc) {
 
 		return signature;
 	}
+}
+
+function createContributing () {
+	var contributing = fs.readFileSync("../CONTRIBUTING.md", "utf8");
+
+	fs.writeFileSync("docs/contributing.md", "---\nid: contributing\ntitle: Contributing\n---\n\n" + contributing);
 }

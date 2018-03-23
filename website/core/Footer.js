@@ -60,6 +60,7 @@ class Footer extends React.Component {
               aria-label="Star this project on GitHub">
               Star
             </a>
+            <a href={this.docUrl('contributing.html', this.props.language)}>Contributing</a>
             <a href={this.docUrl('license.html', this.props.language)}>License</a>
           </div>
         </section>

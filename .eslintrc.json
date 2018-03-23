@@ -3,6 +3,9 @@
     "node": true,
     "es6": true
   },
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
   "extends": "eslint:recommended",
   "rules": {
     "no-await-in-loop": "error",
@@ -11,7 +14,7 @@
       "nestedBinaryExpressions": false
     }],
     "array-callback-return": "error",
-    "complexity": ["error", 5],
+    "complexity": ["error", 6],
     "curly": "error",
     "dot-notation": "error",
     "eqeqeq": "error",
@@ -107,7 +110,9 @@
     "no-restricted-syntax": ["error", "SwitchStatement", "CaseStatement"],
     "no-trailing-spaces": "error",
     "no-whitespace-before-property": "error",
-    "object-property-newline": "error",
+    "object-property-newline": ["error", {
+        "allowAllPropertiesOnSameLine": true
+    }],
     "one-var": "error",
     "one-var-declaration-per-line": "error",
     "padded-blocks": ["error", "never"],

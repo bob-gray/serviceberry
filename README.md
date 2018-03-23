@@ -1,8 +1,8 @@
 ![Serviceberry](https://serviceberry.js.org/img/serviceberry.svg)
 
 [![CircleCI](https://circleci.com/gh/bob-gray/serviceberry.svg?style=svg)](https://circleci.com/gh/bob-gray/serviceberry)
-[![npm version](https://badge.fury.io/js/serviceberry.svg)](https://badge.fury.io/js/serviceberry)
 [![Maintainability](https://api.codeclimate.com/v1/badges/8df2be2193274eaf29a9/maintainability)](https://codeclimate.com/github/bob-gray/serviceberry/maintainability)
+[![npm version](https://badge.fury.io/js/serviceberry.svg)](https://badge.fury.io/js/serviceberry)
 
 [Documentation](https://serviceberry.js.org)
 

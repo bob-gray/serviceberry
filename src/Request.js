@@ -4,7 +4,6 @@ require("solv/src/object/for-each");
 
 const EventEmitter = require("events"),
 	Base = require("solv/src/abstract/base"),
-	type = require("solv/src/type"),
 	url = require("url"),
 	querystring = require("querystring"),
 	contentType = require("content-type");
@@ -48,9 +47,9 @@ class Request extends EventEmitter {
 	getParams () {
 		var body = this.getBody();
 
-		if (body && type.is.not("object", body)) {
+		if (body && typeof body !== "object") {
 			body = {body};
-		} else if (type.is.not("undefined", body) ) {
+		} else if (typeof body === "undefined") {
 			body = {};
 		}
 

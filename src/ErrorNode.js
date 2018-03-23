@@ -1,7 +1,5 @@
 "use strict";
 
-require("solv/src/function/curry");
-
 const LeafNode = require("./LeafNode"),
 	HttpError = require("./HttpError"),
 	messages = {

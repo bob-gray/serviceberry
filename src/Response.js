@@ -1,8 +1,8 @@
 "use strict";
 
 const EventEmitter = require("events"),
-	StatusAccessor = require("./StatusAccessor"),
-	HeadersAccessor = require("./HeadersAccessor"),
+	statusAccessor = require("./statusAccessor"),
+	headersAccessor = require("./headersAccessor"),
 	contentType = require("content-type");
 
 class Response extends EventEmitter {
@@ -81,10 +81,6 @@ class Response extends EventEmitter {
 	}
 }
 
-Object.assign(
-	Response.prototype,
-	StatusAccessor,
-	HeadersAccessor
-);
+Object.assign(Response.prototype, statusAccessor, headersAccessor);
 
 module.exports = Response;

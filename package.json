@@ -11,7 +11,7 @@
     "build-ci": "npm run lint && npm run test-coverage",
     "lint": "eslint src/**",
     "test": "jasmine",
-    "test-coverage": "nyc --include=src/**/*.js --all npm test"
+    "test-coverage": "nyc --include=src/**/*.js --all --reporter=lcov npm test"
   },
   "repository": {
     "type": "git",

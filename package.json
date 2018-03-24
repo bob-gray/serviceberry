@@ -9,6 +9,7 @@
   "scripts": {
     "build": "npm run lint && npm run test-coverage",
     "lint": "eslint src/**",
+    "lint:spec": "eslint spec/**",
     "test": "jasmine",
     "test-coverage": "nyc --include=src/**/*.js --all --reporter=lcov --reporter=text npm test"
   },

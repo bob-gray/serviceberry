@@ -12,17 +12,6 @@ class Serializer extends Base {
 		this.handlers = {...defaultHandlers, ...handlers};
 	}
 
-	set (contentType, handler) {
-		var handlers;
-
-		if (arguments.length === 1) {
-			handlers = arguments[0];
-			Object.assign(this.handers, handlers);
-		} else {
-			this.handlers[contentType] = handler;
-		}
-	}
-
 	serialize (request, response) {
 		var handler = this.invoke(getHandler, response),
 			serialized;

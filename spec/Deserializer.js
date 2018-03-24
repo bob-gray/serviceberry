@@ -1,13 +1,12 @@
 "use strict";
 
 const Deserializer = require("../src/Deserializer"),
-	{Readable} = require('stream');
+	{Readable} = require("stream");
 
 describe("Deserializer", () => {
 	var deserializer,
 		text,
-		json,
-		csv;
+		json;
 
 	beforeEach(() => {
 		text = {
@@ -54,7 +53,7 @@ describe("Deserializer", () => {
 
 	it("should call result in raw content when no handler exists", async () => {
 		const csv = {
-				type: "application/csv",
+				type: "text/csv",
 				string: '"Hello","World!"'
 			},
 			deserializer = new Deserializer(),

@@ -14,17 +14,6 @@ class Deserializer extends Base {
 		this.handlers = {...defaultHandlers, ...handlers};
 	}
 
-	set (contentType, handler) {
-		var handlers;
-
-		if (arguments.length === 1) {
-			handlers = arguments[0];
-			Object.assign(this.handers, handlers);
-		} else {
-			this.handlers[contentType] = handler;
-		}
-	}
-
 	deserialize (request, response) {
 		var handler = this.invoke(getHandler, request);
 

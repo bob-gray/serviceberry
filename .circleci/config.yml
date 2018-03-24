@@ -31,7 +31,7 @@ jobs:
           name: Run tests
           command: |
             ./cc-test-reporter before-build
-            npm run build-ci
+            npm run build
             ./cc-test-reporter after-build
 
   deploy-website:

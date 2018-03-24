@@ -18,7 +18,13 @@ module.exports = {
 	},
 
 	getHeader (name) {
-		return this.headers[this.invoke(findName, name)].slice();
+		var value = this.headers[this.invoke(findName, name)];
+
+		if (Array.isArray(value)) {
+			value = [...value];
+		}
+
+		return value;
 	},
 
 	hasHeader (name) {

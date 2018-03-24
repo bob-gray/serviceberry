@@ -16,14 +16,23 @@ jobs:
 
       - run: npm install
 
-      - run: sudo npm install eslint -g
-
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: npm test
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+
+      - run:
+          name: Run tests
+          command: |
+            ./cc-test-reporter before-build
+            npm run build-ci
+            ./cc-test-reporter after-build --exit-code $EXIT_CODE
 
   deploy-website:
     docker:

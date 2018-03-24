@@ -7,7 +7,11 @@
     "src"
   ],
   "scripts": {
-    "test": "eslint src/** & jasmine"
+    "build": "npm run lint && npm run test",
+    "build-ci": "npm run lint && npm run test-coverage",
+    "lint": "eslint src/**",
+    "test": "jasmine",
+    "test-coverage": "nyc --include=src/**/*.js --all npm test"
   },
   "repository": {
     "type": "git",
@@ -34,6 +38,7 @@
   },
   "devDependencies": {
     "eslint": "^4.18.2",
-    "jasmine": "^3.1.0"
+    "jasmine": "^3.1.0",
+    "nyc": "^11.6.0"
   }
 }

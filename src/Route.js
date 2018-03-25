@@ -6,14 +6,18 @@ const Base = require("solv/src/abstract/base");
 
 class Route extends Base {
 	constructor (root, ...args) {
-		Object.assign(super(), {
+		super();
+
+		Object.assign(this, {
 			queue: [],
-			catches: [],
+			catches: [...root.catches],
 			caught: [],
-			options: {}
+			options: {...root.options}
 		});
 
-		this.invoke(plot, root, args);
+		if (root.test(...args)) {
+			this.invoke(plotNext, root, args);
+		}
 	}
 
 	getNextHandler () {
@@ -31,19 +35,25 @@ class Route extends Base {
 	}
 }
 
-function plot (node, args) {
-	var next;
-
-	this.invoke(add, node.handlers);
-	this.invoke(addCatches, node.catches);
-	this.invoke(setOptions, node.options);
-	node.transition.apply(node, args);
-
-	next = node.chooseNext.apply(node, args);
+function plotNext (node, args) {
+	var next = this.invoke(moveToNext, node, args);
 
 	if (next) {
 		this.invoke(plot, next, args);
 	}
+}
+
+function moveToNext (node, args) {
+	this.invoke(add, node.handlers);
+	node.transition(...args);
+
+	return node.chooseNext(...args);
+}
+
+function plot (node) {
+	this.invoke(setOptions, node.options);
+	this.invoke(addCatches, node.catches);
+	this.invoke(plotNext, ...arguments);
 }
 
 function recatch () {
@@ -56,7 +66,7 @@ function add (handlers) {
 }
 
 function addCatches (handlers) {
-	this.queue = this.queue.concat(handlers.map(toErrorHandlers));
+	this.queue = this.queue.concat(handlers.map(toFailHandlers));
 }
 
 function setOptions (options) {
@@ -66,17 +76,17 @@ function setOptions (options) {
 function getNext () {
 	var next = this.queue.shift();
 
-	if (next && next.errorHandler) {
-		this.catches.push(next.errorHandler);
+	if (next && next.failHandler) {
+		this.catches.push(next.failHandler);
 		next = this.invoke(getNext);
 	}
 
 	return next;
 }
 
-function toErrorHandlers (handler) {
+function toFailHandlers (handler) {
 	return {
-		errorHandler: handler
+		failHandler: handler
 	};
 }
 

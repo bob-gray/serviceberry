@@ -2,14 +2,14 @@
 
 const Branch = require("./Branch"),
 	http = require("http"),
-	TrunkNode = require("./TrunkNode"),
+	BranchNode = require("./BranchNode"),
 	Request = require("./Request"),
 	Response = require("./Response"),
 	Route = require("./Route"),
 	Director = require("./Director"),
 	defaultOptions = {
 		port: 3000,
-		basePath: "/",
+		path: "/",
 		autoStart: true,
 		timeout: 10000
 	};
@@ -20,8 +20,8 @@ class Trunk extends Branch {
 	}
 
 	constructor (options = {}) {
-		options = Object.assign({}, defaultOptions, options);
-		super(options);
+		super({...defaultOptions, ...options});
+
 		this.server = http.createServer();
 
 		if (options.autoStart) {
@@ -34,7 +34,7 @@ class Trunk extends Branch {
 	}
 
 	createNode (options) {
-		this.node = new TrunkNode(options);
+		this.node = new BranchNode(options);
 	}
 
 	start (callback) {

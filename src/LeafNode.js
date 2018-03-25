@@ -1,9 +1,19 @@
 "use strict";
 
-const TrunkNode = require("./TrunkNode"),
+const Base = require("solv/src/abstract/base"),
 	accepts = require("accepts");
 
-class LeafNode extends TrunkNode {
+class LeafNode extends Base {
+	constructor (options = {}) {
+		super();
+
+		Object.assign(this, {
+			options: {...options},
+			handlers: [],
+			catches: []
+		});
+	}
+
 	isAllowed (request) {
 		var allowed = true,
 			method = this.options.method;
@@ -56,11 +66,11 @@ class LeafNode extends TrunkNode {
 		return acceptable !== false;
 	}
 
-	chooseNext () {
+	transition () {
 		// A leaf is the end of the route
 	}
 
-	transition () {
+	chooseNext () {
 		// A leaf is the end of the route
 	}
 }

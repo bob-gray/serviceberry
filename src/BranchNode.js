@@ -1,14 +1,25 @@
 "use strict";
 
 require("solv/src/regexp/escape");
+require("solv/src/array/first");
+require("solv/src/array/add");
+require("solv/src/array/is-empty");
 
-var TrunkNode = require("./TrunkNode"),
+const Base = require("solv/src/abstract/base"),
 	placeholders = /\{[^}]+\}/g,
 	escapedBraces = /\\([{}])/g;
 
-class BranchNode extends TrunkNode {
-	constructor () {
-		super(...arguments);
+class BranchNode extends Base {
+	constructor (options = {}) {
+		super();
+
+		Object.assign(this, {
+			options: {...options},
+			branches: [],
+			leaves: [],
+			handlers: [],
+			catches: []
+		});
 
 		this.invoke(forceLeadingSlash);
 		this.invoke(createPattern);
@@ -23,13 +34,26 @@ class BranchNode extends TrunkNode {
 		Object.assign(request.pathParams, this.invoke(parsePathParams, request));
 		request.remainingPath = request.remainingPath.replace(this.pattern, "");
 	}
+
+	chooseNext (request, response) {
+		var next;
+
+		if (request.remainingPath.length) {
+			next = this.invoke(chooseBranch, request, response);
+		} else {
+			next = this.invoke(chooseLeaf, request, response);
+		}
+
+		return next;
+	}
 }
 
 function forceLeadingSlash () {
-	var options = this.options;
+	var options = this.options,
+		{path} = options;
 
-	if (!options.path.startsWith("/")) {
-		options.path = "/" + options.path;
+	if (!path.startsWith("/")) {
+		options.path = "/" + path;
 	}
 }
 
@@ -62,6 +86,112 @@ function parsePathParams (request) {
 	}
 
 	return params;
+}
+
+function chooseBranch (request, response) {
+	// eslint-disable-next-line no-shadow
+	var branch = this.branches.find(branch => branch.test(request, response));
+
+	if (!branch) {
+		branch = notFound(request);
+	}
+
+	return branch;
+}
+
+function chooseLeaf (request, response) {
+	var allowed = this.invoke(getAllowedLeaves, request),
+		supported = allowed.filter(leaf => leaf.isSupported(request)),
+		acceptable = supported.filter(leaf => leaf.isAcceptable(request, response)),
+		leaf = acceptable.first();
+
+	if (!leaf) {
+		leaf = this.invoke(getAutoLeaf, request, allowed, supported);
+	}
+
+	return leaf;
+}
+
+function getAllowedLeaves (request) {
+	var allowed = this.leaves.filter(leaf => leaf.isAllowed(request));
+
+	if (allowed.isEmpty() && request.getMethod() === "HEAD") {
+		allowed = this.leaves.filter(leaf => leaf.options.method === "GET");
+	}
+
+	return allowed;
+}
+
+function getAutoLeaf (request, allowed, supported) {
+	var leaf;
+
+	if (this.leaves.isEmpty()) {
+		leaf = notFound();
+	} else if (isAutoOptions(request, allowed)) {
+		leaf = this.invoke(autoOptions);
+	} else if (allowed.isEmpty()) {
+		leaf = this.invoke(notAllowed);
+	} else if (supported.isEmpty()) {
+		leaf = unsupported();
+	} else {
+		leaf = notAcceptable();
+	}
+
+	return leaf;
+}
+
+function autoOptions () {
+	var OptionsNode = require("./OptionsNode"),
+		allow = this.invoke(getAllow),
+		options;
+
+	if (allow) {
+		options = new OptionsNode(allow);
+	}
+
+	return options;
+}
+
+function isAutoOptions (request, allowed) {
+	return request.getMethod() === "OPTIONS" && allowed.isEmpty();
+}
+
+function notFound () {
+	return createErrorNode("Not Found");
+}
+
+function notAllowed () {
+	return createErrorNode("Method Not Allowed", {
+		Allow: this.invoke(getAllow)
+	});
+}
+
+function unsupported () {
+	return createErrorNode("Unsupported Media Type");
+}
+
+function notAcceptable () {
+	return createErrorNode("Not Acceptable");
+}
+
+function getAllow () {
+	var allow = this.leaves.map(leaf => leaf.options.method).filter(method => method);
+
+	allow.add("OPTIONS");
+
+	if (allow.includes("GET")) {
+		allow.add("HEAD");
+	}
+
+	allow.sort();
+
+	return allow.join();
+}
+
+function createErrorNode () {
+	const ErrorNode = require("./ErrorNode");
+
+	return new ErrorNode(...arguments);
 }
 
 module.exports = BranchNode;

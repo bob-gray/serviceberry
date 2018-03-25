@@ -62,6 +62,15 @@ describe("Binder", () => {
 		expect(run).toHaveBeenCalled();
 	});
 
+	it("should allow binding by a method name", () => {
+		binder.run = jasmine.createSpy("run");
+		binder.bind(steward, "run");
+
+		steward.run();
+
+		expect(binder.run).toHaveBeenCalled();
+	});
+
 	it("should forward arguments to bound function", () => {
 		var run = jasmine.createSpy("run");
 

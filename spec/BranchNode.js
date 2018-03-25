@@ -27,7 +27,7 @@ describe("BranchNode", () => {
 			}),
 			branchNode = new BranchNode({
 				path: "/{name}"
-			});;
+			});
 
 		expect(branchNode.test(request)).toBe(true);
 	});
@@ -60,6 +60,20 @@ describe("BranchNode", () => {
 		item.transition(request);
 
 		expect(request.getPathParam("id")).toBe("32");
+	});
+
+	it("should choose next branch", () => {
+		var next = new BranchNode({
+				path: "foo"
+			}),
+			request = createRequest({
+				url: "/bob/foo"
+			});
+
+		branchNode.branches.push(next);
+		branchNode.transition(request);
+
+		expect(branchNode.chooseNext(request)).toBe(next);
 	});
 });
 

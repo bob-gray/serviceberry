@@ -3,20 +3,20 @@
 const LeafNode = require("./LeafNode"),
 	HttpError = require("./HttpError"),
 	messages = {
-		404: request => "No resource at " + request.getUrl(),
-		405: request => "Request method " + request.getMethod() + " is not allowed",
-		406: request => "No acceptable response type for " + request.getAccept() + " can be produced",
-		415: request => "Request content type " + request.getContentType() + " is not supported"
+		"Not Found": request => "No resource at " + request.getUrl(),
+		"Method Not Allowed": request => "Request method " + request.getMethod() + " is not allowed",
+		"Not Acceptable": request => "No acceptable response type for " + request.getAccept() + " can be produced",
+		"Unsupported Media Type": request => "Request content type " + request.getContentType() + " is not supported"
 	};
 
 class ErrorNode extends LeafNode {
-	constructor (code, headers) {
+	constructor (text, headers) {
 		super();
 
 		this.handlers.push(request => {
 			throw new HttpError(
-				messages[code](request),
-				code,
+				messages[text](request),
+				text,
 				headers
 			);
 		});

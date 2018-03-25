@@ -7,38 +7,38 @@ const ErrorNode = require("../src/ErrorNode"),
 
 describe("ErrorNode", () => {
 	it("should throw a 404 HttpError", () => {
-		const code = 404,
+		const text = "Not Found",
 			headers = {
 				"Content-Type": "text/plain; charset=utf-8"
 			},
-			errorNode = new ErrorNode(code, headers),
+			errorNode = new ErrorNode(text, headers),
 			request = createRequest({
 				url: "/fake/path"
 			});
 
-		expect(run(errorNode, request)).toThrowMatching(thrown(code, headers));
+		expect(run(errorNode, request)).toThrowMatching(thrown(text, headers));
 	});
 
 	it("should throw a 405 HttpError", () => {
-		const code = 405,
+		const text = "Method Not Allowed",
 			headers = {
 				"Allow": "PUT,DELETE",
 				"Content-Type": "text/plain; charset=utf-8"
 			},
-			errorNode = new ErrorNode(code, headers),
+			errorNode = new ErrorNode(text, headers),
 			request = createRequest({
 				url: "/fake/path"
 			});
 
-		expect(run(errorNode, request)).toThrowMatching(thrown(code, headers));
+		expect(run(errorNode, request)).toThrowMatching(thrown(text, headers));
 	});
 
 	it("should throw a 406 HttpError", () => {
-		const code = 406,
+		const text = "Not Acceptable",
 			headers = {
 				"Content-Type": "text/plain; charset=utf-8"
 			},
-			errorNode = new ErrorNode(code, headers),
+			errorNode = new ErrorNode("Not Acceptable", headers),
 			request = createRequest({
 				url: "/fake/path",
 				headers: {
@@ -46,15 +46,15 @@ describe("ErrorNode", () => {
 				}
 			});
 
-		expect(run(errorNode, request)).toThrowMatching(thrown(code, headers));
+		expect(run(errorNode, request)).toThrowMatching(thrown("Not Acceptable", headers));
 	});
 
 	it("should throw a 415 HttpError", () => {
-		const code = 415,
+		const text = "Unsupported Media Type",
 			headers = {
 				"Content-Type": "text/plain; charset=utf-8"
 			},
-			errorNode = new ErrorNode(code, headers),
+			errorNode = new ErrorNode(text, headers),
 			request = createRequest({
 				url: "/fake/path",
 				headers: {
@@ -62,7 +62,7 @@ describe("ErrorNode", () => {
 				}
 			});
 
-		expect(run(errorNode, request)).toThrowMatching(thrown(code, headers));
+		expect(run(errorNode, request)).toThrowMatching(thrown(text, headers));
 	});
 });
 
@@ -81,10 +81,10 @@ function run (errorNode, request) {
 	};
 }
 
-function thrown (code, headers = {}) {
+function thrown (text, headers = {}) {
 	return error => {
 		expect(error.getHeaders()).toEqual(headers);
 
-		return error instanceof HttpError && error.is(code)
+		return error instanceof HttpError && error.is(text)
 	};
 }

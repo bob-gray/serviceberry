@@ -22,8 +22,6 @@ class TrunkNode extends Base {
 	}
 
 	transition (request) {
-		request.remainingPath = request.path;
-
 		if (this.options.basePath) {
 			request.remainingPath = request.remainingPath.replace(this.options.basePath, "");
 		}
@@ -61,7 +59,7 @@ function chooseLeaf (request, response) {
 		leaf = acceptable.first();
 
 	if (!leaf) {
-		leaf = this.invoke(getAutoLeaf, request, allowed, supported, acceptable);
+		leaf = this.invoke(getAutoLeaf, request, allowed, supported);
 	}
 
 	return leaf;
@@ -77,7 +75,7 @@ function getAllowedLeaves (request) {
 	return allowed;
 }
 
-function getAutoLeaf (request, allowed, supported, acceptable) {
+function getAutoLeaf (request, allowed, supported) {
 	var leaf;
 
 	if (this.leaves.isEmpty()) {
@@ -88,7 +86,7 @@ function getAutoLeaf (request, allowed, supported, acceptable) {
 		leaf = this.invoke(notAllowed);
 	} else if (supported.isEmpty()) {
 		leaf = unsupported();
-	} else if (acceptable.isEmpty()) {
+	} else {
 		leaf = notAcceptable();
 	}
 

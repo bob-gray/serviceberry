@@ -16,9 +16,10 @@ class Request extends EventEmitter {
 		this.invoke(parseContentType);
 		this.incomingMessage.setEncoding(this.getEncoding());
 		this.url = url.parse(this.incomingMessage.url);
+		this.path = this.url.pathname;
 
 		Object.assign(this, {
-			path: this.url.pathname,
+			remainingPath: this.path,
 			pathParams: {},
 			content: ""
 		});

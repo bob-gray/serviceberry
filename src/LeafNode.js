@@ -57,11 +57,11 @@ class LeafNode extends TrunkNode {
 	}
 
 	chooseNext () {
-		// A leaf is the end of the road
+		// A leaf is the end of the route
 	}
 
 	transition () {
-		// A leaf is the end of the road
+		// A leaf is the end of the route
 	}
 }
 

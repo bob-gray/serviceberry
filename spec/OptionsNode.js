@@ -24,6 +24,6 @@ function run (optionsNode, response) {
 	handler(null, response);
 }
 
-function createResponse (options) {
+function createResponse () {
 	return jasmine.createSpyObj("Response", ["send"]);
 }

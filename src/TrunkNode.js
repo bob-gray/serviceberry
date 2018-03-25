@@ -6,17 +6,19 @@ require("solv/src/array/first");
 require("solv/src/array/add");
 require("solv/src/array/is-empty");
 
-const Base = require("solv/src/abstract/base"),
-	statusCodes = require("./statusCodes");
+const Base = require("solv/src/abstract/base");
 
 class TrunkNode extends Base {
 	constructor (options = {}) {
 		super();
-		this.options = options;
-		this.branches = [];
-		this.leaves = [];
-		this.handlers = [];
-		this.catches = [];
+
+		Object.assign(this, {
+			options,
+			branches: [],
+			leaves: [],
+			handlers: [],
+			catches: []
+		});
 	}
 
 	transition (request) {
@@ -52,39 +54,79 @@ function chooseBranch (request, response) {
 	return branch;
 }
 
-// eslint-disable-next-line complexity
 function chooseLeaf (request, response) {
-	var allowed = this.leaves.filter(leaf => leaf.isAllowed(request)),
-		supported,
-		acceptable,
-		leaf;
+	var allowed = this.invoke(getAllowedLeaves, request),
+		supported = allowed.filter(leaf => leaf.isSupported(request)),
+		acceptable = supported.filter(leaf => leaf.isAcceptable(request, response)),
+		leaf = acceptable.first();
 
-	const ErrorNode = require("./ErrorNode");
+	if (!leaf) {
+		leaf = this.invoke(getAutoLeaf, request, allowed, supported, acceptable);
+	}
+
+	return leaf;
+}
+
+function getAllowedLeaves (request) {
+	var allowed = this.leaves.filter(leaf => leaf.isAllowed(request));
 
 	if (allowed.isEmpty() && request.getMethod() === "HEAD") {
 		allowed = this.leaves.filter(leaf => leaf.options.method === "GET");
 	}
 
-	supported = allowed.filter(leaf => leaf.isSupported(request));
-	acceptable = supported.filter(leaf => leaf.isAcceptable(request, response));
+	return allowed;
+}
+
+function getAutoLeaf (request, allowed, supported, acceptable) {
+	var leaf;
 
 	if (this.leaves.isEmpty()) {
 		leaf = notFound();
-	} else if (allowed.isEmpty() && request.getMethod() === "OPTIONS") {
+	} else if (isAutoOptions(request, allowed)) {
 		leaf = this.invoke(autoOptions);
 	} else if (allowed.isEmpty()) {
-		leaf = new ErrorNode(statusCodes.METHOD_NOT_ALLOWED, {
-			Allow: this.invoke(getAllow)
-		});
+		leaf = this.invoke(notAllowed);
 	} else if (supported.isEmpty()) {
-		leaf = new ErrorNode(statusCodes.UNSUPPORTED_MEDIA_TYPE);
+		leaf = unsupported();
 	} else if (acceptable.isEmpty()) {
-		leaf = new ErrorNode(statusCodes.NOT_ACCEPTABLE);
-	} else {
-		leaf = acceptable.first();
+		leaf = notAcceptable();
 	}
 
 	return leaf;
+}
+
+function autoOptions () {
+	var OptionsNode = require("./OptionsNode"),
+		allow = this.invoke(getAllow),
+		options;
+
+	if (allow) {
+		options = new OptionsNode(allow);
+	}
+
+	return options;
+}
+
+function isAutoOptions (request, allowed) {
+	return request.getMethod() === "OPTIONS" && allowed.isEmpty();
+}
+
+function notFound () {
+	return createErrorNode("Not Found");
+}
+
+function notAllowed () {
+	return createErrorNode("Method Not Allowed", {
+		Allow: this.invoke(getAllow)
+	});
+}
+
+function unsupported () {
+	return createErrorNode("Unsupported Media Type");
+}
+
+function notAcceptable () {
+	return createErrorNode("Not Acceptable");
 }
 
 function getAllow () {
@@ -101,22 +143,10 @@ function getAllow () {
 	return allow.join();
 }
 
-function autoOptions () {
-	var OptionsNode = require("./OptionsNode"),
-		allow = this.invoke(getAllow),
-		options;
-
-	if (allow) {
-		options = new OptionsNode(allow);
-	}
-
-	return options;
-}
-
-function notFound () {
+function createErrorNode () {
 	const ErrorNode = require("./ErrorNode");
 
-	return new ErrorNode(statusCodes.NOT_FOUND);
+	return new ErrorNode(...arguments);
 }
 
 module.exports = TrunkNode;

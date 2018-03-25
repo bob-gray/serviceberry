@@ -11,13 +11,17 @@ const EventEmitter = require("events"),
 class Request extends EventEmitter {
 	constructor (incomingMessage) {
 		super();
+
 		this.incomingMessage = incomingMessage;
 		this.invoke(parseContentType);
 		this.incomingMessage.setEncoding(this.getEncoding());
-		this.url = url.parse(this.incomingMessage.url);
-		this.path = this.url.pathname;
-		this.pathParams = {};
-		this.content = "";
+
+		Object.assign(this, {
+			url: url.parse(this.incomingMessage.url),
+			path: this.url.pathname,
+			pathParams: {},
+			content: ""
+		});
 	}
 
 	copy () {

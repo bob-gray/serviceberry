@@ -14,9 +14,11 @@ class ErrorNode extends LeafNode {
 		super();
 
 		this.handlers.push(request => {
-			var message = messages[code](request);
-
-			throw new HttpError(message, code, headers);
+			throw new HttpError(
+				messages[code](request),
+				code,
+				headers
+			);
 		});
 	}
 }

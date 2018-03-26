@@ -77,13 +77,11 @@ function parsePathParams (request) {
 	var values = request.remainingPath.match(this.pattern),
 		params = {};
 
-	if (values) {
-		values.shift();
+	values.shift();
 
-		this.placeholders.forEach((placeholder, index) => {
-			params[placeholder] = decodeURIComponent(values[index]);
-		});
-	}
+	this.placeholders.forEach((placeholder, index) => {
+		params[placeholder] = decodeURIComponent(values[index]);
+	});
 
 	return params;
 }
@@ -175,7 +173,8 @@ function notAcceptable () {
 }
 
 function getAllow () {
-	var allow = this.leaves.map(leaf => leaf.options.method).filter(method => method);
+	var allow = this.leaves.map(leaf => leaf.options.method)
+		.reduce(flattenMethods, []);
 
 	allow.add("OPTIONS");
 
@@ -192,6 +191,14 @@ function createErrorNode () {
 	const ErrorNode = require("./ErrorNode");
 
 	return new ErrorNode(...arguments);
+}
+
+function flattenMethods (flat, method) {
+	if (method) {
+		flat = flat.concat(method);
+	}
+
+	return flat;
 }
 
 module.exports = BranchNode;

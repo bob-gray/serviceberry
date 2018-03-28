@@ -22,7 +22,12 @@ class HttpError extends Error {
 	}
 }
 
-Object.assign(HttpError.prototype, statusAccessor, headersAccessor);
+Object.assign(
+	HttpError.prototype,
+	statusAccessor,
+	headersAccessor.getters,
+	headersAccessor.setters
+);
 
 function init (error, status, headers = {}) {
 	this.message = error.message || error;

@@ -8,7 +8,10 @@ describe("headersAccessor", () => {
 	var accessor;
 
 	beforeEach(() => {
-		accessor = Object.create(headersAccessor);
+		accessor = Object.create({
+			...headersAccessor.getters,
+			...headersAccessor.setters
+		});
 		accessor.initHeaders();
 	});
 

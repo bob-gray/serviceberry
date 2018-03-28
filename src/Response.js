@@ -81,6 +81,11 @@ class Response extends EventEmitter {
 	}
 }
 
-Object.assign(Response.prototype, statusAccessor, headersAccessor);
+Object.assign(
+	Response.prototype,
+	statusAccessor,
+	headersAccessor.getters,
+	headersAccessor.setters
+);
 
 module.exports = Response;

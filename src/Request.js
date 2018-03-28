@@ -3,7 +3,7 @@
 require("solv/src/object/for-each");
 
 const EventEmitter = require("events"),
-	Base = require("solv/src/abstract/base"),
+	headersAccessor = require("./headersAccessor"),
 	url = require("url"),
 	querystring = require("querystring"),
 	contentType = require("content-type");
@@ -12,17 +12,16 @@ class Request extends EventEmitter {
 	constructor (incomingMessage) {
 		super();
 
-		this.incomingMessage = incomingMessage;
-		this.invoke(parseContentType);
-		this.incomingMessage.setEncoding(this.getEncoding());
-		this.url = url.parse(this.incomingMessage.url);
-		this.path = this.url.pathname;
-
 		Object.assign(this, {
-			remainingPath: this.path,
+			incomingMessage,
+			headers: incomingMessage.headers,
+			contentType: parseContentType(incomingMessage),
 			pathParams: {},
 			content: ""
 		});
+
+		this.remainingPath = this.getUrl().pathname;
+		incomingMessage.setEncoding(this.getEncoding());
 	}
 
 	copy () {
@@ -36,11 +35,7 @@ class Request extends EventEmitter {
 	}
 
 	getUrl () {
-		return this.incomingMessage.url;
-	}
-
-	getAccept () {
-		return this.getHeader("Accept");
+		return url.parse(this.incomingMessage.url);
 	}
 
 	getParam (name) {
@@ -52,10 +47,10 @@ class Request extends EventEmitter {
 	getParams () {
 		var body = this.getBody();
 
-		if (body && typeof body !== "object") {
-			body = {body};
-		} else if (typeof body === "undefined") {
+		if (typeof body === "undefined") {
 			body = {};
+		} else if (typeof body !== "object" || Array.isArray(body)) {
+			body = {body};
 		}
 
 		return Object.assign({}, body, this.getQueryParams(), this.pathParams);
@@ -76,7 +71,7 @@ class Request extends EventEmitter {
 	}
 
 	getQueryParams () {
-		return querystring.parse(this.url.query);
+		return querystring.parse(this.getUrl().query);
 	}
 
 	getBody () {
@@ -95,24 +90,6 @@ class Request extends EventEmitter {
 		this.content = content;
 	}
 
-	getHeader (name) {
-		var headers = this.getHeaders();
-
-		return headers[name.toLowerCase()];
-	}
-
-	getHeaders () {
-		return this.incomingMessage.headers;
-	}
-
-	hasHeader (name) {
-		return this.invoke(findName, name) !== undefined;
-	}
-
-	withoutHeader (name) {
-		return !this.hasHeader(name);
-	}
-
 	getContentType () {
 		return this.contentType && this.contentType.type;
 	}
@@ -122,20 +99,21 @@ class Request extends EventEmitter {
 	}
 }
 
-function parseContentType () {
+Object.assign(
+	Request.prototype,
+	headersAccessor.getters
+);
+
+function parseContentType (incomingMessage) {
+	var parsed;
+
 	try {
-		this.contentType = contentType.parse(this.incomingMessage);
+		parsed = contentType.parse(incomingMessage);
 	} catch (error) {
 		// throws if missing header or header is malformed
 	}
+
+	return parsed;
 }
-
-function findName (name) {
-	name = name.toLowerCase();
-
-	return Object.keys(this.incomingMessage.headers).find(key => key.toLowerCase() === name);
-}
-
-Object.assign(Request.prototype, Base.prototype);
 
 module.exports = Request;

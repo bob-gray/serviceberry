@@ -218,7 +218,7 @@ describe("BranchNode", () => {
 });
 
 function createRequest (options) {
-	var incomingMessage = httpMocks.createRequest(options);
+	const incomingMessage = httpMocks.createRequest(options);
 
 	incomingMessage.setEncoding = Function.prototype;
 
@@ -226,7 +226,10 @@ function createRequest (options) {
 }
 
 function createResponse () {
-	const response = Object.create(headersAccessor);
+	const response = Object.create({
+		...headersAccessor.getters,
+		...headersAccessor.setters
+	});
 
 	response.initHeaders();
 	response.setHeader("Content-Type", "text/plain");

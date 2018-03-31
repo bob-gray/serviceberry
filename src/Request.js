@@ -20,7 +20,7 @@ class Request extends EventEmitter {
 			content: ""
 		});
 
-		this.remainingPath = this.getUrl().pathname;
+		this.remainingPath = this.getUrl().pathname.slice(1);
 		incomingMessage.setEncoding(this.getEncoding());
 	}
 

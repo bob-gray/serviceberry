@@ -103,18 +103,4 @@ describe("Route", () => {
 
 		expect(route.options.root).toBe(true);
 	});
-
-	it("should not have child options if root tests false", () => {
-		root.test.and.returnValue(false);
-		route = new Route(root);
-
-		expect(route.options.child).toBeUndefined();
-	});
-
-	it("should have root catches even if root tests false", () => {
-		root.test.and.returnValue(false);
-		route = new Route(root);
-		expect(route.getNextFailHandler()).toBe(2);
-		expect(route.getNextFailHandler()).toBe(1);
-	});
 });

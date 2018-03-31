@@ -10,7 +10,7 @@ const Base = require("solv/src/abstract/base"),
 	escapedBraces = /\\([{}])/g;
 
 class BranchNode extends Base {
-	constructor (options) {
+	constructor (options = {path: ""}) {
 		super();
 
 		Object.assign(this, {
@@ -21,7 +21,7 @@ class BranchNode extends Base {
 			catches: []
 		});
 
-		this.invoke(forceLeadingSlash);
+		this.invoke(stripLeadingSlash);
 		this.invoke(createPattern);
 		this.invoke(setPlaceholders);
 	}
@@ -48,12 +48,12 @@ class BranchNode extends Base {
 	}
 }
 
-function forceLeadingSlash () {
+function stripLeadingSlash () {
 	var options = this.options,
 		{path} = options;
 
-	if (!path.startsWith("/")) {
-		options.path = "/" + path;
+	if (path.startsWith("/")) {
+		options.path = path.slice(1);
 	}
 }
 
@@ -61,7 +61,7 @@ function createPattern () {
 	var src = RegExp.escape(this.options.path).replace(escapedBraces, "$1")
 		.replace(placeholders, "([^/]+)");
 
-	this.pattern = new RegExp("^" + src);
+	this.pattern = new RegExp("^" + src + "/?");
 }
 
 function setPlaceholders () {
@@ -91,7 +91,7 @@ function chooseBranch (request, response) {
 	var branch = this.branches.find(branch => branch.test(request, response));
 
 	if (!branch) {
-		branch = notFound(request);
+		branch = notFound();
 	}
 
 	return branch;

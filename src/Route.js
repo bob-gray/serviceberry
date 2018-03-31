@@ -10,14 +10,12 @@ class Route extends Base {
 
 		Object.assign(this, {
 			queue: [],
-			catches: [...root.catches],
+			catches: [],
 			caught: [],
-			options: {...root.options}
+			options: {}
 		});
 
-		if (root.test(...args)) {
-			this.invoke(plotNext, root, args);
-		}
+		this.invoke(plot, root, args);
 	}
 
 	getNextHandler () {
@@ -35,25 +33,20 @@ class Route extends Base {
 	}
 }
 
+function plot (node, args) {
+	this.invoke(setOptions, node.options);
+	this.invoke(addCatches, node.catches);
+	this.invoke(add, node.handlers);
+	node.transition(...args);
+	this.invoke(plotNext, node, args);
+}
+
 function plotNext (node, args) {
-	var next = this.invoke(moveToNext, node, args);
+	var next = node.chooseNext(...args);
 
 	if (next) {
 		this.invoke(plot, next, args);
 	}
-}
-
-function moveToNext (node, args) {
-	this.invoke(add, node.handlers);
-	node.transition(...args);
-
-	return node.chooseNext(...args);
-}
-
-function plot (node) {
-	this.invoke(setOptions, node.options);
-	this.invoke(addCatches, node.catches);
-	this.invoke(plotNext, ...arguments);
 }
 
 function recatch () {

@@ -9,7 +9,7 @@ const Branch = require("./Branch"),
 	Director = require("./Director"),
 	defaultOptions = {
 		port: 3000,
-		path: "/",
+		path: "",
 		autoStart: true,
 		timeout: 10000
 	};
@@ -24,17 +24,30 @@ class Trunk extends Branch {
 
 		this.server = http.createServer();
 
-		if (options.autoStart) {
+		if (this.options.autoStart) {
 			process.nextTick(this.proxy("start"));
 		}
 
-		if (options.callback) {
-			this.server.on("listening", options.callback);
+		if (this.options.callback) {
+			this.server.on("listening", this.options.callback);
 		}
 	}
 
 	createNode (options) {
 		this.node = new BranchNode(options);
+
+		if (options.path && options.path !== "/") {
+			this.root = new Branch();
+			this.root.node.branches.push(this.node);
+		} else {
+			this.root = this;
+		}
+	}
+
+	catchAll (handler) {
+		this.root.catch(handler);
+
+		return this;
 	}
 
 	start (callback) {
@@ -49,7 +62,7 @@ function respond (incomingMessage, serverResponse) {
 	var request = new Request(incomingMessage),
 		response = new Response(serverResponse),
 		director = new Director(request, response),
-		route = new Route(this.node, request, response);
+		route = new Route(this.root.node, request, response);
 
 	director.run(route);
 }

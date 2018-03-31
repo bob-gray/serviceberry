@@ -1,5 +1,4 @@
-const validate = require("jsonschema").validate;
-const serviceberry = require("../src/main");
+const { validate } = require("jsonschema");
 
 module.exports = schema => request => {
     const result = validate(request.getBody(), schema);
@@ -7,7 +6,7 @@ module.exports = schema => request => {
     if (result.valid) {
         request.proceed();
     } else {
-        throw new serviceberry.HttpError(result.errors, 422, {
+        request.fail(result.errors, 422, {
             "Content-Type": "application/json"
         });
     }

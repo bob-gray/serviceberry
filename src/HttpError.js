@@ -5,7 +5,7 @@ const statusAccessor = require("./statusAccessor"),
 	statusCodes = require("./statusCodes");
 
 class HttpError extends Error {
-	constructor (error = "") {
+	constructor (error = "", ...rest) {
 		var initialized = error instanceof HttpError;
 
 		super();
@@ -13,7 +13,7 @@ class HttpError extends Error {
 		if (initialized) {
 			Object.assign(this, error);
 		} else {
-			init.apply(this, arguments);
+			init.call(this, error, ...rest);
 		}
 	}
 

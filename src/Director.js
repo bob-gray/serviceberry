@@ -100,9 +100,7 @@ function send (options = {}) {
 function end () {
 	var response = this.response,
 		serverResponse = response.serverResponse,
-		content;
-
-	content = response.getContent();
+		content = response.getContent();
 
 	if (!content.length && response.is("OK")) {
 		response.setStatus(statusCodes.NO_CONTENT);

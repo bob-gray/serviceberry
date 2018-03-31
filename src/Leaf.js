@@ -1,7 +1,5 @@
 "use strict";
 
-require("solv/src/class/method");
-
 const Base = require("solv/src/abstract/base"),
 	LeafNode = require("./LeafNode");
 
@@ -16,31 +14,33 @@ class Leaf extends Base {
 		this.node = new LeafNode(options);
 	}
 
-	use (usable) {
-		return this.use(usable.use.bind(usable));
+	use (handler) {
+		this.node.handlers.push(prepareHandler(handler));
+
+		return this;
 	}
 
-	catch (usable) {
-		return this.catch(usable.use.bind(usable));
+	catch (handler) {
+		this.node.catches.push(prepareHandler(handler));
+
+		return this;
 	}
 }
 
-Leaf.method({
-	name: "use",
-	signature: "function"
-}, function (handler) {
-	this.node.handlers.push(handler);
+function prepareHandler (handler) {
+	if (typeof handler !== "function" && typeof handler.use === "function") {
+		handler = handler.use.bind(handler);
+	}
 
-	return this;
-});
+	if (typeof handler !== "function") {
+		badHandler();
+	}
 
-Leaf.method({
-	name: "catch",
-	signature: "function"
-}, function (handler) {
-	this.node.catches.push(handler);
+	return handler;
+}
 
-	return this;
-});
+function badHandler () {
+	throw new Error("handler must be a function or an object with a `use` method");
+}
 
 module.exports = Leaf;

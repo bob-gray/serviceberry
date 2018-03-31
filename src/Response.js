@@ -35,7 +35,7 @@ class Response extends EventEmitter {
 	}
 
 	getContent () {
-		return Buffer.from(this.content, this.getEncoding());
+		return Buffer.from(this.content || "", this.getEncoding());
 	}
 
 	setContent (content) {

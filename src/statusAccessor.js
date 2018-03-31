@@ -43,7 +43,7 @@ module.exports = {
 			({code, text} = status);
 		} else if (typeof status === "number") {
 			code = status;
-		} else if (typeof status === "string") {
+		} else {
 			text = status;
 		}
 

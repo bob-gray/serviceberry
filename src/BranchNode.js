@@ -10,7 +10,7 @@ const Base = require("solv/src/abstract/base"),
 	escapedBraces = /\\([{}])/g;
 
 class BranchNode extends Base {
-	constructor (options = {}) {
+	constructor (options) {
 		super();
 
 		Object.assign(this, {
@@ -140,14 +140,9 @@ function getAutoLeaf (request, allowed, supported) {
 
 function autoOptions () {
 	var OptionsNode = require("./OptionsNode"),
-		allow = this.invoke(getAllow),
-		options;
+		allow = this.invoke(getAllow);
 
-	if (allow) {
-		options = new OptionsNode(allow);
-	}
-
-	return options;
+	return new OptionsNode(allow);
 }
 
 function isAutoOptions (request, allowed) {
@@ -174,7 +169,7 @@ function notAcceptable () {
 
 function getAllow () {
 	var allow = this.leaves.map(leaf => leaf.options.method)
-		.reduce(flattenMethods, []);
+		.reduce((flat, method) => flat.concat(method), []);
 
 	allow.add("OPTIONS");
 
@@ -191,14 +186,6 @@ function createErrorNode () {
 	const ErrorNode = require("./ErrorNode");
 
 	return new ErrorNode(...arguments);
-}
-
-function flattenMethods (flat, method) {
-	if (method) {
-		flat = flat.concat(method);
-	}
-
-	return flat;
 }
 
 module.exports = BranchNode;

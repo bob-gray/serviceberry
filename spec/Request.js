@@ -143,7 +143,10 @@ describe("Request (POST)", () => {
 });
 
 function createRequest (options) {
-	const incomingMessage = httpMocks.createRequest(options);
+	const incomingMessage = httpMocks.createRequest({
+		url: "/",
+		...options
+	});
 
 	incomingMessage.setEncoding = Function.prototype;
 

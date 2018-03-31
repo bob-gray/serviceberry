@@ -233,7 +233,10 @@ describe("LeafNode", () => {
 });
 
 function createRequest (options) {
-	var incomingMessage = httpMocks.createRequest(options);
+	var incomingMessage = httpMocks.createRequest({
+		url: "/",
+		...options
+	});
 
 	incomingMessage.setEncoding = Function.prototype;
 

@@ -62,7 +62,7 @@ or deserialized. Then the result is the response content or request body respect
 
 
 
-Call this method to transfer control of the request the next handler. See [handlers](handlers.html) guide.
+Call this method to transfer control of the request the closest error handler. See [handlers](handlers.html) guide.
 
 
   - **error** *string or error* 

@@ -75,7 +75,7 @@ in addition to codes found at constant case property status names (such as `stat
 A class for creating HTTP specific error objects. Like [`statusCodes`](#statuscodes) above,
 it isn't strictly necessary for use with Serviceberry.
 
-The [HttpError](httperror.hml) constructor has the same arguments signature as
+The [HttpError](httperror.html) constructor has the same arguments signature as
 [`request.fail()`](request.html#failerror-status-headers) and is instanced internally with a request fails.
 It is the error object available at `request.error`.
  

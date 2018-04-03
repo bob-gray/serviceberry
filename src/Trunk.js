@@ -44,17 +44,35 @@ class Trunk extends Branch {
 		}
 	}
 
-	catchAll (handler) {
-		this.root.catch(handler);
+	use (handler) {
+		if (this === this.root) {
+			super.use(handler);
+		} else {
+			this.root.use(handler);
+		}
+
+		return this;
+	}
+
+	catch (handler) {
+		if (this === this.root) {
+			super.catch(handler);
+		} else {
+			this.root.catch(handler);
+		}
 
 		return this;
 	}
 
 	start (callback) {
-		var options = this.options;
+		var {port, host, backlog} = this.options;
 
 		this.server.on("request", this.proxy(respond))
-			.listen(options.port, options.host, options.backlog, callback);
+			.listen(port, host, backlog, callback);
+	}
+
+	stop (callback) {
+		this.server.close(callback);
 	}
 }
 

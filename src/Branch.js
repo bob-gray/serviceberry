@@ -11,38 +11,34 @@ class Branch extends Leaf {
 	}
 
 	at (path) {
-		var branch = new Branch({path});
+		const branch = new Branch({path});
 
 		this.node.branches.push(branch.node);
 
 		return branch;
 	}
 
-	on (options, usable) {
-		return this.on(options, usable);
+	on (options, handler) {
+		const leaf = createLeaf(options);
+
+		this.node.leaves.push(leaf.node);
+
+		if (handler) {
+			leaf.use(handler);
+		}
+
+		return leaf;
 	}
 }
 
-Branch.method({
-	name: "on",
-	signature: "string, function|object?"
-}, function (method, usable) {
-	return this.on({method}, usable);
-});
-
-Branch.method({
-	name: "on",
-	signature: "object, function|object?"
-}, function (options, usable) {
-	var leaf = new Leaf(options);
-
-	this.node.leaves.push(leaf.node);
-
-	if (usable) {
-		leaf.use(usable);
+function createLeaf (options) {
+	if (typeof options === "string") {
+		options = {
+			method: options
+		};
 	}
 
-	return leaf;
-});
+	return new Leaf(options);
+}
 
 module.exports = Branch;

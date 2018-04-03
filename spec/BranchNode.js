@@ -15,6 +15,12 @@ describe("BranchNode", () => {
 		});
 	});
 
+	it("should create branch with an empty string path if no options passed", () => {
+		branchNode = new BranchNode();
+
+		expect(branchNode.options.path).toBe("");
+	});
+
 	it("should test true if path is entire request url", () => {
 		const request = createRequest({
 			url: "/bob"

@@ -1,7 +1,5 @@
 "use strict";
 
-require("solv/src/class/method");
-
 const BranchNode = require("./BranchNode"),
 	Leaf = require("./Leaf");
 

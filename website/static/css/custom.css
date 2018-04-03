@@ -5,6 +5,7 @@
 
 .headerWrapper header img {
 	margin: 0 10px;
+	display: block;
 }
 
 code {
@@ -168,9 +169,33 @@ footer.nav-footer {
 	box-shadow: inset 0 20px 30px 0 rgba(0,0,0,0.05)
 }
 
-@media (min-device-width: 360px) and (max-device-width: 736px) {
-	.logo {
-		display: block;
+footer .sitemap a.github-link {
+    display: inline-block;
+    margin-right: 0;
+}
+
+footer .sitemap a.github-link + iframe {
+    display: inline-block;
+    vertical-align: text-bottom;
+}
+
+@media (max-width: 480px) {
+	.fixedHeaderContainer {
+		min-height: 84px;
+	}
+
+	.navigationSlider .slidingNav ul {
+		margin-top: 84px;
+	}
+
+	.navSearchWrapper {
+		top: 50px;
+    	width: calc(100% - 40px);
+		right: 20px;
+	}
+
+	.navPusher {
+		padding-top: 134px;
 	}
 }
 

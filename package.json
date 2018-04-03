@@ -1,6 +1,6 @@
 {
   "name": "serviceberry",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Simple HTTP service framework",
   "main": "src/main.js",
   "files": [
@@ -16,7 +16,7 @@
     "test": "jasmine",
     "test-coverage": "nyc --include=src/**/*.js --all --reporter=lcov --reporter=text npm test"
   },
-  "homepage": "https://github.com/bob-gray/serviceberry#readme",
+  "homepage": "https://serviceberry.js.org",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bob-gray/serviceberry.git"

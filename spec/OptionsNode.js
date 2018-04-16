@@ -6,22 +6,29 @@ describe("OptionsNode", () => {
 	it("should respond with 204 and Allow header", () => {
 		const status = 204,
 			headers = {
-				Allow: "GET,POST,OPTIONS"
+				Allow: "GET, POST, OPTIONS"
 			},
-			optionsNode = new OptionsNode(headers.Allow),
-			response = createResponse({
+			optionsNode = new OptionsNode(),
+			request = createRequest(headers.Allow),
+			response = createResponse();
 
-			});
+		run(optionsNode, request, response);
 
-		run(optionsNode, response);
-
-		expect(response.send).toHaveBeenCalledWith({status, headers})
+		expect(response.send).toHaveBeenCalledWith({status, headers});
 	});
 });
 
-function run (optionsNode, response) {
+function run (optionsNode, request, response) {
 	const handler = optionsNode.handlers.pop();
-	handler(null, response);
+	handler(request, response);
+}
+
+function createRequest (allowed) {
+	return {
+		getAllowedMethods () {
+			return allowed
+		}
+	};
 }
 
 function createResponse () {

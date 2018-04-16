@@ -176,7 +176,7 @@ describe("BranchNode", () => {
 		expect(response.send).toHaveBeenCalledWith({
 			status: 204,
 			headers: {
-				Allow: "GET,HEAD,OPTIONS,POST"
+				Allow: "GET, HEAD, OPTIONS, POST"
 			}
 		});
 	});

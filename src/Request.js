@@ -107,7 +107,7 @@ class Request extends EventEmitter {
 		return querystring.parse(this.getUrl().query);
 	}
 
-	getAllowedMethods (allow) {
+	getAllowedMethods () {
 		return this.allowedMethods;
 	}
 
@@ -145,8 +145,8 @@ class Request extends EventEmitter {
 			milliseconds = 1e3,
 			elapsed = process.hrtime(this.startStamp);
 
-		return elapsed[seconds] * milliseconds +
-			elapsed[nanoseconds] / milliseconds / milliseconds;
+		return (elapsed[seconds] * milliseconds) +
+			(elapsed[nanoseconds] / milliseconds / milliseconds);
 	}
 }
 

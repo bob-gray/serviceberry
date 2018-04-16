@@ -6,7 +6,8 @@ const EventEmitter = require("events"),
 	headersAccessor = require("./headersAccessor"),
 	url = require("url"),
 	querystring = require("querystring"),
-	contentType = require("content-type");
+	contentType = require("content-type"),
+	{randomBytes} = require("crypto");
 
 class Request extends EventEmitter {
 	constructor (incomingMessage) {
@@ -15,6 +16,8 @@ class Request extends EventEmitter {
 		Object.assign(this, {
 			incomingMessage,
 			headers: incomingMessage.headers,
+			id: createId(),
+			startStamp: process.hrtime(),
 			contentType: parseContentType(incomingMessage),
 			pathParams: {},
 			content: ""
@@ -30,12 +33,42 @@ class Request extends EventEmitter {
 		return Object.assign(copied, this);
 	}
 
+	getId () {
+		return this.id;
+	}
+
+	getIp () {
+		return this.incomingMessage.socket.remoteAddress;
+	}
+
+	getProtocol () {
+		var protocol = this.getHeader("X-Forwarded-Proto") || "http";
+
+		if (this.incomingMessage.connection.encrypted) {
+			protocol = "https";
+		}
+
+		return protocol;
+	}
+
+	getPort () {
+		return this.incomingMessage.socket.localPort;
+	}
+
+	getHost () {
+		return this.getHeader("host");
+	}
+
 	getMethod () {
 		return this.incomingMessage.method;
 	}
 
 	getUrl () {
 		return url.parse(this.incomingMessage.url);
+	}
+
+	getFullUrl () {
+		return this.getProtocol() + "://" + this.getHost() + this.getUrl().href;
 	}
 
 	getParam (name) {
@@ -74,6 +107,14 @@ class Request extends EventEmitter {
 		return querystring.parse(this.getUrl().query);
 	}
 
+	getAllowedMethods (allow) {
+		return this.allowedMethods;
+	}
+
+	setAllowedMethods (allow) {
+		this.allowedMethods = allow;
+	}
+
 	getBody () {
 		return this.body;
 	}
@@ -97,12 +138,26 @@ class Request extends EventEmitter {
 	getEncoding () {
 		return this.contentType && (this.contentType.parameters.charset || "utf-8");
 	}
+
+	getElapsedTime () {
+		const seconds = 0,
+			nanoseconds = 1,
+			milliseconds = 1e3,
+			elapsed = process.hrtime(this.startStamp);
+
+		return elapsed[seconds] * milliseconds +
+			elapsed[nanoseconds] / milliseconds / milliseconds;
+	}
 }
 
 Object.assign(
 	Request.prototype,
 	headersAccessor.getters
 );
+
+function createId () {
+	return randomBytes(8).toString("hex").toLowerCase();
+}
 
 function parseContentType (incomingMessage) {
 	var parsed;

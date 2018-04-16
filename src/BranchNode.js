@@ -126,9 +126,9 @@ function getAutoLeaf (request, allowed, supported) {
 	if (this.leaves.isEmpty()) {
 		leaf = notFound();
 	} else if (isAutoOptions(request, allowed)) {
-		leaf = this.invoke(autoOptions);
+		leaf = this.invoke(autoOptions, request);
 	} else if (allowed.isEmpty()) {
-		leaf = this.invoke(notAllowed);
+		leaf = this.invoke(notAllowed, request);
 	} else if (supported.isEmpty()) {
 		leaf = unsupported();
 	} else {
@@ -138,24 +138,28 @@ function getAutoLeaf (request, allowed, supported) {
 	return leaf;
 }
 
-function autoOptions () {
-	var OptionsNode = require("./OptionsNode"),
-		allow = this.invoke(getAllow);
-
-	return new OptionsNode(allow);
-}
-
 function isAutoOptions (request, allowed) {
 	return request.getMethod() === "OPTIONS" && allowed.isEmpty();
 }
 
+function autoOptions (request) {
+	var OptionsNode = require("./OptionsNode");
+
+	request.setAllowedMethods(this.invoke(getAllow));
+
+	return new OptionsNode();
+}
+
 function notFound () {
+	// TODO: create error object and set request.error for these error nodes so handlers can check it
 	return createErrorNode("Not Found");
 }
 
-function notAllowed () {
+function notAllowed (request) {
+	request.setAllowedMethods(this.invoke(getAllow));
+
 	return createErrorNode("Method Not Allowed", {
-		Allow: this.invoke(getAllow)
+		Allow: request.getAllowedMethods()
 	});
 }
 
@@ -179,7 +183,7 @@ function getAllow () {
 
 	allow.sort();
 
-	return allow.join();
+	return allow.join(", ");
 }
 
 function createErrorNode () {

@@ -37,6 +37,17 @@ describe("Request (GET)", () => {
 		expect(request.copy()).not.toBe(request);
 	});
 
+	it("should return id from getId()", () => {
+		expect(typeof request.getId()).toBe("string");
+	});
+
+	it("should return elasped time from getElapsedTime()", (done) => {
+		setTimeout(() => {
+			expect(request.getElapsedTime()).toBeGreaterThan(0);
+			done();
+		}, 500);
+	});
+
 	it("should return method from getMethod()", () => {
 		expect(request.getMethod()).toBe("GET");
 	});

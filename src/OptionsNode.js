@@ -3,7 +3,7 @@
 const LeafNode = require("./LeafNode");
 
 class OptionsNode extends LeafNode {
-	constructor (allow) {
+	constructor () {
 		super({
 			method: "OPTIONS"
 		});
@@ -12,7 +12,7 @@ class OptionsNode extends LeafNode {
 			response.send({
 				status: 204,
 				headers: {
-					Allow: allow
+					Allow: request.getAllowedMethods()
 				}
 			});
 		});

@@ -5,8 +5,9 @@
             nav.classList.toggle('docsSliderActive');
           };
         </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Trunk</h1></header><article><div><span><h3><a class="anchor" aria-hidden="true" id="class"></a><a href="#class" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><em>class</em></h3>
-<p>Should be created using <code>serviceberry.createTrunk()</code>. All <a href="branch.html">branches</a> and <a href="leaf.html">leaves</a>
-originate from the trunk. Each service has only one trunk.</p>
+<p>Should be created using <a href="serviceberry.html#createtrunk-options"><code>serviceberry.createTrunk(options)</code></a>.
+All <a href="branch.html">branches</a> and <a href="leaf.html">leaves</a> originate from the trunk. Each
+service has only one trunk.</p>
 <h2><a class="anchor" aria-hidden="true" id="methods"></a><a href="#methods" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
 <ul>
 <li><a href="#usehandler">use(handler)</a></li>
@@ -14,7 +15,7 @@ originate from the trunk. Each service has only one trunk.</p>
 <li><a href="#atpath">at(path)</a></li>
 <li><a href="#onoptions-handler">on(options[, handler])</a></li>
 <li><a href="#onmethod-handler">on(method[, handler])</a></li>
-<li><a href="#startcallback">start([callback])</a></li>
+<li><a href="#start-callback">start([callback])</a></li>
 </ul>
 <h2><a class="anchor" aria-hidden="true" id="reference"></a><a href="#reference" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reference</h2>
 <h3><a class="anchor" aria-hidden="true" id="usehandler"></a><a href="#usehandler" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>use(handler)</h3>
@@ -31,45 +32,52 @@ originate from the trunk. Each service has only one trunk.</p>
 </ul>
 <h3><a class="anchor" aria-hidden="true" id="atpath"></a><a href="#atpath" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>at(path)</h3>
 <p>Returns <em>new <a href="branch.html">branch</a></em></p>
-<p>Routes requests at a path (segment) down a new <a href="branch.html">branch</a>. Path paramaters are delimited using
-a pair of curly braces. Such as <code>foo/baz/{id}/</code>. The branch will parse the path parameters. They are
-available to all handlers through the request object.</p>
+<p>Routes requests at a path (segment) down a new <a href="branch.html">branch</a>. The path is cumulative.
+Creating a new <a href="branch.html">branch</a> only requires the next path segment. For example if a branch's
+path is <code>/widgets</code> a new <a href="branch.html">branch</a> created with <code>.at(&quot;{id}&quot;)</code> will have a path of <code>/widgets/{id}</code>.</p>
+<p>Path paramaters are delimited using a pair of curly braces. Such as <code>foo/baz/{id}/</code>.
+The branch will parse the path parameters. They are available to all handlers through the
+<a href="request.html">request</a> object's methods <a href="request.html#getpathparams">getPathParms</a> and
+<a href="request.html#getpathparamname">getPathParam</a>.</p>
 <ul>
 <li><strong>path</strong> <em>string</em></li>
 </ul>
 <h3><a class="anchor" aria-hidden="true" id="onoptions-handler"></a><a href="#onoptions-handler" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>on(options[, handler])</h3>
 <p>Returns <em>new <a href="leaf.html">leaf</a></em></p>
-<p>Routes requests filtered by options to a new leaf.</p>
+<p>Routes requests filtered by options to a new <a href="leaf.html">leaf</a>.</p>
 <ul>
 <li><strong>options</strong> <em>object</em>
 <ul>
 <li><p><strong>method</strong> <em>string or array</em> [optional]</p>
-<p>HTTP method(s) to handle (<code>GET</code>, <code>POST</code>...). If not specified or is &quot;*&quot;, all methods are handled.</p></li>
+<p>HTTP method(s) to handle (<code>GET</code>, <code>POST</code>...). If not specified or is <code>*</code>, all methods are handled.</p></li>
 <li><p><strong>consumes</strong> <em>string or array</em> [optional]</p>
 <p>Request content type(s) to handle (application/json, text/xml...). If not specified all request content types are handled.</p></li>
 <li><p><strong>produces</strong> <em>string or array</em> [optional]</p>
 <p>Response content type(s) to handle (application/json, text/xml...). If not specified all response content types are handled.</p></li>
 <li><p><strong>serializers</strong> <em>object</em></p>
-<p>Property names must be content types (such as <code>application/json</code>) and values must be <a href="plugins.html#serializers-and-deserializers">serializers</a> plugins.</p></li>
+<p>Property names must be content types (such as <code>application/json</code>) and values must be <a href="plugins.html#serializers-and-deserializers">serializer</a> plugins.</p></li>
 <li><p><strong>deserializers</strong> <em>object</em></p>
-<p>Property names must be content types (such as <code>application/json</code>) and values must be <a href="plugins.html#serializers-and-deserializers">deserializers</a> plugins.</p></li>
+<p>Property names must be content types (such as <code>application/json</code>) and values must be <a href="plugins.html#serializers-and-deserializers">deserializer</a> plugins.</p></li>
 </ul></li>
 </ul>
 <ul>
-<li><strong>handler</strong> <em>function or object</em> [optional]</li>
+<li><p><strong>handler</strong> <em>function or object</em> [optional]</p>
+<p>See <a href="handlers.html">Handlers</a> guide.</p></li>
 </ul>
 <h3><a class="anchor" aria-hidden="true" id="onmethod-handler"></a><a href="#onmethod-handler" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>on(method[, handler])</h3>
 <p>Returns <em>new <a href="leaf.html">leaf</a></em></p>
-<p>Routes requests filtered by method to a new leaf.</p>
+<p>Routes requests filtered by method to a new <a href="leaf.html">leaf</a>.</p>
 <ul>
 <li><p><strong>method</strong> <em>string or array</em></p>
-<p>HTTP method(s) to handle (<code>GET</code>, <code>POST</code>...). If &quot;*&quot;, all methods are handled.</p></li>
+<p>HTTP method(s) to handle (<code>GET</code>, <code>POST</code>...). If <code>*</code>, all methods are handled.</p></li>
 </ul>
 <ul>
-<li><strong>handler</strong> <em>function or object</em> [optional]</li>
+<li><p><strong>handler</strong> <em>function or object</em> [optional]</p>
+<p>See <a href="handlers.html">Handlers</a> guide.</p></li>
 </ul>
 <h3><a class="anchor" aria-hidden="true" id="start-callback"></a><a href="#start-callback" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>start([callback])</h3>
-<p>Begin listening for requets.</p>
+<p>Begin listening for requets. If trunk was created with option <code>autoStart</code>,
+<code>start</code> is called automatically.</p>
 <ul>
 <li><strong>callback</strong> <em>function</em> [optional]</li>
 </ul>

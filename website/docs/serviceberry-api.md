@@ -5,9 +5,9 @@ title: Serviceberry
 
 ### *object*
 
-When you require `serviceberry` this is the object that you recieve. The most important property is `createTrunk()`.
+When you require `serviceberry` this is the object that you receive. The most important property is `createTrunk()`.
 A service is created as a [trunk](trunk.html) then [branches](branch.html) and [leaves](leaf.html) are added using
-`.at()` and `.on()` of the trunk and resulting branches. All parts of the tree can have plugins and error handlers attached
+`.at()` and `.on()` of the [trunk](trunk.html) and resulting branches. All parts of the tree can have plugins and error handlers attached
 with `.use()` and `.catch()`.
 
 
@@ -17,7 +17,7 @@ with `.use()` and `.catch()`.
 Properties
 ----------
 
-  - [createTrunk([options])](#createtrunkoptions)
+  - [createTrunk([options])](#createtrunk-options)
   - [statusCodes *object*](#statuscodes)
   - [HttpError *class*](#httperror)
 
@@ -29,7 +29,7 @@ Reference
 
 
 
-Creating a trunk using this factory function is the first thing you'll do when creating a service. This is the entry
+Creating a [trunk](trunk.html) using this factory function is the first thing you'll do when creating a service. This is the entry
 point of the framework.
 
 
@@ -38,17 +38,39 @@ point of the framework.
   
     - **host** *string* [optional]
   
-    - **basePath** *string* [optional]
+    - **path** *string* [optional]
+  
+      Path for the [trunk](trunk.html). All request handled by the service must begin
+  with this path.
+   **Default:** /
   
     - **backlog** *number* [optional]
   
+    - **autoStart** *boolean* [optional]
+  
+      If `false`, the service won't begin handling requests until `.start()`
+  is called.
+   **Default:** true
+  
     - **timeout** *number* [optional]
   
-    - **deserializers** *object* [optional]
+      Number of milliseconds to wait before aborting requests. 
   
     - **serializers** *object* [optional]
   
+      Property names must be content types (such as `application/json`) and values
+  must be [serializer](plugins.html#serializers-and-deserializers) plugins..
+   
+  
+    - **deserializers** *object* [optional]
+  
+      Property names must be content types (such as `application/json`) and values
+  must be [deserializer](plugins.html#serializers-and-deserializers) plugins..
+   
+  
     - **callback** *function* [optional]
+  
+      Listener for server's `listening` event. 
   
 
 
@@ -76,7 +98,7 @@ A class for creating HTTP specific error objects. Like [`statusCodes`](#statusco
 it isn't strictly necessary for use with Serviceberry.
 
 The [HttpError](httperror.html) constructor has the same arguments signature as
-[`request.fail()`](request.html#failerror-status-headers) and is instanced internally with a request fails.
+[`request.fail()`](request.html#failerror-status-headers) and is instanced internally when a request fails.
 It is the error object available at `request.error`.
  
 

@@ -5,7 +5,7 @@ title: Leaf
 
 ### *class*
 
-Created by calling `.on()` method on the service trunk or any service branch.
+Created by calling `.on()` method on the service trunk or any service [branch](branch.html).
 
 
 

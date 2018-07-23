@@ -2,9 +2,9 @@ name: Request
 type: class
 description: |
   This object is created internally by Serviceberry and passed as the first argument to [Handlers](handlers.html).
-  It is a wrapper object around Node's [`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/).
+  It is a wrapper object around Node's [`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage).
 
-  Extends [`EventEmitter`](https://nodejs.org/dist/latest-v8.x/docs/api/).
+  Extends [`EventEmitter`](https://nodejs.org/dist/latest-v8.x/docs/api/events.html#events_class_eventemitter).
 
 methods:
 - name: proceed
@@ -81,7 +81,7 @@ methods:
   returns: a string
 
 - name: getUrl
-  description: Parsed URL object. See [`url`](https://nodejs.org/dist/latest-v8.x/docs/api/).
+  description: Parsed URL object. See [`url`](https://nodejs.org/dist/latest-v8.x/docs/api/url.html#url_url_strings_and_url_objects).
   returns: an object
 
 - name: getFullUrl
@@ -210,7 +210,7 @@ properties:
   description: |
     The preferred way to interact with a request is the methods above, however if a need arises
     that is not addressed with an existing method, then direct access to the
-    [`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/) is available here.
+    [`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage) is available here.
 - name: error
   type: HttpError
   description: Available within catch handlers.

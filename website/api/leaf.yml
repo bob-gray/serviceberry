@@ -1,6 +1,6 @@
 name: Leaf
 type: class
-description: Created by calling `.on()` method on the service trunk or any service branch.
+description: Created by calling `.on()` method on the service trunk or any service [branch](branch.html).
 methods:
 - name: use
   returns: this leaf

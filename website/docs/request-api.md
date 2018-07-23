@@ -6,9 +6,9 @@ title: Request
 ### *class*
 
 This object is created internally by Serviceberry and passed as the first argument to [Handlers](handlers.html).
-It is a wrapper object around Node's [`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/).
+It is a wrapper object around Node's [`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage).
 
-Extends [`EventEmitter`](https://nodejs.org/dist/latest-v8.x/docs/api/).
+Extends [`EventEmitter`](https://nodejs.org/dist/latest-v8.x/docs/api/events.html#events_class_eventemitter).
 
 
 
@@ -16,7 +16,7 @@ Extends [`EventEmitter`](https://nodejs.org/dist/latest-v8.x/docs/api/).
 Methods
 -------
 
-  - [proceed([result])](#proceedresult)
+  - [proceed([result])](#proceed-result)
   - [fail(error[, status[, headers]])](#failerror-status-headers)
   - [getId()](#getid)
   - [getElapsedTime()](#getelapsedtime)
@@ -157,7 +157,7 @@ HTTP method (verb) such as GET, POST, PUT, DELETE...
 
 Returns *an object*
 
-Parsed URL object. See [`url`](https://nodejs.org/dist/latest-v8.x/docs/api/).
+Parsed URL object. See [`url`](https://nodejs.org/dist/latest-v8.x/docs/api/url.html#url_url_strings_and_url_objects).
 
 
 ### getFullUrl()
@@ -329,7 +329,7 @@ Raw request content. Most likely use case is within a deserializer.
 
 The preferred way to interact with a request is the methods above, however if a need arises
 that is not addressed with an existing method, then direct access to the
-[`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/) is available here.
+[`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage) is available here.
  
 
 ### error

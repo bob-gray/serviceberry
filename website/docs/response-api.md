@@ -16,7 +16,7 @@ Extends [`EventEmitter`](https://nodejs.org/dist/latest-v8.x/docs/api/).
 Methods
 -------
 
-  - [send([options])](#sendoptions)
+  - [send([options])](#send-options)
   - [is(status)](#isstatus)
   - [getStatus()](#getstatus)
   - [getStatusCode()](#getstatuscode)

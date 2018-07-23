@@ -26,10 +26,10 @@ function createDoc (doc) {
 	doc.id = doc.name.toLowerCase().replace(/\W+/g, "-");
 	doc.title = doc.name;
 
-	/*if (doc.constructor && doc.constructor.arguments) {
+	if (typeof doc.constructor === "object") {
 		doc.constructor.signature = doc.constructor.arguments.map(arg => arg.name).join(", ");
 		doc.constructor.arguments.forEach(arg => arg.required !== false);
-	}*/
+	}
 
 	if (doc.methods) {
 		doc.methods.forEach(setHash);
@@ -50,7 +50,7 @@ function createDoc (doc) {
 		}
 
 		if (fn.signature) {
-			fn.hash += fn.signature.replace(/\s+/g, "-")
+			fn.hash += fn.signature.replace(/[\[\]\s]+(?=\w)/g, "-")
 				.replace(/[^\w-]/g, "")
 				.toLowerCase();
 		}

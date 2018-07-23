@@ -13,11 +13,11 @@ title: {{title}}
 ```
 {{/if}}
 
-{{!--
-{{#if constructor}}
+{{#if constructor.signature}}
 [new {{name}}({{constructor.signature}})](#constructor)
+
+{{> arguments arguments=constructor.arguments}}
 {{/if}}
---}}
 
 {{#if methods}}
 Methods

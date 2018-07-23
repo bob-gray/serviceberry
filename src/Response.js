@@ -42,12 +42,12 @@ class Response extends EventEmitter {
 		this.content = content;
 	}
 
-	getBody () {
-		return this.body;
-	}
-
 	setBody (body) {
 		this.body = body;
+	}
+
+	getBody () {
+		return this.body;
 	}
 
 	getEncoding () {

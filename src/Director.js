@@ -37,6 +37,8 @@ function proceed () {
 	if (handler) {
 		this.invoke(callHandler, handler);
 	} else {
+		// TODO: don't call send again when send is called within an async
+		// function which results in a resolved promise to the binding
 		this.invoke(send, {
 			body: this.request.latestResult
 		});

@@ -37,6 +37,16 @@ class Request extends EventEmitter {
 		return this.id;
 	}
 
+	getElapsedTime () {
+		const seconds = 0,
+			nanoseconds = 1,
+			milliseconds = 1e3,
+			elapsed = process.hrtime(this.startStamp);
+
+		return (elapsed[seconds] * milliseconds) +
+			(elapsed[nanoseconds] / milliseconds / milliseconds);
+	}
+
 	getIp () {
 		return this.incomingMessage.socket.remoteAddress;
 	}
@@ -51,12 +61,12 @@ class Request extends EventEmitter {
 		return protocol;
 	}
 
-	getPort () {
-		return this.incomingMessage.socket.localPort;
+	getHost () {
+		return this.getHeader("Host");
 	}
 
-	getHost () {
-		return this.getHeader("host");
+	getPort () {
+		return this.incomingMessage.socket.localPort;
 	}
 
 	getMethod () {
@@ -71,10 +81,59 @@ class Request extends EventEmitter {
 		return this.getProtocol() + "://" + this.getHost() + this.getUrl().href;
 	}
 
-	getParam (name) {
-		var params = this.getParams();
+	setContent (content) {
+		this.content = content;
+	}
 
-		return params[name];
+	getContent () {
+		return this.content;
+	}
+
+	getContentType () {
+		return this.contentType && this.contentType.type;
+	}
+
+	getEncoding () {
+		return this.contentType && (this.contentType.parameters.charset || "utf-8");
+	}
+
+	getPathParam (name) {
+		return this.pathParams[name.toLowerCase()];
+	}
+
+	getPathParams () {
+		return Object.assign({}, this.pathParams);
+	}
+
+	getQueryParam (name) {
+		var params = this.getQueryParams();
+
+		return params[name.toLowerCase()];
+	}
+
+	getQueryParams () {
+		return querystring.parse(this.getUrl().query);
+	}
+
+	setBody (body) {
+		this.body = body;
+	}
+
+	getBody () {
+		return this.body;
+	}
+
+	getBodyParam (name) {
+		var param,
+			lower = name.toLowerCase();
+
+		if (name in this.body) {
+			param = this.body[name];
+		} else if (lower in this.body) {
+			param = this.body[lower];
+		}
+
+		return param;
 	}
 
 	getParams () {
@@ -89,64 +148,26 @@ class Request extends EventEmitter {
 		return Object.assign({}, body, this.getQueryParams(), this.pathParams);
 	}
 
-	getPathParam (name) {
-		return this.pathParams[name];
-	}
+	getParam (name) {
+		var params = this.getParams(),
+			param,
+			lower = name.toLowerCase();
 
-	getPathParams () {
-		return Object.assign({}, this.pathParams);
-	}
+		if (name in params) {
+			param = params[name];
+		} else if (lower in params) {
+			param = params[lower];
+		}
 
-	getQueryParam (name) {
-		var params = this.getQueryParams();
-
-		return params[name];
-	}
-
-	getQueryParams () {
-		return querystring.parse(this.getUrl().query);
-	}
-
-	getAllowedMethods () {
-		return this.allowedMethods;
+		return param;
 	}
 
 	setAllowedMethods (allow) {
 		this.allowedMethods = allow;
 	}
 
-	getBody () {
-		return this.body;
-	}
-
-	setBody (body) {
-		this.body = body;
-	}
-
-	getContent () {
-		return this.content;
-	}
-
-	setContent (content) {
-		this.content = content;
-	}
-
-	getContentType () {
-		return this.contentType && this.contentType.type;
-	}
-
-	getEncoding () {
-		return this.contentType && (this.contentType.parameters.charset || "utf-8");
-	}
-
-	getElapsedTime () {
-		const seconds = 0,
-			nanoseconds = 1,
-			milliseconds = 1e3,
-			elapsed = process.hrtime(this.startStamp);
-
-		return (elapsed[seconds] * milliseconds) +
-			(elapsed[nanoseconds] / milliseconds / milliseconds);
+	getAllowedMethods () {
+		return this.allowedMethods;
 	}
 }
 

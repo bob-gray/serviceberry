@@ -80,7 +80,7 @@ function parsePathParams (request) {
 	values.shift();
 
 	this.placeholders.forEach((placeholder, index) => {
-		params[placeholder] = decodeURIComponent(values[index]);
+		params[placeholder.toLowerCase()] = decodeURIComponent(values[index]);
 	});
 
 	return params;

@@ -1,12 +1,15 @@
 name: Response
 type: class
 description: |
-  This object is created internally by Serviceberry and passed as the second argument to [handler](handlers.html) functions.
+  This object is created internally by Serviceberry and passed as the second argument to [Handlers](handlers.html).
   It is a wrapper object around Node's [`http.ServerResponse`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_serverresponse).
+
+  Extends [`EventEmitter`](https://nodejs.org/dist/latest-v8.x/docs/api/).
+
 methods:
 - name: send
   description: |
-    Sends a response back to the client. A response can also be implicity sent when the request proceeds and
+    Sends a response back to the client - ending the request. A response can also be implicity sent when the request proceeds and
     there are no more handlers in the queue.
   arguments:
     - name: options
@@ -16,8 +19,12 @@ methods:
         Sets response options before finishing request and sending response.
       properties:
         - name: status
-          type: number or object
+          type: number, string or object
           default: 200
+          description: |
+            Can be a status code, standard status text or an object with properties `code` and `text`. See
+            methods [`setStatusCode`](#setstatuscodecode), [`setStatusText`](#setstatustexttext),
+            and [`setStatus`](#setstatusstatus).
         - name: headers
           type: object
           required: false
@@ -31,27 +38,37 @@ methods:
           type: function
           required: false
           description: |
-            Listener for `http.ServerResponse` event `finish`
+            Listener for `http.ServerResponse`'s `finish` event.
 
 - name: is
+  description: |
+    `true` when status matches.
   arguments:
   - name: status
     type: string or number
+    description: Status code or standard status text to test against. Case insensitive.
   returns: a boolean
 
 - name: getStatus
+  description: Status code and text if known. May have `code` and/or `text`. May be
+    an empty object.
   returns: an object
 
 - name: getStatusCode
-  returns: a number
+  returns: a number or undefined
 
 - name: getStatusText
-  returns: a string
+  returns: a string or undefined
 
 - name: setStatus
+  description: |
+    When code or text is not provided, an attempt will be made to derive one from
+    the other. For example `setStatus(200)` will set status code to `200` and
+    status text to `OK` and `setStatus("OK")` will set status text to `OK` and
+    status code to `200`.
   arguments:
   - name: status
-    type: object or number
+    type: number, string or object
     properties:
     - name: code
       type: number
@@ -69,15 +86,40 @@ methods:
     type: string
 
 - name: getHeaders
+  description: |
+    All headers. Names are lower case and values are arrays when names
+    are duplicated.
   returns: an object
 
 - name: getHeader
+  description: Value is an array when header is duplicated.
   arguments:
   - name: name
     type: string
+    description: Case insensitive.
   returns: a string or array
 
+- name: hasHeader
+  description: |
+    `true` when the header is in the request.
+  arguments:
+  - name: name
+    type: string
+    description: Case insensitive.
+  returns: a boolean
+
+- name: withoutHeader
+  description: |
+    `true` when the header is **NOT** in the request.
+  arguments:
+  - name: name
+    type: string
+    description: Case insensitive.
+  returns: a boolean
+
 - name: setHeaders
+  description: Sets headers from an object. Does **NOT** clear headers. Does
+    override headers.
   arguments:
   - name: headers
     type: object
@@ -87,45 +129,39 @@ methods:
   - name: name
     type: string
   - name: value
-    type: string or number or array
-
-- name: hasHeader
-  arguments:
-  - name: name
-    type: string
-  returns: a boolean
-
-- name: withoutHeader
-  arguments:
-  - name: name
-    type: string
-  returns: a boolean
+    type: string, number or array
 
 - name: removeHeader
+  description: Causes a header not to be sent. Causes `hasHeader` method to return
+    `false`.
   arguments:
   - name: name
+    description: Case insensitive.
     type: string
 
 - name: clearHeaders
-
-- name: getBody
-  returns: unserialized body
+  description: Removes all headers.
 
 - name: setBody
+  description: The body prior to serialization.
   arguments:
   - name: body
     type: any
 
-- name: getEncoding
-  returns: a string
+- name: getBody
+  description: The body, as set by the request, prior to serialization.
+  returns: any
 
 - name: setEncoding
+  description: Name of encoding such as `utf-8`.
   arguments:
   - name: encoding
     type: string
 
-- name: getContentType
+- name: getEncoding
+  description: Name of encoding such as `utf-8`.
   returns: a string
 
-- name: getContent
-  returns: a buffer
+- name: getContentType
+  description: Content mime type without encoding charset, such as `application/json`.
+  returns: a string

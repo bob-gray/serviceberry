@@ -1,108 +1,208 @@
 name: Request
 type: class
 description: |
-  This object is created internally by Serviceberry and passed as the first argument to [handler](handlers.html) functions.
+  This object is created internally by Serviceberry and passed as the first argument to [Handlers](handlers.html).
   It is a wrapper object around Node's [`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/).
+
+  Extends [`EventEmitter`](https://nodejs.org/dist/latest-v8.x/docs/api/).
+
 methods:
 - name: proceed
   description: |
-    Call this method to transfer control of the request to the next handler. See [handlers](handlers.html) guide.
+    Call this method to pass control of the request to the next handler. Handlers receiving `Request` may
+    optionally pass control by their `return` value in lieu of calling `proceed`. See [Handlers](handlers.html) guide.
   arguments:
     - name: result
       type: any
       required: false
       description: |
         Set as [`latestResult`](#latestresult) property with the exception of when a request is being serialized
-        or deserialized. Then the result is the response content or request body respectively.
+        or deserialized. When serializing or deserializing the result is the response content or request
+        body respectively.
 
 - name: fail
   description: |
-    Call this method to transfer control of the request the closest error handler. See [handlers](handlers.html) guide.
+    Call this method to pass control of the request the nearest catch handler. Handlers receiving `Request` may
+    optionally pass control by throwing an exception or by their `return` value in lieu of calling `fail`.
+    See [handlers](handlers.html) guide.
   arguments:
     - name: error
       type: string or error
       description: |
         Can be a error message or an error object.
     - name: status
-      type: number or object
+      type: number, string or object
       default: 500
       description: |
-        Can be a status code or an object with properties `code` and `text`.
+        Can be a status code, well know status text or an object with properties `code` and `text`. See
+        `HttpError` methods [`setStatusCode`](httperror.html#setstatuscodecode), [`setStatusText`](httperror.html#setstatustexttext),
+        and [`setStatus`](httperror.html#setstatusstatus).
     - name: headers
       type: object
       required: false
       description: |
         Response headers if fail results in the end of the request. These headers are not set on the
-        response if a catch handlers the fail and the request continues.
+        response if a catch handler recovers from the fail and the request continues.
+
+- name: getId
+  description: Unique identifier for the request.
+  returns: a string
+
+- name: getElapsedTime
+  description: |
+    Number of milliseconds since the start of processing the request.
+
+    *Starts in the `Request` constructor and is not the same as time since the client sent
+    the request.*
+
+  returns: a number
+
+- name: getIp
+  description: Remote IP address of the client making the request.
+  returns: a string
+
+- name: getProtocol
+  description: |
+    Protocol of the request such as `http` or `https`. Will be the
+    `X-Forwarded-Proto` header value when available.
+  returns: a string
+
+- name: getHost
+  description: |
+    `Host` header value.
+  returns: a string
+
+- name: getPort
+  description: Port number of the request.
+  returns: a number
 
 - name: getMethod
+  description: HTTP method (verb) such as GET, POST, PUT, DELETE...
   returns: a string
 
 - name: getUrl
-  returns: a string
+  description: Parsed URL object. See [`url`](https://nodejs.org/dist/latest-v8.x/docs/api/).
+  returns: an object
 
-- name: getAccept
+- name: getFullUrl
+  description: |
+    Full URL including protocol, host, path and query string.
+
+    *Relies on `Host` header.*
+
   returns: a string
 
 - name: getContentType
+  description: Content mime type without encoding charset, such as `application/json`.
   returns: a string
 
 - name: getEncoding
+  description: Name of encoding such as `utf-8`.
   returns: a string
 
 - name: getHeaders
+  description: |
+    All headers. Names are lower case and values are arrays when names
+    are duplicated.
   returns: an object
 
 - name: getHeader
+  description: Value is an array when header is duplicated.
   arguments:
   - name: name
     type: string
+    description: Case insensitive.
   returns: a string or array
 
 - name: hasHeader
+  description: |
+    `true` when the header is in the request.
   arguments:
   - name: name
     type: string
+    description: Case insensitive.
   returns: a boolean
 
 - name: withoutHeader
+  description: |
+    `true` when the header is **NOT** in the request.
   arguments:
   - name: name
     type: string
+    description: Case insensitive.
   returns: a boolean
 
-- name: getParams
-  returns: an object
-
-- name: getParam
-  arguments:
-  - name: name
-    type: string
-  returns: a string
-
 - name: getPathParams
+  description: All path params. Names are lower case.
   returns: an object
 
 - name: getPathParam
+  description: The value of a path param.
   arguments:
   - name: name
     type: string
   returns: a string
 
 - name: getQueryParams
+  description: |
+    All query string params. Names are lower case and values are
+    arrays when names are duplicated.
   returns: an object
 
 - name: getQueryParam
+  description: The value of a query string param.
   arguments:
   - name: name
     type: string
+    description: Case insensitive.
   returns: a string
 
-- name: getContent
-  returns: a buffer
-
 - name: getBody
-  returns: unserialized body
+  description: |
+    Deserialized request content. Casing of param names is determined
+    by the deserializer. Deserializers are encouraged to preserve case.
+  returns: any (probably an object - determined by the deserializer)
+
+- name: getBodyParam
+  description: The value of a body param.
+  arguments:
+  - name: name
+    type: string
+    description: Case insensitive.
+  returns: any
+
+- name: getParams
+  description: |
+    All params deserialized from the path, the query string
+    and the request body. Will throw an exception if deserializing the params
+    results in an exception.
+
+    When params exist in more than one location such as both the path and
+    the query string, the order of priority is path, then query string, then request
+    body. Because of this ambiguity, it is usually preferable to use [`getPathParms`](#getpathparams),
+    [`getQueryParams`](#getqueryparams), or [`getBody`](#getbody) instead of `getParams`.
+
+  returns: an object
+
+- name: getParam
+  description: |
+    Param deserialized from the path, the query string or the request body.
+    Will throw an exception if deserializing the params results in an exception.
+
+    When a param exists in more than one location such as both the path and the
+    query string, the order of priority is path, then query string, then request
+    body. Because of this ambiguity, it is usually preferable to use [`getPathParm`](#getpathparamname),
+    [`getQueryParam`](#getqueryparamname), or [`getBodyParam`](#getbodyparamname) instead of `getParam`.
+
+  arguments:
+  - name: name
+    type: string
+    description: Case insensitive.
+  returns: any
+
+- name: getContent
+  description: Raw request content. Most likely use case is within a deserializer.
+  returns: a buffer
 
 properties:
 - name: incomingMessage

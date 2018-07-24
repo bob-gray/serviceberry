@@ -58,15 +58,11 @@ point of the framework.
   
     - **serializers** *object* [optional]
   
-      Property names must be content types (such as `application/json`) and values
-  must be [serializer](plugins.html#serializers-and-deserializers) plugins..
-   
+      Property names must be content types (such as `application/json`) and values must be [serializer](plugins.html#serializers-and-deserializers) plugins. 
   
     - **deserializers** *object* [optional]
   
-      Property names must be content types (such as `application/json`) and values
-  must be [deserializer](plugins.html#serializers-and-deserializers) plugins..
-   
+      Property names must be content types (such as `application/json`) and values must be [deserializer](plugins.html#serializers-and-deserializers) plugins. 
   
     - **callback** *function* [optional]
   

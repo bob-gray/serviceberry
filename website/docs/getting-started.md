@@ -3,7 +3,7 @@ id: getting-started
 title: Getting Started
 ---
 
-This guide will walk you through creating a simple "Hello World" HTTP service with Serviceberry.
+This guide will walk you through creating a simple "Hello World" HTTP service using Serviceberry.
 
 Install Node.js and Serviceberry
 --------------------------------
@@ -34,7 +34,7 @@ Run `node service` in `hello/` to start your service then visit [http://localhos
 to see the response. If your service responds "Hello World!", you've successfully created your first
 Serviceberry service!
 
-### Let's breakdown how we made it happen:
+### Let's break it down:
 
 ```javascript
 require("serviceberry")
@@ -77,7 +77,7 @@ new [branch](branch.html) will include the placeholder `{name}`. Serviceberry wi
 when routing the request to our new [branch](branch.html). Path parameter placeholders are delimited with curly braces. The value of the parameter will be available through the [request](request.html)
 object passed as the first argument to our [handler](handers.html).
 
-`hello/service.js` **should now look like this:**
+*`hello/service.js` should now look like this:*
 
 ```javascript
 require("serviceberry")
@@ -111,7 +111,7 @@ leaf produces JSON, Serviceberry knows to serialize the response using the JSON 
 
 To help keep our code organized, we'll also refactor a bit by storing the Serviceberry object and the [trunk](trunk.html) in variables.
 
-`hello/service.js` **should now look like this:**
+*`hello/service.js` should now look like this:*
 
 ```javascript
 const serviceberry = require("serviceberry"),
@@ -172,7 +172,7 @@ function testToken (error, secret) {
 module.exports = authenticate;
 ```
 
-`hello/service.js` **should now look like this:**
+*`hello/service.js` should now look like this:*
 
 ```javascript
 const {createTrunk} = require("serviceberry"),

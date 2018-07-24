@@ -8,122 +8,140 @@
 <h2><a class="anchor" aria-hidden="true" id="install-nodejs-and-serviceberry"></a><a href="#install-nodejs-and-serviceberry" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Install Node.js and Serviceberry</h2>
 <p>Serviceberry is a framework for <a href="https://nodejs.org">Node.js</a>. If you don't have Node installed,
 visit the Node <a href="https://nodejs.org">website</a> to download and install the latest LTS version.</p>
-<p>Once Node is installed, we'll use <a href="https://npmjs.com">npm</a> (Node Package Manager) to install Serviceberry.</p>
+<p>Once Node is installed, we'll use <a href="https://npmjs.com">npm</a> (Node Package Manager) to install Serviceberry.
+Node Package Manager will be installed with Node.</p>
 <ul>
-<li>Create a folder for your service (any name)</li>
-<li>Run <code>npm install serviceberry</code> in the folder</li>
+<li>Create a folder named hello</li>
+<li>In the <code>hello/</code> run the following two commands:
+<ul>
+<li><code>npm init --yes</code> to initialize a <code>package.json</code> file</li>
+<li><code>npm install serviceberry</code> to install Serviceberry</li>
+</ul></li>
 </ul>
-<p>Now that Serviceberry is installed, your ready to code your service.</p>
+<p>Now that you've created your project and installed Serviceberry, you're ready to code your service.</p>
 <h2><a class="anchor" aria-hidden="true" id="hello-world"></a><a href="#hello-world" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Hello World!</h2>
-<p>Create a new file named <code>hello.js</code> in the folder where you installed Serviceberry. Copy the line of
-JavaScript below into it.</p>
+<p>Create a new file <code>hello/service.js</code> and save the JavaScript below as its contents.</p>
 <pre><code class="hljs css javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>).createTrunk().on(<span class="hljs-string">"*"</span>, () =&gt; <span class="hljs-string">"Hello World!"</span>);
 </code></pre>
-<p>Run <code>node hello</code> to start your service then visit <a href="http://localhost:3000">http://localhost:3000</a>
+<p>Run <code>node service</code> in <code>hello/</code> to start your service then visit <a href="http://localhost:3000">http://localhost:3000</a>
 to see the response. If your service responds &quot;Hello World!&quot;, you've successfully created your first
 Serviceberry service!</p>
-<p>Let's breakdown how we made it happen.</p>
-<p>The first expression is loading <a href="serviceberry.html">Serviceberry</a>.</p>
+<h3><a class="anchor" aria-hidden="true" id="let-s-breakdown-how-we-made-it-happen"></a><a href="#let-s-breakdown-how-we-made-it-happen" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Let's breakdown how we made it happen:</h3>
 <pre><code class="hljs css javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>)
 </code></pre>
-<p>The next expression calls a Serviceberry function that creates the service <a href="trunk.html">trunk</a>.
-The trunk is the entry point of the framework and all incoming requests. All branches and leaves
-originate from the trunk. Calling <code>createTrunk()</code> will always be the first step to create a service
-with Serviceberry.</p>
+<p>The first expression loads <a href="serviceberry.html">Serviceberry</a>.</p>
 <pre><code class="hljs css javascript">.createTrunk()
 </code></pre>
-<p>The last expression creates a new <a href="leaf.html">leaf</a> at the service trunk and adds a handler for
-that response with &quot;Hello World!&quot; to all request methods.</p>
+<p>The next expression calls the Serviceberry function <code>createTrunk</code> which creates the service <a href="trunk.html">trunk</a>.
+The <a href="trunk.html">trunk</a> is the entry point of the framework and all incoming requests. All <a href="branch.html">branches</a> and <a href="leaf.html">leaves</a>
+originate from the <a href="trunk.html">trunk</a>. Calling <code>createTrunk</code> is always be the first step in creating a service
+with Serviceberry.</p>
+<p><code>createTrunk</code> takes an optional <a href="serviceberry.html#createtrunk-options">options</a> argument that configures
+the behavior of the service. For this service the default options will work fine.</p>
 <pre><code class="hljs css javascript">.on(<span class="hljs-string">"*"</span>, () =&gt; <span class="hljs-string">"Hello World!"</span>);
 </code></pre>
+<p>The last expression creates a new <a href="leaf.html">leaf</a> on the <a href="trunk.html">trunk</a> and adds a <a href="handlers.html">handler</a>
+that responds with &quot;Hello World!&quot; to all request methods.</p>
 <h2><a class="anchor" aria-hidden="true" id="hello-world-version-2"></a><a href="#hello-world-version-2" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Hello World! <em>version 2</em></h2>
 <p>It's fun to build an HTTP service in one line, but we want to build services that are much more interesting
-and powerful. It's time to add some features and create the next version of our service.</p>
+and powerful than Hello World above. It's time to add some features and create the next version of our service.</p>
 <h3><a class="anchor" aria-hidden="true" id="feature-1-greet-by-name"></a><a href="#feature-1-greet-by-name" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Feature 1: <em>Greet By Name</em></h3>
 <p>Let's greet a user by name using a parameter in the URL path. The service should respond to <code>GET /hello/{name}</code>
-with <code>Hello {name}!</code>.</p>
-<p>To do this, we'll add a new branch with <code>.at()</code> and switch from <code>*</code> (all methods) to <code>GET</code>. Our path to the
-new branch will include the placeholder <code>{name}</code>. Serviceberry will parse this path parameter out of the URL
-when routing the request to our new branch. The value of the parameter will be available through the <code>request</code>
-object passed as the first argument to our handler.</p>
-<p><code>hello.js</code> should now look like this:</p>
+with &quot;Hello <em>name</em>!&quot;.</p>
+<p>To do this, we'll add a new <a href="branch.html">branch</a> with <code>.at()</code> and switch from <code>*</code> (all methods) to <code>GET</code>. Our path to the
+new <a href="branch.html">branch</a> will include the placeholder <code>{name}</code>. Serviceberry will parse this path parameter value out of the URL
+when routing the request to our new <a href="branch.html">branch</a>. Path parameter placeholders are delimited with curly braces. The value of the parameter will be available through the <a href="request.html">request</a>
+object passed as the first argument to our <a href="handers.html">handler</a>.</p>
+<p><code>hello/service.js</code> <strong>should now look like this:</strong></p>
 <pre><code class="hljs css javascript"><span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>)
     .createTrunk()
     .at(<span class="hljs-string">"hello/{name}"</span>)
-    .on(<span class="hljs-string">"GET"</span>, request =&gt; <span class="hljs-string">`Hello <span class="hljs-subst">${request.getParam(<span class="hljs-string">"name"</span>)}</span>!`</span>);
+    .on(<span class="hljs-string">"GET"</span>, request =&gt; <span class="hljs-string">`Hello <span class="hljs-subst">${request.getPathParam(<span class="hljs-string">"name"</span>)}</span>!`</span>);
 </code></pre>
-<p>Run <code>node hello</code> to start your service and visit <a href="http://localhost:3000/hello/Bob">http://localhost:3000/hello/Bob</a>
+<p>Run <code>node service</code> in <code>hello/</code> to start your service and visit <a href="http://localhost:3000/hello/Bob">http://localhost:3000/hello/Bob</a>
 to see the response.</p>
 <h3><a class="anchor" aria-hidden="true" id="feature-2-respond-with-json"></a><a href="#feature-2-respond-with-json" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Feature 2: <em>Respond with JSON</em></h3>
 <p>Let's send our response serialized as a JSON object.</p>
-<p>To do this we'll declare options with an object instead of the string shorthand <code>&quot;GET&quot;</code>. We'll also return an object
-instead of a string. Serviceberry has built-in support for JSON serializing and deserializing. By declaring the
-leaf produces JSON in the options, Serviceberry knows to serialize the response as JSON.</p>
+<p>To do this we'll pass in <a href="leaf.html">leaf</a> options as an object instead of just a string. This lets
+us tell Serviceberry this leaf produces JSON. Next we'll change the <a href="handlers.html">handler</a> to return an object
+instead of a string.</p>
+<p>Serviceberry has built-in support for JSON serializing and deserializing. By declaring the
+leaf produces JSON, Serviceberry knows to serialize the response using the JSON serializer.</p>
 <pre><code class="hljs css javascript">.on({
     <span class="hljs-attr">method</span>: <span class="hljs-string">"GET"</span>,
     <span class="hljs-attr">produces</span>: <span class="hljs-string">"application/json"</span>
 }, request =&gt; ({
-    <span class="hljs-attr">greeting</span>: <span class="hljs-string">`Hello <span class="hljs-subst">${request.getParam(<span class="hljs-string">"name"</span>)}</span>!`</span>
+    <span class="hljs-attr">greeting</span>: <span class="hljs-string">`Hello <span class="hljs-subst">${request.getPathParam(<span class="hljs-string">"name"</span>)}</span>!`</span>
 }));
 </code></pre>
-<p>To help keep our code organized, we'll also refactor a bit by storing the Serviceberry object and the trunk in variables.</p>
-<p><code>hello.js</code> should now look like this:</p>
-<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> serviceberry = <span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>);
-<span class="hljs-keyword">const</span> service = serviceberry.createTrunk();
+<p>To help keep our code organized, we'll also refactor a bit by storing the Serviceberry object and the <a href="trunk.html">trunk</a> in variables.</p>
+<p><code>hello/service.js</code> <strong>should now look like this:</strong></p>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> serviceberry = <span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>),
+    trunk = serviceberry.createTrunk();
 
-service.at(<span class="hljs-string">"hello/{name}"</span>).on({
+trunk.at(<span class="hljs-string">"hello/{name}"</span>).on({
     <span class="hljs-attr">method</span>: <span class="hljs-string">"GET"</span>,
     <span class="hljs-attr">produces</span>: <span class="hljs-string">"application/json"</span>
 }, request =&gt; ({
     <span class="hljs-attr">greeting</span>: <span class="hljs-string">`Hello <span class="hljs-subst">${request.getParam(<span class="hljs-string">"name"</span>)}</span>!`</span>
 }));
 </code></pre>
-<p>Run <code>node hello</code> to start your service and visit <a href="http://localhost:3000/hello/Bob">http://localhost:3000/hello/Bob</a>
+<p>Run <code>node service</code> in <code>hello/</code> to start your service and visit <a href="http://localhost:3000/hello/Bob">http://localhost:3000/hello/Bob</a>
 to see the response.</p>
 <h3><a class="anchor" aria-hidden="true" id="feature-3-token-authentication"></a><a href="#feature-3-token-authentication" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Feature 3: <em>Token Authentication</em></h3>
-<p>Let's secure our service so only authorized users can access it. To do this, we'll add a handler to
-the trunk with <code>.use()</code>. This handler will validate a query string token parameter.</p>
-<p>Create a new file named <code>token.txt</code> in your service folder and save <code>d0189daeb2097</code> as its contents.
+<p>Let's secure our service so only authorized users can access it. To do this, we'll create a
+plugin and add it to the <a href="trunk.html">trunk</a> with <code>.use()</code>. This plugin will validate a query string token parameter.</p>
+<p>Create a new file <code>hello/token.txt</code> and save <code>d0189daeb2097</code> as its contents.
 We'll read this string from <code>token.txt</code> to validate the token in the query string. Since we don't want
-our service to wait while the file is read, we'll read the file asynchronously and call <code>request.proceed()</code>
-when the request is authenticated and <code>request.fail()</code> when the token is missing or invalid.</p>
+our service to wait while the file is read, we'll read the file asynchronously and call <a href="request.html#proceed-result"><code>request.proceed()</code></a>
+when the request is authenticated and <a href="request.html#failerror-status-headers"><code>request.fail()</code></a> when the token is missing or invalid.</p>
 <p>We'll read the file using Node's <a href="https://nodejs.org/dist/latest-v9.x/docs/api/fs.html">File Systems</a>
 module <code>fs</code>.</p>
-<p><code>hello.js</code> should now look like this:</p>
-<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> serviceberry = <span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>);
-<span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">"fs"</span>);
-<span class="hljs-keyword">const</span> service = serviceberry.createTrunk().use(authenticate);
+<p><em>There are better ways of authenticating our service but this quick and dirty example helps
+quickly and easily demonstrate how to use plugins.</em></p>
+<p>Create a new file <code>hello/authenticate.js</code> and save the JavaScript below as its contents.</p>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> fs = <span class="hljs-built_in">require</span>(<span class="hljs-string">"fs"</span>);
 
-service.at(<span class="hljs-string">"hello/{name}"</span>).on({
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">authenticate</span> (<span class="hljs-params">request</span>) </span>{
+    <span class="hljs-keyword">const</span> token = request.getQueryParam(<span class="hljs-string">"token"</span>);
+
+    <span class="hljs-keyword">if</span> (!token) {
+        request.fail(<span class="hljs-string">"Token required!"</span>, <span class="hljs-string">"Unauthorized"</span>);
+    }
+
+    fs.readFile(<span class="hljs-string">"token.txt"</span>, <span class="hljs-string">"utf8"</span>, testToken);
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">testToken</span> (<span class="hljs-params">error, secret</span>) </span>{
+    <span class="hljs-keyword">if</span> (error) {
+        request.fail(error);
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (token !== secret.trim()) {
+        request.fail(<span class="hljs-string">"Token is not valid!"</span>, <span class="hljs-string">"Forbidden"</span>);
+    } <span class="hljs-keyword">else</span> {
+        request.proceed();
+    }
+}
+
+<span class="hljs-built_in">module</span>.exports = authenticate;
+</code></pre>
+<p><code>hello/service.js</code> <strong>should now look like this:</strong></p>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> {createTrunk} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>),
+    trunk = createTrunk(),
+    authenticate = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./authenticate"</span>);
+
+trunk.use(authenticate).at(<span class="hljs-string">"hello/{name}"</span>).on({
     <span class="hljs-attr">method</span>: <span class="hljs-string">"GET"</span>,
     <span class="hljs-attr">produces</span>: <span class="hljs-string">"application/json"</span>
 }, request =&gt; ({
-    <span class="hljs-attr">greeting</span>: <span class="hljs-string">`Hello <span class="hljs-subst">${request.getParam(<span class="hljs-string">"name"</span>)}</span>!`</span>
+    <span class="hljs-attr">greeting</span>: <span class="hljs-string">`Hello <span class="hljs-subst">${request.getPathParam(<span class="hljs-string">"name"</span>)}</span>!`</span>
 }));
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">authenticate</span> (<span class="hljs-params">request</span>) </span>{
-    <span class="hljs-keyword">const</span> token = request.getParam(<span class="hljs-string">"token"</span>);
-
-    <span class="hljs-keyword">if</span> (!token) {
-        request.fail(<span class="hljs-string">"Token required!"</span>, <span class="hljs-number">401</span>);
-    }
-
-    fs.readFile(<span class="hljs-string">"token.txt"</span>, <span class="hljs-string">"utf8"</span>, (error, secret) =&gt; {
-        <span class="hljs-keyword">if</span> (error) {
-            request.fail(error);
-        } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (token !== secret.trim()) {
-            request.fail(<span class="hljs-string">"Token is not valid!"</span>, <span class="hljs-number">403</span>);
-        } <span class="hljs-keyword">else</span> {
-            request.proceed();
-        }
-    });
-}
 </code></pre>
-<p>Run <code>node hello</code> to start your service and visit <a href="http://localhost:3000/hello/bob?token=d0189daeb2097">http://localhost:3000/hello/bob?token=d0189daeb2097</a>
-to see the response. Try it without the token or with a bad token to see a failing repsonse.</p>
+<p>Run <code>node service</code> in <code>hello/</code> to start your service and visit <a href="http://localhost:3000/hello/bob?token=d0189daeb2097">http://localhost:3000/hello/bob?token=d0189daeb2097</a>
+to see the response. Try it without the token or with a bad token to see a failing response.</p>
+<p>Code for this Hello World service can be found at <a href="https://github.com/bob-gray/serviceberry/tree/master/examples/hello">https://github.com/bob-gray/serviceberry/tree/master/examples/hello</a>.</p>
 <p>Now that you know how to build a basic HTTP service using Serviceberry, check out the next guide
-to learn all about handler.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="handlers.html">Handlers →</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#install-nodejs-and-serviceberry">Install Node.js and Serviceberry</a></li><li><a href="#hello-world">Hello World!</a></li><li><a href="#hello-world-version-2">Hello World! *version 2*</a><ul class="toc-headings"><li><a href="#feature-1-greet-by-name">Feature 1: *Greet By Name*</a></li><li><a href="#feature-2-respond-with-json">Feature 2: *Respond with JSON*</a></li><li><a href="#feature-3-token-authentication">Feature 3: *Token Authentication*</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"></a><div><h5>Guides</h5><a href="/docs/getting-started.html">Getting Started</a><a href="/docs/handlers.html">Handlers</a><a href="/docs/plugins.html">Plugins</a><a href="/docs/auto-responses.html">Auto Responses</a><a href="/docs/how-it-works.html">How it Works</a></div><div><h5>API Reference</h5><a href="/docs/serviceberry.html">Serviceberry</a><a href="/docs/trunk.html">Trunk</a><a href="/docs/branch.html">Branch</a><a href="/docs/leaf.html">Leaf</a><a href="/docs/request.html">Reqeust</a><a href="/docs/response.html">Response</a><a href="/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/blog">Blog</a><a class="github-link" href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/docs/contributing.html">Contributing</a><a href="/docs/license.html">License</a></div></section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+to learn all about <a href="handlers.html">handlers</a>.</p>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-next button" href="handlers.html">Handlers →</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#install-nodejs-and-serviceberry">Install Node.js and Serviceberry</a></li><li><a href="#hello-world">Hello World!</a><ul class="toc-headings"><li><a href="#let-s-breakdown-how-we-made-it-happen">Let&#x27;s breakdown how we made it happen:</a></li></ul></li><li><a href="#hello-world-version-2">Hello World! *version 2*</a><ul class="toc-headings"><li><a href="#feature-1-greet-by-name">Feature 1: *Greet By Name*</a></li><li><a href="#feature-2-respond-with-json">Feature 2: *Respond with JSON*</a></li><li><a href="#feature-3-token-authentication">Feature 3: *Token Authentication*</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"></a><div><h5>Guides</h5><a href="/docs/getting-started.html">Getting Started</a><a href="/docs/handlers.html">Handlers</a><a href="/docs/plugins.html">Plugins</a><a href="/docs/auto-responses.html">Auto Responses</a><a href="/docs/how-it-works.html">How it Works</a></div><div><h5>API Reference</h5><a href="/docs/serviceberry.html">Serviceberry</a><a href="/docs/trunk.html">Trunk</a><a href="/docs/branch.html">Branch</a><a href="/docs/leaf.html">Leaf</a><a href="/docs/request.html">Reqeust</a><a href="/docs/response.html">Response</a><a href="/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/blog">Blog</a><a class="github-link" href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/docs/contributing.html">Contributing</a><a href="/docs/license.html">License</a></div></section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
               (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

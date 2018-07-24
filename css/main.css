@@ -1942,6 +1942,14 @@ body,
 	max-width: 50rem;
 }
 
+.mainContainer .wrapper p,
+.mainContainer .wrapper ul,
+.mainContainer .wrapper ol {
+
+	padding-top: 0;
+    margin: 0.8em 0;
+}
+
 .docMainWrapper.wrapper {
 	margin-bottom: 0;
 }

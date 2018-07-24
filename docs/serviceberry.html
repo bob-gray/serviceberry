@@ -36,19 +36,13 @@ is called.
 <li><p><strong>timeout</strong> <em>number</em> [optional]</p>
 <p>Number of milliseconds to wait before aborting requests.</p></li>
 <li><p><strong>serializers</strong> <em>object</em> [optional]</p>
-<p>Property names must be content types (such as <code>application/json</code>) and values
-must be <a href="plugins.html#serializers-and-deserializers">serializer</a> plugins..</p></li>
+<p>Property names must be content types (such as <code>application/json</code>) and values must be <a href="plugins.html#serializers-and-deserializers">serializer</a> plugins.</p></li>
+<li><p><strong>deserializers</strong> <em>object</em> [optional]</p>
+<p>Property names must be content types (such as <code>application/json</code>) and values must be <a href="plugins.html#serializers-and-deserializers">deserializer</a> plugins.</p></li>
+<li><p><strong>callback</strong> <em>function</em> [optional]</p>
+<p>Listener for server's <code>listening</code> event.</p></li>
 </ul></li>
 </ul>
-<pre><code class="hljs">- **deserializers** *object* [optional]
-
-  Property names must be content types (such as `application/json`) and values
-</code></pre>
-<p>must be <a href="plugins.html#serializers-and-deserializers">deserializer</a> plugins..</p>
-<pre><code class="hljs">- **callback** *function* [optional]
-
-  Listener for server's `listening` event. 
-</code></pre>
 <pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> service = serviceberry.createTrunk({
   <span class="hljs-attr">port</span>: <span class="hljs-number">3000</span>,
   <span class="hljs-attr">basePath</span>: <span class="hljs-string">"api"</span>,

@@ -15,9 +15,8 @@ I mean, let's create a plugin.</p>
 All the heavy lifting will be done by <a href="https://www.npmjs.com/package/jsonschema">jsonschema</a> which
 we'll install using <a href="https://www.npmjs.com">npm</a>. Our plugin will be a thin wrapper that responds
 with an appropriate error when validation fails.</p>
-<p>Create a folder. In the folder run <code>npm install jsonschema</code>. Create a file named <code>validate.js</code> and save
-it in the folder. Copy the JavaScript below into it.</p>
-<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> { validate } = <span class="hljs-built_in">require</span>(<span class="hljs-string">"jsonschema"</span>);
+<p>Create a folder <code>echo</code>. Run <code>npm install jsonschema</code> in <code>echo/</code>. Create a new file <code>echo/validate.js</code> and save the JavaScript below as its contents.</p>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> {validate} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"jsonschema"</span>);
 
 <span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-params">schema</span> =&gt;</span> request =&gt; {
     <span class="hljs-keyword">const</span> result = validate(request.getBody(), schema);
@@ -31,53 +30,56 @@ it in the folder. Copy the JavaScript below into it.</p>
     }
 };
 </code></pre>
-<p>Let's breakdown how this plugin works.</p>
+<h3><a class="anchor" aria-hidden="true" id="let-s-break-it-down"></a><a href="#let-s-break-it-down" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Let's Break It Down</h3>
 <p>First our plugin requires <code>jsonschema</code> and assigns its validate function to a variable. Then it exports a
 function that accepts a schema and returns a handler function. The handler function will validate the
-body of each request using <code>jsonschema</code> and the schema passed in to our plugin. The request proceeds
-if it's body matches the schema and fails with information about why if it does not match.</p>
-<p>Let's create a simple service to allow us to use our plugin. Create a file named <code>echo.js</code> and save it in the
-same folder as <code>validate.js</code>. Copy the JavaScript below into it.</p>
-<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> serviceberry = <span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>);
-<span class="hljs-keyword">const</span> validate = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./validate"</span>);
-<span class="hljs-keyword">const</span> service = serviceberry.createTrunk();
-<span class="hljs-keyword">const</span> schema = {
-    <span class="hljs-attr">type</span>: <span class="hljs-string">"object"</span>,
-    <span class="hljs-attr">properties</span>: {
-        <span class="hljs-attr">name</span>: {
-            <span class="hljs-attr">type</span>: <span class="hljs-string">"string"</span>,
-            <span class="hljs-attr">minLength</span>: <span class="hljs-number">1</span>
+body of each request using <code>jsonschema</code> and the schema passed into our plugin. The request proceeds
+if it's body matches the schema and it fails if it does not match. Failed requests will send the reason for the fail in the response.</p>
+<h3><a class="anchor" aria-hidden="true" id="using-our-plugin"></a><a href="#using-our-plugin" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Using Our Plugin</h3>
+<p>Let's create a simple service to allow us to use our plugin.</p>
+<p>First create a new file <code>echo/person.json</code> and save the JSON below as its contents.</p>
+<pre><code class="hljs">{
+    <span class="hljs-attr">"type"</span>: <span class="hljs-string">"object"</span>,
+    <span class="hljs-attr">"properties"</span>: {
+        <span class="hljs-attr">"name"</span>: {
+            <span class="hljs-attr">"type"</span>: <span class="hljs-string">"string"</span>,
+            <span class="hljs-attr">"minLength"</span>: <span class="hljs-number">1</span>
         },
-        <span class="hljs-attr">age</span>: {
-            <span class="hljs-attr">type</span>: <span class="hljs-string">"integer"</span>,
-            <span class="hljs-attr">minimum</span>: <span class="hljs-number">0</span>
+        <span class="hljs-attr">"age"</span>: {
+            <span class="hljs-attr">"type"</span>: <span class="hljs-string">"integer"</span>,
+            <span class="hljs-attr">"minimum"</span>: <span class="hljs-number">0</span>
         }
     }
-};
+}
+</code></pre>
+<p>Next create a new file <code>echo\service.js</code> and save the JavaScript below as its contents.</p>
+<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> {createTrunk} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>),
+    validate = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./validate"</span>),
+    schema = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./person"</span>),
+    trunk = createTrunk();
 
-service.at(<span class="hljs-string">"echo"</span>).on({
+trunk.at(<span class="hljs-string">"echo"</span>).use(validate(schema)).on({
     <span class="hljs-attr">method</span>: <span class="hljs-string">"POST"</span>,
     <span class="hljs-attr">consumes</span>: <span class="hljs-string">"application/json"</span>,
     <span class="hljs-attr">produces</span>: <span class="hljs-string">"application/json"</span>
-})
-.use(validate(schema))
-.use(<span class="hljs-function"><span class="hljs-params">request</span> =&gt;</span> request.getBody());
+}, request =&gt; request.getBody());
 </code></pre>
-<p>Run <code>node echo</code> to start your service. Send a <code>POST</code> request to <a href="http://localhost:3000/echo">http://localhost:3000/echo</a> with a JSON body
+<p>Run <code>node service</code> in <code>echo/</code> to start your service. Send a <code>POST</code> request to <a href="http://localhost:3000/echo">http://localhost:3000/echo</a> with a JSON body
 to see the response. If your request JSON matches the schema, you should see it echoed back to you.
 If it doesn't match the schema, the request should fail with a 422 status and information about why it
 didn't match.</p>
 <p><em>TIP: A couple good options for sending HTTP requests are <a href="https://www.getpostman.com">Postman</a>
-and <a href="https://www.getpostman.com">curl</a></em></p>
+and <a href="https://curl.haxx.se">curl</a></em></p>
+<p>Code for this echo service can be found at <a href="https://github.com/bob-gray/serviceberry/tree/master/examples/echo">https://github.com/bob-gray/serviceberry/tree/master/examples/echo</a>.</p>
 <h2><a class="anchor" aria-hidden="true" id="serializers-and-deserializers"></a><a href="#serializers-and-deserializers" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Serializers and Deserializers</h2>
-<p>Serializers and deserializers are plugins which means they are handlers but they have a specific mission.
-Serializers transform the response body into response content. Deserializers transform the request content
-into the request body. The returned or resolved value of each is set to the response content and request body
-respectively. Because they are handlers, they can be asychronous and produces errors in the same ways as
+<p>Serializers and deserializers are plugins which means they are <a href="handers.html">handlers</a> but they have a specific mission.
+Serviceberry loads a JSON serializer by default. All other serializers will be loaded by your service.
+Serializers transform the <a href="response.html">response</a> body into <a href="response.html">response</a> content. Deserializers transform the <a href="request.html">request</a> content
+into the <a href="request.html">request</a> body. The returned or resolved value of each is set to the <a href="response.html">response</a> content and <a href="request.html">request</a> body
+respectively. Because they are <a href="handlers.html">handlers</a>, they can be asynchronous and produces errors in the same ways as
 other plugins. See <a href="https://www.npmjs.com/package/serviceberry-json"><code>serviceberry-json</code></a> for an example.</p>
-<p>One tricky detail about deserializers that is unlikely to be an issue but still worth noting is that their
-control of the request is &quot;replayed&quot; out of sequence. This means that although the deserializer is executed
-prior to any handlers in the queue, if it results in the request failing, the error will only surface if
+<p>One tricky detail about deserializers is that their control of the request is &quot;replayed&quot; out of sequence. This is unlikely to be an issue but still worth noting. It means that although the deserializer is executed
+prior to any handlers in the queue, if it results is an error, the error will only surface if
 and when <code>request.getBody()</code> is called from a handler. This allows deserializers to be asychronous and
 deserializing error handling to be more intuitive.</p>
 <h2><a class="anchor" aria-hidden="true" id="authoring-plugins"></a><a href="#authoring-plugins" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Authoring Plugins</h2>
@@ -85,9 +87,9 @@ deserializing error handling to be more intuitive.</p>
 publishing it on <a href="https://npmjs.com">npm</a> with a package name that's prefixed with <code>serviceberry-</code> (such as
 <a href="https://www.npmjs.com/package/serviceberry-json"><code>serviceberry-json</code></a>). In the future I'd like to show
 a list of plugins on this site.</p>
-<p>Searching npm for Serviceberry plugins is a good way to see examples of plugins as a reference when
+<p>Searching <a href="https://www.npmjs.org">npm</a> for Serviceberry plugins is a good way to see examples of plugins as a reference when
 creating your own.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="handlers.html">← Handlers</a><a class="docs-next button" href="auto-responses.html">Auto Responses →</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#plugins-are-handlers">Plugins Are Handlers</a></li><li><a href="#json-schema-plugin">JSON Schema Plugin</a></li><li><a href="#serializers-and-deserializers">Serializers and Deserializers</a></li><li><a href="#authoring-plugins">Authoring Plugins</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"></a><div><h5>Guides</h5><a href="/docs/getting-started.html">Getting Started</a><a href="/docs/handlers.html">Handlers</a><a href="/docs/plugins.html">Plugins</a><a href="/docs/auto-responses.html">Auto Responses</a><a href="/docs/how-it-works.html">How it Works</a></div><div><h5>API Reference</h5><a href="/docs/serviceberry.html">Serviceberry</a><a href="/docs/trunk.html">Trunk</a><a href="/docs/branch.html">Branch</a><a href="/docs/leaf.html">Leaf</a><a href="/docs/request.html">Reqeust</a><a href="/docs/response.html">Response</a><a href="/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/blog">Blog</a><a class="github-link" href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/docs/contributing.html">Contributing</a><a href="/docs/license.html">License</a></div></section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="handlers.html">← Handlers</a><a class="docs-next button" href="auto-responses.html">Auto Responses →</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#plugins-are-handlers">Plugins Are Handlers</a></li><li><a href="#json-schema-plugin">JSON Schema Plugin</a><ul class="toc-headings"><li><a href="#let-s-break-it-down">Let&#x27;s Break It Down</a></li><li><a href="#using-our-plugin">Using Our Plugin</a></li></ul></li><li><a href="#serializers-and-deserializers">Serializers and Deserializers</a></li><li><a href="#authoring-plugins">Authoring Plugins</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"></a><div><h5>Guides</h5><a href="/docs/getting-started.html">Getting Started</a><a href="/docs/handlers.html">Handlers</a><a href="/docs/plugins.html">Plugins</a><a href="/docs/auto-responses.html">Auto Responses</a><a href="/docs/how-it-works.html">How it Works</a></div><div><h5>API Reference</h5><a href="/docs/serviceberry.html">Serviceberry</a><a href="/docs/trunk.html">Trunk</a><a href="/docs/branch.html">Branch</a><a href="/docs/leaf.html">Leaf</a><a href="/docs/request.html">Reqeust</a><a href="/docs/response.html">Response</a><a href="/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/blog">Blog</a><a class="github-link" href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/docs/contributing.html">Contributing</a><a href="/docs/license.html">License</a></div></section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
               (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

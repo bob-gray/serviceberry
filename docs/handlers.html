@@ -11,7 +11,7 @@ This makes creating services and plugins easier.</p>
 <p>A handler can be a <a href="#handler-functions">function</a> or an <a href="#handler-objects">object</a>. Handler objects
 can be any object with a <code>use</code> method that is a handler function.</p>
 <h2><a class="anchor" aria-hidden="true" id="handler-functions"></a><a href="#handler-functions" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Handler Functions</h2>
-<p>Handler functions all have the same arguments signature <code>(request, response)</code>.
+<p>Handler functions all have the same arguments signature <code>(request, response)</code> and ability to control requests.
 <a href="request.html">Request</a> and <a href="response.html">response</a> are wrapper objects for the
 <a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage">http.IncomingRequest</a>
 and <a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_serverresponse">http.ServiceResponse</a>
@@ -22,7 +22,7 @@ arguments passed to the underlining <a href="https://nodejs.org/dist/latest-v8.x
 <li><a href="response.html">response</a> <em>object</em></li>
 </ul>
 <p>Handlers are added to the <a href="trunk.html">trunk</a>, <a href="branch.html">branches</a> and <a href="leaf.html">leaves</a>
-of your service using Serviceberry's API. When Serviceberry routes each request through your service, it builds a queue of handlers. Each handler in the queue is then called one after the other. Each given control of the
+of your service using methods <code>use</code>, <code>catch</code> and <code>on</code>. When Serviceberry routes each request through your service, it builds a queue of handlers. Each handler in the queue is then called one after the other. Each given control of the
 <a href="request.html">request</a> and <a href="response.html">response</a> until control is exercised and transferred away. Handlers exercise control through
 methods of <a href="request.html">request</a> and <a href="response.html">response</a>, their return value or by throwing an error.</p>
 <h3><a class="anchor" aria-hidden="true" id="three-possible-outcomes"></a><a href="#three-possible-outcomes" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Three Possible Outcomes</h3>
@@ -49,15 +49,14 @@ control over the <a href="request.html">request</a> and <a href="response.html">
 <p>Returning a <code>promise</code> that is resolved or eventually resolved, returning anything other than <code>false</code> or a
 thennable, or returning nothing and calling <a href="request.html#proceed-value"><code>request.proceed()</code></a> are all functionally equivalent. They all result in the request
 proceeding. Control will be given to the next handler in the queue. If the queue has no more handlers,
-the request will end.</p>
+the request will end and a response sent to the client.</p>
 <p>Returning nothing and calling <a href="response.html#send-options"><code>response.send()</code></a> will complete the request and send the response to the client.</p>
 <p>Returning a <code>promise</code> that is rejected or eventually rejected, returning <code>false</code>, throwing an error, or returning
-nothing and calling <a href="request.html#failerror-status-headers"><code>request.fail()</code></a> are all functionally equivalent. They all result in control falling back to the nearest catch handler. If no catch handler is found the request will be ended. Errors are available in catch handlers
+nothing and calling <a href="request.html#failerror-status-headers"><code>request.fail()</code></a> are all functionally equivalent. They all result in control falling back to the nearest error handler. If no error handler is found the request will be ended. Errors are available in error handlers
 at <a href="request.html#error"><code>request.error</code></a>.</p>
 <p><a href="request.html#proceed-value"><code>request.proceed()</code></a>, <a href="request.html#failerror-status-headers"><code>request.fail()</code></a> and <a href="response.html#send-options"><code>response.send()</code></a> can all be called asynchronously as long
 as the handler doesn't return a value. Additionally none are required to be called with context so
-each can be safely passed directly as callbacks - such as <code>.then(request.proceed, request.fail)</code>. When control is transferred to the
-next handler, request and response methods given to the prior handler are rendered useless.</p>
+each can be safely passed directly as callbacks - such as <code>.then(request.proceed, request.fail)</code>. When control is exercised and transferred away, request and response methods given to the prior handler are rendered useless.</p>
 <h2><a class="anchor" aria-hidden="true" id="handler-objects"></a><a href="#handler-objects" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Handler Objects</h2>
 <p>Everywhere a handler is accepted as an argument, an object can be used. It can be any object that has a <code>use</code>
 method that is a handler function. When Serviceberry is passed a handler object it binds the object's <code>use</code> method to the object so that handlers can be stateful. This can be particularly useful for plugins.</p>

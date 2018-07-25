@@ -1,4 +1,4 @@
-const { validate } = require("jsonschema");
+const {validate} = require("jsonschema");
 
 module.exports = schema => request => {
     const result = validate(request.getBody(), schema);

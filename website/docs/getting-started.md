@@ -34,7 +34,7 @@ Run `node service` in `hello/` to start your service then visit [http://localhos
 to see the response. If your service responds "Hello World!", you've successfully created your first
 Serviceberry service!
 
-### Let's break it down:
+### Let's Break It Down
 
 ```javascript
 require("serviceberry")

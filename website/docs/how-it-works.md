@@ -21,7 +21,7 @@ Phase 1
 Phase 1 happens only once each time your service is started.
 It would include code such as requiring Serviceberry,
 calling [`createTrunk()`](serviceberry.html#createtrunk-options) and using the [trunk](trunk.html), [branches](branch.html) and [leaves](leaf.html)
-to build a tree of [handlers](handlers.html). 
+to build a tree of [handlers](handlers.html).
 
 Phase 2
 -------
@@ -38,7 +38,7 @@ Phase 3
 
 *Serviceberry calling your handlers*
 
-Phase 3 begins imediately after phase 2 and likewise happens once per request. Serviceberry
+Phase 3 begins immediately after phase 2 and likewise happens once per request. Serviceberry
 runs through the handler queue and passes control of the request to each handler as it's called.
-The request ends when one of the handlers decides to send a respone. If Serviceberry reache
+The request ends when one of the handlers decides to send a response. If Serviceberry reaches
 the end of the queue an implicit response will be sent and the request ended.

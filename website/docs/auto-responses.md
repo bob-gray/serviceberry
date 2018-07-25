@@ -30,7 +30,7 @@ Auto Error Statuses
 
   - **503 Service Unavailable**
 
-    When a request times out. 
+    When a request times out.
 
 Auto Methods
 ------------
@@ -45,6 +45,4 @@ To override these auto methods, implement your own `OPTI0NS` and `HEAD` handlers
   - **HEAD**
 
     Any request path that implements a `GET` method will respond to `HEAD`
-    requests with the head written while executing the `GET` queue.
-    All plugins, catches and handlers in the `GET` queue will be
-    executed.
+    requests with the head written while executing all the [handlers](handlers.html) in the `GET` queue.

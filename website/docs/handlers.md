@@ -14,7 +14,7 @@ can be any object with a `use` method that is a handler function.
 Handler Functions
 -----------------
 
-Handler functions all have the same arguments signature `(request, response)`.
+Handler functions all have the same arguments signature `(request, response)` and ability to control requests.
 [Request](request.html) and [response](response.html) are wrapper objects for the
 [http.IncomingRequest](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage)
 and [http.ServiceResponse](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_serverresponse)
@@ -25,7 +25,7 @@ arguments passed to the underlining [http.Server](https://nodejs.org/dist/latest
   - [response](response.html) *object*
 
 Handlers are added to the [trunk](trunk.html), [branches](branch.html) and [leaves](leaf.html)
-of your service using Serviceberry's API. When Serviceberry routes each request through your service, it builds a queue of handlers. Each handler in the queue is then called one after the other. Each given control of the
+of your service using methods `use`, `catch` and `on`. When Serviceberry routes each request through your service, it builds a queue of handlers. Each handler in the queue is then called one after the other. Each given control of the
 [request](request.html) and [response](response.html) until control is exercised and transferred away. Handlers exercise control through
 methods of [request](request.html) and [response](response.html), their return value or by throwing an error.
 
@@ -55,18 +55,17 @@ control over the [request](request.html) and [response](response.html) by the fo
 Returning a `promise` that is resolved or eventually resolved, returning anything other than `false` or a
 thennable, or returning nothing and calling [`request.proceed()`](request.html#proceed-value) are all functionally equivalent. They all result in the request
 proceeding. Control will be given to the next handler in the queue. If the queue has no more handlers,
-the request will end.
+the request will end and a response sent to the client.
 
 Returning nothing and calling [`response.send()`](response.html#send-options) will complete the request and send the response to the client.
 
 Returning a `promise` that is rejected or eventually rejected, returning `false`, throwing an error, or returning
-nothing and calling [`request.fail()`](request.html#failerror-status-headers) are all functionally equivalent. They all result in control falling back to the nearest catch handler. If no catch handler is found the request will be ended. Errors are available in catch handlers
+nothing and calling [`request.fail()`](request.html#failerror-status-headers) are all functionally equivalent. They all result in control falling back to the nearest error handler. If no error handler is found the request will be ended. Errors are available in error handlers
 at [`request.error`](request.html#error).
 
 [`request.proceed()`](request.html#proceed-value), [`request.fail()`](request.html#failerror-status-headers) and [`response.send()`](response.html#send-options) can all be called asynchronously as long
 as the handler doesn't return a value. Additionally none are required to be called with context so
-each can be safely passed directly as callbacks - such as `.then(request.proceed, request.fail)`. When control is transferred to the
-next handler, request and response methods given to the prior handler are rendered useless.
+each can be safely passed directly as callbacks - such as `.then(request.proceed, request.fail)`. When control is exercised and transferred away, request and response methods given to the prior handler are rendered useless.
 
 Handler Objects
 ---------------

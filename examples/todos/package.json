@@ -1,0 +1,17 @@
+{
+  "name": "todos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "read-log": "bunyan logs/server.log"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-persist": "^3.0.0",
+    "serviceberry-logger": "^0.1.3"
+  }
+}

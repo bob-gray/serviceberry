@@ -14,8 +14,8 @@ visit the Node [website](https://nodejs.org) to download and install the latest 
 Once Node is installed, we'll use [npm](https://npmjs.com) (Node Package Manager) to install Serviceberry.
 Node Package Manager will be installed with Node.
 
-  - Create a folder named hello
-  - In the `hello/` run the following two commands:
+  - Create a folder named `hello`
+  - In `hello/` run the following commands:
       - `npm init --yes` to initialize a `package.json` file
       - `npm install serviceberry` to install Serviceberry
 

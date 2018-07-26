@@ -21,7 +21,11 @@ All the heavy lifting will be done by [jsonschema](https://www.npmjs.com/package
 we'll install using [npm](https://www.npmjs.com). Our plugin will be a thin wrapper that responds
 with an appropriate error when validation fails.
 
-Create a folder `echo`. Run `npm install jsonschema` in `echo/`. Create a new file `echo/validate.js` and save the JavaScript below as its contents.
+  - Create a folder named `echo`
+  - In `echo/` run the following commands:
+      - `npm init --yes` to initialize a `package.json` file
+      - `npm install jsonschema` to install [jsonschema](https://www.npmjs.com/package/jsonschema)
+  - Create a new file `echo/validate.js` and save the JavaScript below as its contents.
 
 ```javascript
 const {validate} = require("jsonschema");
@@ -52,7 +56,7 @@ Let's create a simple service to allow us to use our plugin.
 
 First create a new file `echo/person.json` and save the JSON below as its contents.
 
-```
+```json
 {
     "type": "object",
     "properties": {
@@ -68,7 +72,9 @@ First create a new file `echo/person.json` and save the JSON below as its conten
 }
 ```
 
-Next create a new file `echo\service.js` and save the JavaScript below as its contents.
+Next run `npm install serviceberry` in `echo/`.
+
+Next create a new file `echo/service.js` and save the JavaScript below as its contents.
 
 ```javascript
 const {createTrunk} = require("serviceberry"),

@@ -22,10 +22,13 @@ describe("Leaf", () => {
 		expect("node" in leaf).toBe(true);
 	});
 
-	it("should add handler function", () => {
+	it("should add handler function", async () => {
 		const handler = jasmine.createSpy("handler function");
 
 		leaf.use(handler);
+
+		await leaf.node.resolved;
+
 		leaf.node.handlers[0]();
 
 		expect(leaf.node.handlers.length).toBe(1);
@@ -33,20 +36,26 @@ describe("Leaf", () => {
 		expect(handler).toHaveBeenCalled();
 	});
 
-	it("should add handler object", () => {
+	it("should add handler object", async () => {
 		const handler = jasmine.createSpyObj("handler object", ["use"]);
 
 		leaf.use(handler);
+
+		await leaf.node.resolved;
+
 		leaf.node.handlers[0]();
 
 		expect(leaf.node.handlers.length).toBe(1);
 		expect(handler.use).toHaveBeenCalled();
 	});
 
-	it("should add catch function", () => {
+	it("should add catch function", async () => {
 		const handler = jasmine.createSpy("handler function");
 
 		leaf.catch(handler);
+
+		await leaf.node.resolved;
+
 		leaf.node.catches[0]();
 
 		expect(leaf.node.catches.length).toBe(1);
@@ -54,18 +63,30 @@ describe("Leaf", () => {
 		expect(handler).toHaveBeenCalled();
 	});
 
-	it("should add catch object", () => {
+	it("should add catch object", async () => {
 		const handler = jasmine.createSpyObj("handler object", ["use"]);
 
 		leaf.catch(handler);
+
+		await leaf.node.resolved;
+
 		leaf.node.catches[0]();
 
 		expect(leaf.node.catches.length).toBe(1);
 		expect(handler.use).toHaveBeenCalled();
 	});
 
-	it("should throw when handler is not a function or object with use method", () => {
-		expect(leaf.use.bind(leaf, "foo"))
-			.toThrowMatching((thrown) => thrown.message === "handler must be a function or an object with a `use` method");
+	it("should reject when handler is not a function or object with use method", async () => {
+		var thrown;
+
+		leaf.use("foo");
+
+		try {
+			await leaf.node.resolved;
+		} catch (error) {
+			thrown = error;
+		}
+
+		expect(thrown.message).toBe("handler must be a function or an object with a `use` method");
 	});
 });

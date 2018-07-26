@@ -16,6 +16,7 @@
     "plugins": "Plugins",
     "request": "Request",
     "response": "Response",
+    "service-tree": "Service Tree",
     "serviceberry": "Serviceberry",
     "trunk": "Trunk",
     "Guides": "Guides",

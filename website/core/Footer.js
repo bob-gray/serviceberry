@@ -33,6 +33,7 @@ class Footer extends React.Component {
             <a href={this.docUrl('getting-started.html', this.props.language)}>Getting Started</a>
             <a href={this.docUrl('handlers.html', this.props.language)}>Handlers</a>
             <a href={this.docUrl('plugins.html', this.props.language)}>Plugins</a>
+            <a href={this.docUrl('service-tree.html', this.props.language)}>Serice Tree</a>
             <a href={this.docUrl('auto-responses.html', this.props.language)}>Auto Responses</a>
             <a href={this.docUrl('how-it-works.html', this.props.language)}>How it Works</a>
           </div>

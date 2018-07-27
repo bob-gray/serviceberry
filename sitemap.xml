@@ -14,6 +14,7 @@
 <url> <loc>https://serviceberry.js.org/docs/plugins.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/plugins.html" /> </url>
 <url> <loc>https://serviceberry.js.org/docs/request.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/request.html" /> </url>
 <url> <loc>https://serviceberry.js.org/docs/response.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/response.html" /> </url>
+<url> <loc>https://serviceberry.js.org/docs/service-tree.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/service-tree.html" /> </url>
 <url> <loc>https://serviceberry.js.org/docs/serviceberry.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/serviceberry.html" /> </url>
 <url> <loc>https://serviceberry.js.org/docs/trunk.html</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://serviceberry.js.org/docs/trunk.html" /> </url>
 </urlset>

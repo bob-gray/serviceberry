@@ -29,6 +29,9 @@ async function resolveHandlers () {
 
 	this.handlers = handlers.map(prepareHandler);
 	this.catches = catches.map(prepareHandler);
+
+	await Promise.all(this.waiting);
+	this.waiting = null;
 }
 
 function prepareHandler (handler) {

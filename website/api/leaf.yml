@@ -15,3 +15,12 @@ methods:
   arguments:
   - name: handler
     type: function or object
+
+- name: waitFor
+  returns: this branch
+  description: |
+    A hook for asynchronous setup task. The service won't be started until all
+    asynchronous setup is complete.
+  arguments:
+  - name: setup
+    type: promise

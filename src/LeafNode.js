@@ -10,7 +10,8 @@ class LeafNode extends HandlersResolver {
 		Object.assign(this, {
 			options: {...options},
 			handlers: [],
-			catches: []
+			catches: [],
+			waiting: []
 		});
 	}
 

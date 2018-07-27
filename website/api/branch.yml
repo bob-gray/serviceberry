@@ -74,3 +74,12 @@ methods:
     type: function or object
     description: See [Handlers](handlers.html) guide.
     required: false
+
+- name: waitFor
+  returns: this branch
+  description: |
+    A hook for asynchronous setup task. The service won't be started until all
+    asynchronous setup is complete.
+  arguments:
+  - name: setup
+    type: promise

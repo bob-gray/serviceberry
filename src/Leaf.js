@@ -25,6 +25,12 @@ class Leaf extends Base {
 
 		return this;
 	}
+
+	waitFor (setup) {
+		this.waiting.push(setup);
+
+		return this;
+	}
 }
 
 module.exports = Leaf;

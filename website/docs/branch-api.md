@@ -17,6 +17,7 @@ Methods
   - [at(path)](#atpath)
   - [on(options[, handler])](#onoptions-handler)
   - [on(method[, handler])](#onmethod-handler)
+  - [waitFor(setup)](#waitforsetup)
 
 
 Reference
@@ -104,6 +105,17 @@ Routes requests filtered by method to a new [leaf](leaf.html).
   - **handler** *function or object* [optional]
 
     See [Handlers](handlers.html) guide. 
+
+
+### waitFor(setup)
+
+Returns *this branch*
+
+A hook for asynchronous setup task. The service won't be started until all
+asynchronous setup is complete.
+
+
+  - **setup** *promise* 
 
 
 

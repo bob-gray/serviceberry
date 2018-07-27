@@ -18,7 +18,8 @@ class BranchNode extends ChildrenResolver {
 			branches: [],
 			leaves: [],
 			handlers: [],
-			catches: []
+			catches: [],
+			waiting: []
 		});
 
 		this.invoke(stripLeadingSlash);

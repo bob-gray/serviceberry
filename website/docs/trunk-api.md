@@ -21,6 +21,7 @@ Methods
   - [on(options[, handler])](#onoptions-handler)
   - [on(method[, handler])](#onmethod-handler)
   - [start([callback])](#start-callback)
+  - [waitFor(setup)](#waitforsetup)
 
 
 Reference
@@ -119,6 +120,17 @@ Begin listening for requets. If trunk was created with option `autoStart`,
 
 
   - **callback** *function* [optional]
+
+
+### waitFor(setup)
+
+Returns *this branch*
+
+A hook for asynchronous setup task. The service won't be started until all
+asynchronous setup is complete.
+
+
+  - **setup** *promise* 
 
 
 

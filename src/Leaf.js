@@ -15,32 +15,16 @@ class Leaf extends Base {
 	}
 
 	use (handler) {
-		this.node.handlers.push(prepareHandler(handler));
+		this.node.handlers.push(handler);
 
 		return this;
 	}
 
 	catch (handler) {
-		this.node.catches.push(prepareHandler(handler));
+		this.node.catches.push(handler);
 
 		return this;
 	}
-}
-
-function prepareHandler (handler) {
-	if (typeof handler !== "function" && typeof handler.use === "function") {
-		handler = handler.use.bind(handler);
-	}
-
-	if (typeof handler !== "function") {
-		badHandler();
-	}
-
-	return handler;
-}
-
-function badHandler () {
-	throw new Error("handler must be a function or an object with a `use` method");
 }
 
 module.exports = Leaf;

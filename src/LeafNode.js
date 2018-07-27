@@ -1,9 +1,9 @@
 "use strict";
 
-const Base = require("solv/src/abstract/base"),
+const HandlersResolver = require("./HandlersResolver"),
 	accepts = require("accepts");
 
-class LeafNode extends Base {
+class LeafNode extends HandlersResolver {
 	constructor (options = {}) {
 		super();
 

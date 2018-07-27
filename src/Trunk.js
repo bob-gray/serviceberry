@@ -64,8 +64,10 @@ class Trunk extends Branch {
 		return this;
 	}
 
-	start (callback) {
+	async start (callback) {
 		var {port, host, backlog} = this.options;
+
+		await this.node.resolved;
 
 		this.server.on("request", this.proxy(respond))
 			.listen(port, host, backlog, callback);

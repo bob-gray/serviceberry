@@ -5,11 +5,11 @@ require("solv/src/array/first");
 require("solv/src/array/add");
 require("solv/src/array/is-empty");
 
-const Base = require("solv/src/abstract/base"),
+const ChildrenResolver = require("./ChildrenResolver"),
 	placeholders = /\{[^}]+\}/g,
 	escapedBraces = /\\([{}])/g;
 
-class BranchNode extends Base {
+class BranchNode extends ChildrenResolver {
 	constructor (options = {path: ""}) {
 		super();
 

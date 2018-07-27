@@ -2,7 +2,7 @@
 
 module.exports = {
 	title: "Serviceberry",
-	tagline: "A simple HTTP service framework for Node.js",
+	tagline: "A focused HTTP service framework for Node.js",
 	url: "https://serviceberry.js.org",
 	baseUrl: "/",
 	cname: "serviceberry.js.org",

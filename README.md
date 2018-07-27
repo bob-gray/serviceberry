@@ -7,7 +7,7 @@
 
 [Documentation](https://serviceberry.js.org)
 
-A simple HTTP service framework for Node.js
+A focused HTTP service framework for Node.js
 
 ```javascript
 require("serviceberry").createTrunk().on("*", () => "Hello World!");

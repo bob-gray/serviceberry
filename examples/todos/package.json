@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "node-persist": "^3.0.0",
+    "serviceberry-basic-auth": "^0.2.0",
     "serviceberry-logger": "^0.1.3"
   }
 }

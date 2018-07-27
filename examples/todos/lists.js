@@ -1,6 +1,7 @@
 "use strict";
 
 const {HttpError} = require("serviceberry"),
+    auth = require("./authentication"),
     storage = require("node-persist"),
 	data = storage.create({
         dir: "data/lists",
@@ -9,8 +10,11 @@ const {HttpError} = require("serviceberry"),
 	whitespace = /\s+/g,
 	nonwords = /[^\w-]+/g;
 
-async function lists (collection) {
+function lists (collection) {
 	const resource = collection.at("{id}");
+
+    collection.use(auth())
+        .waitFor(data.init());
 
 	collection.on({
 		method: "GET",
@@ -35,8 +39,6 @@ async function lists (collection) {
 	}, updateList);
 
 	resource.on("DELETE", removeList);
-
-	await data.init();
 }
 
 async function getLists (request) {

@@ -9,11 +9,13 @@ const BasicAuth = require("serviceberry-basic-auth"),
         expiredInterval: 24 * 60 * 60 * 1000
     });
 
-class Authentication extends BasicAuth {
-    async init () {
-        await data.init();
-    }
+async function plugin () {
+    await data.init();
 
+    return new Authentication("Todos");
+}
+
+class Authentication extends BasicAuth {
     async getHash (username) {
         const {hash} = await data.getItem(username);
 
@@ -38,4 +40,4 @@ class Authentication extends BasicAuth {
     }
 }
 
-module.exports = Authentication;
+module.exports = plugin;

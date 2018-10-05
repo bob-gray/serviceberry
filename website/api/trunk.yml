@@ -80,7 +80,7 @@ methods:
 
 - name: start
   description: |
-    Begin listening for requets. If trunk was created with option `autoStart`,
+    Begin listening for requets. If the trunk was created with the option `autoStart`,
     `start` is called automatically.
   arguments:
   - name: callback
@@ -90,7 +90,7 @@ methods:
 - name: waitFor
   returns: this branch
   description: |
-    A hook for asynchronous setup task. The service won't be started until all
+    A hook for asynchronous setup tasks. The service won't be started until all
     asynchronous setup is complete.
   arguments:
   - name: setup

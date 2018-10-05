@@ -33,7 +33,7 @@ Returns *this trunk*
 
 Adds a plugin [handler](handlers.html) to this trunk.
 
-  - **handler** *function or object* 
+  - **handler** *function or object*
 
 
 ### catch(handler)
@@ -42,7 +42,7 @@ Returns *this trunk*
 
 Adds an error [handler](handlers.html) to this trunk.
 
-  - **handler** *function or object* 
+  - **handler** *function or object*
 
 
 ### at(path)
@@ -59,7 +59,7 @@ The branch will parse the path parameters. They are available to all handlers th
 [getPathParam](request.html#getpathparamname).
 
 
-  - **path** *string* 
+  - **path** *string*
 
 
 ### on(options[, handler])
@@ -68,31 +68,31 @@ Returns *new [leaf](leaf.html)*
 
 Routes requests filtered by options to a new [leaf](leaf.html).
 
-  - **options** *object* 
+  - **options** *object*
     - **method** *string or array* [optional]
-  
-      HTTP method(s) to handle (`GET`, `POST`...). If not specified or is `*`, all methods are handled. 
-  
+
+      HTTP method(s) to handle (`GET`, `POST`...). If not specified or is `*`, all methods are handled.
+
     - **consumes** *string or array* [optional]
-  
-      Request content type(s) to handle (application/json, text/xml...). If not specified all request content types are handled. 
-  
+
+      Request content type(s) to handle (application/json, text/xml...). If not specified all request content types are handled.
+
     - **produces** *string or array* [optional]
-  
-      Response content type(s) to handle (application/json, text/xml...). If not specified all response content types are handled. 
-  
-    - **serializers** *object* 
-  
-      Property names must be content types (such as `application/json`) and values must be [serializer](plugins.html#serializers-and-deserializers) plugins. 
-  
-    - **deserializers** *object* 
-  
-      Property names must be content types (such as `application/json`) and values must be [deserializer](plugins.html#serializers-and-deserializers) plugins. 
-  
+
+      Response content type(s) to handle (application/json, text/xml...). If not specified all response content types are handled.
+
+    - **serializers** *object*
+
+      Property names must be content types (such as `application/json`) and values must be [serializer](plugins.html#serializers-and-deserializers) plugins.
+
+    - **deserializers** *object*
+
+      Property names must be content types (such as `application/json`) and values must be [deserializer](plugins.html#serializers-and-deserializers) plugins.
+
 
   - **handler** *function or object* [optional]
 
-    See [Handlers](handlers.html) guide. 
+    See [Handlers](handlers.html) guide.
 
 
 ### on(method[, handler])
@@ -101,21 +101,21 @@ Returns *new [leaf](leaf.html)*
 
 Routes requests filtered by method to a new [leaf](leaf.html).
 
-  - **method** *string or array* 
+  - **method** *string or array*
 
     HTTP method(s) to handle (`GET`, `POST`...). If `*`, all methods are handled.
- 
+
 
   - **handler** *function or object* [optional]
 
-    See [Handlers](handlers.html) guide. 
+    See [Handlers](handlers.html) guide.
 
 
 ### start([callback])
 
 
 
-Begin listening for requets. If trunk was created with option `autoStart`,
+Begin listening for requests. If trunk was created with option `autoStart`,
 `start` is called automatically.
 
 
@@ -130,7 +130,4 @@ A hook for asynchronous setup task. The service won't be started until all
 asynchronous setup is complete.
 
 
-  - **setup** *promise* 
-
-
-
+  - **setup** *promise*

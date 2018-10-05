@@ -8,8 +8,9 @@ interact with service requests do so through a common handler API. This means yo
 plugins, error handlers, serializers and deserializers are all created in the same way.
 This makes creating services and plugins easier.
 
-A handler can be a [function](#handler-functions) or an [object](#handler-objects). Handler objects
-can be any object with a `use` method that is a handler function.
+A handler can be a [function](#handler-functions) or an [object](#handler-objects)
+or a [promise](#handler-promise) that resolves to a handler [function](#handler-functions) or [object](#handler-objects).
+Handler objects can be any object with a `use` method that is a handler function.
 
 Handler Functions
 -----------------
@@ -72,5 +73,13 @@ Handler Objects
 
 Everywhere a handler is accepted as an argument, an object can be used. It can be any object that has a `use`
 method that is a handler function. When Serviceberry is passed a handler object it binds the object's `use` method to the object so that handlers can be stateful. This can be particularly useful for plugins.
+
+Handler Promises
+----------------
+
+Everywhere a handler is accepted as a argument, a promise can be used. The promise
+must resolve to a handler [function](#handler-function) or handler [object](#handler-promises).
+The service [trunk](trunk.html) will wait until all handlers are resolved before
+starting.
 
 To learn about using and creating [plugins](plugins.html), checkout the next guide.

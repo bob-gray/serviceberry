@@ -27,7 +27,7 @@ class Leaf extends Base {
 	}
 
 	waitFor (setup) {
-		this.waiting.push(setup);
+		this.node.waiting.push(setup);
 
 		return this;
 	}

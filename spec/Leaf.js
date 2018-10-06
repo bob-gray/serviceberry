@@ -89,4 +89,24 @@ describe("Leaf", () => {
 
 		expect(thrown.message).toBe("handler must be a function or an object with a `use` method");
 	});
+
+	it("should add promises that the leaf node waits for", async () => {
+		var {resolve, reject, promise} = createPromise();
+
+		leaf.waitFor(promise);
+
+		expect(leaf.node.waiting.length).toBe(1);
+		expect(leaf.node.waiting.pop()).toBe(promise);
+	});
 });
+
+function createPromise () {
+	var resolve,
+		reject,
+		promise = new Promise((yea, nay) => {
+			resolve = yea;
+			reject = nay;
+		});
+
+	return {resolve, reject, promise};
+}

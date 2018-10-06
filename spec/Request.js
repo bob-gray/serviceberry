@@ -16,7 +16,11 @@ describe("Request (GET)", () => {
 			url: "/path/to/items/105?awesome=yes",
 			headers: {
 				Accept: "application/json",
-			}
+				Host: "www.example.com"
+			},
+			ip: "192.168.0.1",
+			port: 80,
+			protocol: "https"
 		};
 
 		request = createRequest(options);
@@ -83,6 +87,30 @@ describe("Request (GET)", () => {
 	it("should return query param from getParam()", () => {
 		expect(request.getParam("awesome")).toBe(queryParams.awesome);
 	});
+
+	it("should return undefined from getParam()", () => {
+		expect(request.getParam("not a param")).toBe(undefined);
+	});
+
+	it("should return host from getHost()", () => {
+		expect(request.getHost()).toBe(options.headers.Host);
+	});
+
+	it("should return ip from getIp()", () => {
+		expect(request.getIp()).toBe(options.ip);
+	});
+
+	it("should return protocol from getProtocol()", () => {
+		expect(request.getProtocol()).toBe(options.protocol);
+	});
+
+	it("should return port from getPort()", () => {
+		expect(request.getPort()).toBe(options.port);
+	});
+
+	it("should return full url from getFullUrl()", () => {
+		expect(request.getFullUrl()).toBe("https://www.example.com/path/to/items/105?awesome=yes");
+	});
 });
 
 describe("Request (POST)", () => {
@@ -97,11 +125,15 @@ describe("Request (POST)", () => {
 			url: "/path/to/items/105/things",
 			headers: {
 				"Content-Type": "application/json; charset=utf-8",
+				"X-Forwarded-Proto": "https"
 			},
 			body: {
 				foo: "baz",
 				total: 5
-			}
+			},
+			ip: "192.168.0.1",
+			port: 80,
+			protocol: "http"
 		};
 
 		request = createRequest(options);
@@ -145,21 +177,58 @@ describe("Request (POST)", () => {
 		expect(request.getParam("foo")).toBe("baz");
 	});
 
+	it("should get body param - case insensitive", () => {
+		request.setBody(options.body);
+
+		expect(request.getParam("FOO")).toBe("baz");
+	});
+
+	it("should get body param from getBodyParam()", () => {
+		request.setBody(options.body);
+
+		expect(request.getBodyParam("foo")).toBe("baz");
+	});
+
+	it("should get body param - case insensitive", () => {
+		request.setBody(options.body);
+
+		expect(request.getBodyParam("FOO")).toBe("baz");
+	});
+
+	it("should return undefined from getBodyParam()", () => {
+		request.setBody(options.body);
+
+		expect(request.getBodyParam("not a param")).toBe(undefined);
+	});
+
 	it("should set param name as body if body is not an object", () => {
 		request = createRequest();
 		request.setBody([1,2,3]);
 
 		expect(request.getParam("body")).toEqual([1,2,3]);
 	});
+
+	it("should return protocol from getProtocol()", () => {
+		expect(request.getProtocol()).toBe(options.headers["X-Forwarded-Proto"]);
+	});
 });
 
-function createRequest (options) {
+function createRequest (options = {}) {
 	const incomingMessage = httpMocks.createRequest({
 		url: "/",
 		...options
 	});
 
-	incomingMessage.setEncoding = Function.prototype;
+	Object.assign(incomingMessage, {
+		setEncoding: Function.prototype,
+		socket: {
+			remoteAddress: options.ip,
+			localPort: options.port
+		},
+		connection: {
+			encrypted: options.protocol === "https"
+		}
+	});
 
 	return new Request(incomingMessage);
 }

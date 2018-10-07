@@ -125,12 +125,13 @@ class Request extends EventEmitter {
 
 	getBodyParam (name) {
 		var param,
-			lower = name.toLowerCase();
+			lower = name.toLowerCase(),
+			body = this.body || {};
 
-		if (name in this.body) {
-			param = this.body[name];
-		} else if (lower in this.body) {
-			param = this.body[lower];
+		if (name in body) {
+			param = body[name];
+		} else if (lower in body) {
+			param = body[lower];
 		}
 
 		return param;

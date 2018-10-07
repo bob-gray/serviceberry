@@ -22,6 +22,10 @@ class Serializer extends Base {
 			serialized = response.getBody();
 		}
 
+		if (typeof serialized === "undefined") {
+			serialized = "";
+		}
+
 		return serialized;
 	}
 }

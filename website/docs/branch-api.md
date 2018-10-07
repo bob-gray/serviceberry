@@ -111,7 +111,7 @@ Routes requests filtered by method to a new [leaf](leaf.html).
 
 Returns *this branch*
 
-A hook for asynchronous setup task. The service won't be started until all
+A hook for asynchronous setup tasks. The service won't be started until all
 asynchronous setup is complete.
 
 

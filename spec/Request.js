@@ -196,8 +196,6 @@ describe("Request (POST)", () => {
 	});
 
 	it("should return undefined from getBodyParam()", () => {
-		request.setBody(options.body);
-
 		expect(request.getBodyParam("not a param")).toBe(undefined);
 	});
 

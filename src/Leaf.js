@@ -14,20 +14,20 @@ class Leaf extends Base {
 		this.node = new LeafNode(options);
 	}
 
-	use (handler) {
-		this.node.handlers.push(handler);
+	use (...handlers) {
+		this.node.handlers.push(...handlers);
 
 		return this;
 	}
 
-	catch (handler) {
-		this.node.catches.push(handler);
+	catch (...handlers) {
+		this.node.catches.push(...handlers);
 
 		return this;
 	}
 
-	waitFor (setup) {
-		this.node.waiting.push(setup);
+	waitFor (...setup) {
+		this.node.waiting.push(...setup);
 
 		return this;
 	}

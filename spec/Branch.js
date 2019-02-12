@@ -31,7 +31,7 @@ describe("Branch", () => {
 	});
 
 	it("should create a new leaf with on(method)", () => {
-		const leaf = branch.on("OPTIONS", jasmine.createSpy());
+		const leaf = branch.on("OPTIONS");
 
 		expect(leaf instanceof Leaf).toBe(true);
 		expect(branch.node.leaves.length).toBe(1);

@@ -8,24 +8,27 @@ class Branch extends Leaf {
 		this.node = new BranchNode(options);
 	}
 
-	at (path) {
+	at (path, ...handlers) {
 		const branch = new Branch({path});
 
 		this.node.branches.push(branch.node);
+		branch.use(...handlers);
 
 		return branch;
 	}
 
-	on (options, handler) {
-		const leaf = createLeaf(options);
+	on (options, ...handlers) {
+		const leaf = createLeaf(options),
+			result = leaf;
 
 		this.node.leaves.push(leaf.node);
+		leaf.use(...handlers);
 
-		if (handler) {
-			leaf.use(handler);
+		if (handlers.length) {
+			result = this;
 		}
 
-		return leaf;
+		return result;
 	}
 }
 

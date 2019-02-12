@@ -44,21 +44,21 @@ class Trunk extends Branch {
 		}
 	}
 
-	use (handler) {
+	use (...handlers) {
 		if (this === this.root) {
-			super.use(handler);
+			super.use(...handlers);
 		} else {
-			this.root.use(handler);
+			this.root.use(...handlers);
 		}
 
 		return this;
 	}
 
-	catch (handler) {
+	catch (...handlers) {
 		if (this === this.root) {
-			super.catch(handler);
+			super.catch(...handlers);
 		} else {
-			this.root.catch(handler);
+			this.root.catch(...handlers);
 		}
 
 		return this;

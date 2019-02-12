@@ -18,14 +18,14 @@ class Branch extends Leaf {
 	}
 
 	on (options, ...handlers) {
-		const leaf = createLeaf(options),
-			result = leaf;
+		var result = this;
+		const leaf = createLeaf(options);
 
 		this.node.leaves.push(leaf.node);
 		leaf.use(...handlers);
 
-		if (handlers.length) {
-			result = this;
+		if (!handlers.length) {
+			result = leaf;
 		}
 
 		return result;

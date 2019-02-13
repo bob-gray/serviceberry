@@ -60,6 +60,11 @@ module.exports = {
 	},
 
 	setStatusCode (code) {
+		if (isNaN(code)) {
+			throw new Error(`${this.constructor.name} status code cannot be ` +
+				`set to "${code}". Status code must be a number.`);
+		}
+
 		this.status.code = Number(code);
 	},
 

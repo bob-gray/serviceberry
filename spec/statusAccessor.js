@@ -32,6 +32,12 @@ describe("statusAccessor", () => {
 		expect(accessor.getStatusCode()).toBe(201);
 	});
 
+	it("should throw if status code is not a number", () => {
+		const error = () => accessor.setStatusCode("foo");
+
+		expect(error).toThrow();
+	});
+
 	it("should set status text", () => {
 		accessor.setStatusText("Not Found");
 		expect(accessor.getStatusText()).toBe("Not Found");
@@ -70,6 +76,12 @@ describe("statusAccessor", () => {
 
 		accessor.setStatus(status.text);
 		expect(accessor.getStatus()).toEqual(status);
+	});
+
+	it("should throw if setting status by unknown text", () => {
+		const error = () => accessor.setStatus("foo");
+
+		expect(error).toThrow();
 	});
 
 	it("should test status with code", () => {

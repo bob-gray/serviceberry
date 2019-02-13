@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const Response = require("../src/Response"),
@@ -55,7 +57,7 @@ describe("Response", () => {
 		expect(response.getEncoding()).toBe("ascii");
 	});
 
-	it ("should set status", () => {
+	it("should set status", () => {
 		const status = 204;
 
 		response.set({status});
@@ -63,7 +65,7 @@ describe("Response", () => {
 		expect(response.is(status)).toBe(true);
 	});
 
-	it ("should set headers", () => {
+	it("should set headers", () => {
 		const headers = {
 			"Content-Type": "text/xml"
 		};
@@ -73,7 +75,7 @@ describe("Response", () => {
 		expect(response.getHeaders()).toEqual(headers);
 	});
 
-	it ("should set encoding", () => {
+	it("should set encoding", () => {
 		const encoding = "base64";
 
 		response.set({encoding});
@@ -81,7 +83,7 @@ describe("Response", () => {
 		expect(response.getEncoding()).toBe(encoding);
 	});
 
-	it ("should set body", () => {
+	it("should set body", () => {
 		const body = {
 			awesome: true
 		};
@@ -103,7 +105,7 @@ describe("Response", () => {
 	});
 });
 
-function createResponse (options) {
+function createResponse () {
 	const serverResponse = new EventEmitter();
 
 	return new Response(serverResponse);

@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const Serializer = require("../src/Serializer");
@@ -17,6 +19,7 @@ describe("Serializer", () => {
 
 		json = {
 			type: "application/json",
+			// eslint-disable-next-line quotes
 			result: '{"Hello":"Test!"}'
 		};
 
@@ -51,9 +54,9 @@ describe("Serializer", () => {
 	it("should call result in raw content when no handler exists", async () => {
 		const csv = {
 				type: "text/csv",
+				// eslint-disable-next-line quotes
 				result: '"Hello","World!"'
 			},
-			serializer = new Serializer(),
 			request = {},
 			response = createResponse(csv),
 			result = serializer.serialize(request, response);

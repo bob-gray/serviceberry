@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const Leaf = require("../src/Leaf");
@@ -91,7 +93,7 @@ describe("Leaf", () => {
 	});
 
 	it("should add promises that the leaf node waits for", async () => {
-		var {resolve, reject, promise} = createPromise();
+		var {promise} = createPromise();
 
 		leaf.waitFor(promise);
 

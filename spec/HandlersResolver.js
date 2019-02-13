@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const HandlersResolver = require("../src/HandlersResolver");
@@ -27,6 +29,7 @@ describe("HandlersResolver", () => {
 		resolver.resolved.then(spy);
 
 		setTimeout(() => {
+			// eslint-disable-next-line max-nested-callbacks
 			handlers.forEach(handler => handler.resolve(Function.prototype));
 			expect(spy).not.toHaveBeenCalled();
 		}, 50);
@@ -59,6 +62,7 @@ describe("HandlersResolver", () => {
 
 		setImmediate(() => {
 			resolver.handlers.concat(resolver.catches)
+				// eslint-disable-next-line max-nested-callbacks
 				.forEach(handler => expect(handler).toBe(Function.prototype));
 			done();
 		});
@@ -74,6 +78,7 @@ describe("HandlersResolver", () => {
 		setImmediate(() => {
 			const all = resolver.handlers.concat(resolver.catches);
 
+			// eslint-disable-next-line max-nested-callbacks
 			all.forEach(handler => handler());
 			expect(spy.use).toHaveBeenCalledTimes(all.length);
 

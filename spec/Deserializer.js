@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const Deserializer = require("../src/Deserializer"),
@@ -17,6 +19,7 @@ describe("Deserializer", () => {
 
 		json = {
 			type: "application/json",
+			// eslint-disable-next-line quotes
 			string: '{"Hello":"Test!"}',
 			handler: jasmine.createSpy("json handler")
 		};
@@ -54,12 +57,13 @@ describe("Deserializer", () => {
 	it("should call result in raw content when no handler exists", async () => {
 		const csv = {
 				type: "text/csv",
+				// eslint-disable-next-line quotes
 				string: '"Hello","World!"'
 			},
-			deserializer = new Deserializer(),
 			request = createRequest(csv),
-			response = {},
-			result = csv.string;
+			response = {};
+
+		deserializer = new Deserializer();
 
 		await deserializer.deserialize(request, response);
 

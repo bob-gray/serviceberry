@@ -1,8 +1,10 @@
-const SpecReporter = require('jasmine-spec-reporter').SpecReporter;
+"use strict";
+
+const SpecReporter = require("jasmine-spec-reporter").SpecReporter;
 
 jasmine.getEnv().clearReporters();
 jasmine.getEnv().addReporter(new SpecReporter({
-  spec: {
-    displayPending: true
-  }
+	spec: {
+		displayPending: true
+	}
 }));

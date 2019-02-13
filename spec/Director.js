@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const Director = require("../src/Director"),
@@ -5,7 +7,7 @@ const Director = require("../src/Director"),
 	Response = require("../src/Response"),
 	Route = require("../src/Route"),
 	httpMocks = require("node-mocks-http"),
-	EventEmitter = require('events');
+	EventEmitter = require("events");
 
 describe("Director", () => {
 	var request,
@@ -16,7 +18,7 @@ describe("Director", () => {
 	beforeEach(() => {
 		request = createRequest();
 		response = createResponse();
-		director = new Director(request, response),
+		director = new Director(request, response);
 		route = createRoute(request, response);
 	});
 
@@ -34,8 +36,8 @@ describe("Director", () => {
 				Function.prototype
 			],
 			catches: [
-				request => {
-					expect(request.error.is("Service Unavailable")).toBe(true);
+				req => {
+					expect(req.error.is("Service Unavailable")).toBe(true);
 					done();
 				}
 			]
@@ -57,13 +59,13 @@ describe("Director", () => {
 
 		route = createRoute(request, response, {
 			handlers: [
-				request => request.getBody()
+				req => req.getBody()
 			],
 			catches: [
-				request => {
-					expect(request.error).toBeDefined();
+				req => {
+					expect(req.error).toBeDefined();
 					// TODO: figure out why this is ok on my machine but fails on CircleCI
-					//expect(request.error.is("Bad Request")).toBe(true);
+					// expect(request.error.is("Bad Request")).toBe(true);
 					done();
 				}
 			]
@@ -83,7 +85,7 @@ describe("Director", () => {
 
 		route = createRoute(request, response, {
 			handlers: [
-				request => responseContent
+				() => responseContent
 			],
 			catches: []
 		});
@@ -102,7 +104,7 @@ describe("Director", () => {
 
 		route = createRoute(request, response, {
 			handlers: [
-				request => responseContent
+				() => responseContent
 			],
 			catches: []
 		});
@@ -123,7 +125,7 @@ describe("Director", () => {
 
 		route = createRoute(request, response, {
 			handlers: [
-				request => responseContent
+				() => responseContent
 			],
 			catches: []
 		});
@@ -143,7 +145,7 @@ describe("Director", () => {
 
 		route = createRoute(request, response, {
 			handlers: [
-				request => request.fail("Who are you", "Unauthorized")
+				req => req.fail("Who are you", "Unauthorized")
 			],
 			catches: []
 		});
@@ -161,7 +163,7 @@ describe("Director", () => {
 
 		route = createRoute(request, response, {
 			handlers: [
-				(request, response) => response.send()
+				(req, res) => res.send()
 			],
 			catches: []
 		});
@@ -178,7 +180,7 @@ function createRequest (options = {}) {
 
 	incomingMessage.setEncoding = Function.prototype;
 
-	setImmediate(emitRequestContent, incomingMessage, options.content)
+	setImmediate(emitRequestContent, incomingMessage, options.content);
 
 	return new Request(incomingMessage);
 }
@@ -188,7 +190,7 @@ function emitRequestContent (incomingMessage, content) {
 	incomingMessage.emit("end");
 }
 
-function createResponse (hasContentType) {
+function createResponse () {
 	const serverResponse = httpMocks.createResponse({
 		eventEmitter: EventEmitter
 	});

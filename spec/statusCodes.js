@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const {statusCodes} = require("../src/main");
@@ -15,6 +17,7 @@ describe("statusCodes", () => {
 	});
 
 	it("should have status codes at upper case status text", () => {
+		/* eslint-disable dot-notation */
 		expect(statusCodes["CREATED"]).toBe(201);
 		expect(statusCodes["ACCEPTED"]).toBe(202);
 		expect(statusCodes["FOUND"]).toBe(302);

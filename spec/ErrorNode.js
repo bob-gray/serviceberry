@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const ErrorNode = require("../src/ErrorNode"),
@@ -34,8 +36,7 @@ describe("ErrorNode", () => {
 	});
 
 	it("should throw a 406 HttpError", () => {
-		const text = "Not Acceptable",
-			headers = {
+		const headers = {
 				"Content-Type": "text/plain; charset=utf-8"
 			},
 			errorNode = new ErrorNode("Not Acceptable", headers),
@@ -77,6 +78,7 @@ function createRequest (options) {
 function run (errorNode, request) {
 	return () => {
 		const handler = errorNode.handlers.pop();
+
 		handler(request);
 	};
 }
@@ -85,6 +87,6 @@ function thrown (text, headers = {}) {
 	return error => {
 		expect(error.getHeaders()).toEqual(headers);
 
-		return error instanceof HttpError && error.is(text)
+		return error instanceof HttpError && error.is(text);
 	};
 }

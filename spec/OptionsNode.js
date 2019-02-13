@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const OptionsNode = require("../src/OptionsNode");
@@ -20,13 +22,14 @@ describe("OptionsNode", () => {
 
 function run (optionsNode, request, response) {
 	const handler = optionsNode.handlers.pop();
+
 	handler(request, response);
 }
 
 function createRequest (allowed) {
 	return {
 		getAllowedMethods () {
-			return allowed
+			return allowed;
 		}
 	};
 }

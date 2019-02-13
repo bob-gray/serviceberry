@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const Request = require("../src/Request"),
@@ -115,9 +117,7 @@ describe("Request (GET)", () => {
 
 describe("Request (POST)", () => {
 	var options,
-		request,
-		pathParams,
-		queryParams;
+		request;
 
 	beforeEach(() => {
 		options = {
@@ -201,9 +201,9 @@ describe("Request (POST)", () => {
 
 	it("should set param name as body if body is not an object", () => {
 		request = createRequest();
-		request.setBody([1,2,3]);
+		request.setBody([1, 2, 3]);
 
-		expect(request.getParam("body")).toEqual([1,2,3]);
+		expect(request.getParam("body")).toEqual([1, 2, 3]);
 	});
 
 	it("should return protocol from getProtocol()", () => {

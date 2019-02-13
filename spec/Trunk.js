@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const mock = require("mock-require"),
@@ -32,6 +34,7 @@ MockRoute.and.returnValue(mockRoute);
 mock("../src/Route", MockRoute);
 mock.reRequire("../src/Route");
 
+// eslint-disable-next-line one-var
 const Trunk = mock.reRequire("../src/Trunk");
 
 describe("Trunk", () => {
@@ -48,7 +51,6 @@ describe("Trunk", () => {
 
 	it("should run respond", (done) => {
 		trunk.server.on("listening", () => trunk.server.emit("request"));
-		//trunk.server.on("request", respond.bind(null, trunk, done));
 		setTimeout(respond, 500, trunk, done);
 	});
 

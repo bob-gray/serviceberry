@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const BranchNode = require("../src/BranchNode"),
@@ -31,11 +33,12 @@ describe("BranchNode", () => {
 
 	it("should test true if path has a leading slash", () => {
 		const request = createRequest({
-				url: "/bob"
-			}),
-			branchNode = new BranchNode({
-				path: "/{name}"
-			});
+			url: "/bob"
+		});
+
+		branchNode = new BranchNode({
+			path: "/{name}"
+		});
 
 		expect(branchNode.test(request)).toBe(true);
 	});

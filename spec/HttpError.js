@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const {HttpError} = require("../src/main");
@@ -7,7 +9,7 @@ describe("HttpError", () => {
 
 	beforeEach(() => {
 		httpError = new HttpError("Boom!", "I'm a teapot", {
-			Warning: '112 - "cache down"'
+			Warning: "112 - \"cache down\""
 		});
 	});
 
@@ -23,7 +25,7 @@ describe("HttpError", () => {
 	});
 
 	it("should return header value from getHeader()", () => {
-		expect(httpError.getHeader("Warning")).toBe('112 - "cache down"');
+		expect(httpError.getHeader("Warning")).toBe("112 - \"cache down\"");
 	});
 
 	it("should have a default status of 500", () => {
@@ -39,15 +41,17 @@ describe("HttpError", () => {
 	});
 
 	it("should accept an error object which is assigned to originalError property", () => {
-		var error = new Error("Oh snap!"),
-			httpError = new HttpError(error);
+		var error = new Error("Oh snap!");
+
+		httpError = new HttpError(error);
 
 		expect(httpError.originalError).toBe(error);
 	});
 
 	it("should get message from originalError", () => {
-		var error = new Error("Oh snap!"),
-			httpError = new HttpError(error);
+		var error = new Error("Oh snap!");
+
+		httpError = new HttpError(error);
 
 		expect(httpError.getMessage()).toBe("Oh snap!");
 	});

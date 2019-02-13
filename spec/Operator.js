@@ -1,4 +1,4 @@
-/* eslint-env jasmine */
+/* eslint max-nested-callbacks: ["error", 3] */
 
 "use strict";
 
@@ -52,7 +52,7 @@ describe("Operator", () => {
 
 	it("should return a rejected promise from call when handler throws an error", () => {
 		var handler = () => {
-			throw new Error("Oh Snap!")
+			throw new Error("Oh Snap!");
 		};
 
 		return operator.call(handler).catch((error) => expect(error.message).toBe("Oh Snap!"));

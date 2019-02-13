@@ -1,3 +1,5 @@
+/* eslint max-nested-callbacks: ["error", 3] */
+
 "use strict";
 
 const ChildrenResolver = require("../src/ChildrenResolver");
@@ -27,6 +29,7 @@ describe("ChildrenResolver", () => {
 		resolver.resolved.then(spy);
 
 		setTimeout(() => {
+			// eslint-disable-next-line max-nested-callbacks
 			leaves.forEach(leaf => leaf.resolve());
 			expect(spy).not.toHaveBeenCalled();
 		}, 50);

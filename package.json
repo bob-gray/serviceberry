@@ -11,12 +11,12 @@
     "test": "spec"
   },
   "scripts": {
-    "build": "npm run lint && npm run test-coverage",
+    "build": "npm run lint && npm run test:coverage",
     "lint": "npm run lint:src && npm run lint:spec",
     "lint:src": "eslint src",
     "lint:spec": "eslint --env jasmine spec",
     "test": "jasmine",
-    "test-coverage": "nyc --include=src/**/*.js --all --reporter=lcov --reporter=text npm test"
+    "test:coverage": "nyc --include=src/**/*.js --all --reporter=lcov --reporter=text npm test"
   },
   "homepage": "https://serviceberry.js.org",
   "repository": {

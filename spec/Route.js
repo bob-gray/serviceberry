@@ -14,7 +14,7 @@ describe("Route", () => {
 
 		Object.assign(root, {
 			handlers: [3],
-			catches: [1, 2],
+			coping: [1, 2],
 			options: {
 				root: true
 			}
@@ -22,7 +22,7 @@ describe("Route", () => {
 
 		child = Object.assign(jasmine.createSpyObj("child", ["transition", "chooseNext"]), {
 			handlers: [5, 6],
-			catches: [4],
+			coping: [4],
 			options: {
 				child: true
 			}
@@ -48,40 +48,40 @@ describe("Route", () => {
 		expect(route.getNextHandler()).toBeUndefined();
 	});
 
-	it("should not return catches from getNextFailHandler() before moving to child handlers", () => {
-		route.getNextFailHandler();
-		route.getNextFailHandler();
+	it("should not return coping from getNextCoping() before moving to child handlers", () => {
+		route.getNextCoping();
+		route.getNextCoping();
 
-		expect(route.getNextFailHandler()).toBeUndefined();
+		expect(route.getNextCoping()).toBeUndefined();
 	});
 
-	it("should return one fail handler at a time in reverse sequence from getNextFailHandler()", () => {
+	it("should return one fail handler at a time in reverse sequence from getNextCoping()", () => {
 		route.getNextHandler();
 		route.getNextHandler();
 		route.getNextHandler();
 
-		expect(route.getNextFailHandler()).toBe(4);
-		expect(route.getNextFailHandler()).toBe(2);
+		expect(route.getNextCoping()).toBe(4);
+		expect(route.getNextCoping()).toBe(2);
 	});
 
-	it("should return undefined from getNextFailHandler() when fail handler queue is empty", () => {
+	it("should return undefined from getNextCoping() when fail handler queue is empty", () => {
 		route.getNextHandler();
 		route.getNextHandler();
 		route.getNextHandler();
-		route.getNextFailHandler();
-		route.getNextFailHandler();
-		route.getNextFailHandler();
+		route.getNextCoping();
+		route.getNextCoping();
+		route.getNextCoping();
 
-		expect(route.getNextFailHandler()).toBeUndefined();
+		expect(route.getNextCoping()).toBeUndefined();
 	});
 
-	it("should requeue catches if getNextHandler() is called", () => {
+	it("should requeue coping handlers if getNextHandler() is called", () => {
 		route.getNextHandler();
 		route.getNextHandler();
-		route.getNextFailHandler();
+		route.getNextCoping();
 		route.getNextHandler();
 
-		expect(route.getNextFailHandler()).toBe(4);
+		expect(route.getNextCoping()).toBe(4);
 	});
 
 	it("should transition node when ploting route", () => {

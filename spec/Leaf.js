@@ -51,30 +51,30 @@ describe("Leaf", () => {
 		expect(handler.use).toHaveBeenCalled();
 	});
 
-	it("should add catch function", async () => {
+	it("should add coping handler function", async () => {
 		const handler = jasmine.createSpy("handler function");
 
-		leaf.catch(handler);
+		leaf.cope(handler);
 
 		await leaf.node.resolved;
 
-		leaf.node.catches[0]();
+		leaf.node.coping[0]();
 
-		expect(leaf.node.catches.length).toBe(1);
-		expect(leaf.node.catches.pop()).toBe(handler);
+		expect(leaf.node.coping.length).toBe(1);
+		expect(leaf.node.coping.pop()).toBe(handler);
 		expect(handler).toHaveBeenCalled();
 	});
 
-	it("should add catch object", async () => {
+	it("should add coping handler object", async () => {
 		const handler = jasmine.createSpyObj("handler object", ["use"]);
 
-		leaf.catch(handler);
+		leaf.cope(handler);
 
 		await leaf.node.resolved;
 
-		leaf.node.catches[0]();
+		leaf.node.coping[0]();
 
-		expect(leaf.node.catches.length).toBe(1);
+		expect(leaf.node.coping.length).toBe(1);
 		expect(handler.use).toHaveBeenCalled();
 	});
 

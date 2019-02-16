@@ -8,7 +8,7 @@ describe("HttpError", () => {
 	var httpError;
 
 	beforeEach(() => {
-		httpError = new HttpError("Boom!", "I'm a teapot", {
+		httpError = new HttpError("Boom!", "I'm a Teapot", {
 			Warning: "112 - \"cache down\""
 		});
 	});
@@ -20,7 +20,7 @@ describe("HttpError", () => {
 	it("should return message from getStatus()", () => {
 		expect(httpError.getStatus()).toEqual({
 			code: 418,
-			text: "I'm a teapot"
+			text: "I'm a Teapot"
 		});
 	});
 

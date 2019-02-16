@@ -46,7 +46,7 @@ function proceed () {
 }
 
 function fail (error) {
-	const handler = this.route.getNextFailHandler();
+	const handler = this.route.getNextCoping();
 
 	error = new HttpError(...arguments);
 	this.request.error = error;

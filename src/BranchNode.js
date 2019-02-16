@@ -18,7 +18,7 @@ class BranchNode extends ChildrenResolver {
 			branches: [],
 			leaves: [],
 			handlers: [],
-			catches: [],
+			coping: [],
 			waiting: []
 		});
 

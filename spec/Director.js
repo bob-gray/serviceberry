@@ -35,7 +35,7 @@ describe("Director", () => {
 			handlers: [
 				Function.prototype
 			],
-			catches: [
+			coping: [
 				req => {
 					expect(req.error.is("Service Unavailable")).toBe(true);
 					done();
@@ -61,7 +61,7 @@ describe("Director", () => {
 			handlers: [
 				req => req.getBody()
 			],
-			catches: [
+			coping: [
 				req => {
 					expect(req.error).toBeDefined();
 					// TODO: figure out why this is ok on my machine but fails on CircleCI
@@ -87,7 +87,7 @@ describe("Director", () => {
 			handlers: [
 				() => responseContent
 			],
-			catches: []
+			coping: []
 		});
 
 		director.run(route);
@@ -106,7 +106,7 @@ describe("Director", () => {
 			handlers: [
 				() => responseContent
 			],
-			catches: []
+			coping: []
 		});
 
 		director.run(route);
@@ -127,13 +127,13 @@ describe("Director", () => {
 			handlers: [
 				() => responseContent
 			],
-			catches: []
+			coping: []
 		});
 
 		director.run(route);
 	});
 
-	it("should response with error when there are no catch handlers", (done) => {
+	it("should response with error when there are no coping handlers", (done) => {
 		const serverResponse = response.serverResponse;
 
 		serverResponse.on("end", () => {
@@ -147,7 +147,7 @@ describe("Director", () => {
 			handlers: [
 				req => req.fail("Who are you", "Unauthorized")
 			],
-			catches: []
+			coping: []
 		});
 
 		director.run(route);
@@ -165,7 +165,7 @@ describe("Director", () => {
 			handlers: [
 				(req, res) => res.send()
 			],
-			catches: []
+			coping: []
 		});
 
 		director.run(route);
@@ -210,7 +210,7 @@ function createRoute (request, response, rootOptions = getDefaultRootOptions()) 
 function getDefaultRootOptions () {
 	return {
 		handlers: [],
-		catches: [],
+		coping: [],
 		options: {}
 	};
 }

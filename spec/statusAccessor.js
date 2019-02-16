@@ -51,7 +51,7 @@ describe("statusAccessor", () => {
 	it("should set status by code", () => {
 		const status = {
 			code: 418,
-			text: "I'm a teapot"
+			text: "I'm a Teapot"
 		};
 
 		accessor.setStatus(status.code);

@@ -10,8 +10,8 @@ class Route extends Base {
 
 		Object.assign(this, {
 			queue: [],
-			catches: [],
-			caught: [],
+			coping: [],
+			coped: [],
 			options: {}
 		});
 
@@ -19,15 +19,15 @@ class Route extends Base {
 	}
 
 	getNextHandler () {
-		this.invoke(recatch);
+		this.invoke(resetCoping);
 
 		return this.invoke(getNext);
 	}
 
-	getNextFailHandler () {
-		var handler = this.catches.pop();
+	getNextCoping () {
+		var handler = this.coping.pop();
 
-		this.caught.unshift(handler);
+		this.coped.unshift(handler);
 
 		return handler;
 	}
@@ -35,7 +35,7 @@ class Route extends Base {
 
 function plot (node, args) {
 	this.invoke(setOptions, node.options);
-	this.invoke(addCatches, node.catches);
+	this.invoke(addCoping, node.coping);
 	this.invoke(add, node.handlers);
 	node.transition(...args);
 	this.invoke(plotNext, node, args);
@@ -49,17 +49,17 @@ function plotNext (node, args) {
 	}
 }
 
-function recatch () {
-	this.catches = this.catches.concat(this.caught);
-	this.caught.empty();
+function resetCoping () {
+	this.coping = this.coping.concat(this.coped);
+	this.coped.empty();
 }
 
 function add (handlers) {
 	this.queue = this.queue.concat(handlers);
 }
 
-function addCatches (handlers) {
-	this.queue = this.queue.concat(handlers.map(toFailHandlers));
+function addCoping (handlers) {
+	this.queue = this.queue.concat(handlers.map(toCoping));
 }
 
 function setOptions (options) {
@@ -69,17 +69,17 @@ function setOptions (options) {
 function getNext () {
 	var next = this.queue.shift();
 
-	if (next && next.failHandler) {
-		this.catches.push(next.failHandler);
+	if (next && next.coping) {
+		this.coping.push(next.coping);
 		next = this.invoke(getNext);
 	}
 
 	return next;
 }
 
-function toFailHandlers (handler) {
+function toCoping (handler) {
 	return {
-		failHandler: handler
+		coping: handler
 	};
 }
 

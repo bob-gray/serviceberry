@@ -117,10 +117,10 @@ describe("Trunk", () => {
 		expect(trunk.root.node.handlers.length).toBe(1);
 	});
 
-	it("should add a error handler with catch()", () => {
-		trunk.catch(jasmine.createSpy("handler"));
+	it("should add a error handler with cope()", () => {
+		trunk.cope(jasmine.createSpy("handler"));
 
-		expect(trunk.root.node.catches.length).toBe(1);
+		expect(trunk.root.node.coping.length).toBe(1);
 	});
 
 	it("should add a root handler with use()", () => {
@@ -132,13 +132,13 @@ describe("Trunk", () => {
 		expect(trunk.root.node.handlers.length).toBe(1);
 	});
 
-	it("should add a root error handler with catch()", () => {
+	it("should add a root error handler with cope()", () => {
 		trunk = Trunk.create({
 			path: "products"
 		});
-		trunk.catch(jasmine.createSpy("handler"));
+		trunk.cope(jasmine.createSpy("handler"));
 
-		expect(trunk.root.node.catches.length).toBe(1);
+		expect(trunk.root.node.coping.length).toBe(1);
 	});
 });
 

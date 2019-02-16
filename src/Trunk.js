@@ -54,11 +54,11 @@ class Trunk extends Branch {
 		return this;
 	}
 
-	catch (...handlers) {
+	cope (...handlers) {
 		if (this === this.root) {
-			super.catch(...handlers);
+			super.cope(...handlers);
 		} else {
-			this.root.catch(...handlers);
+			this.root.cope(...handlers);
 		}
 
 		return this;

@@ -16,7 +16,7 @@ describe("ChildrenResolver", () => {
 
 		Object.assign(resolver, {
 			handlers: [],
-			catches: [],
+			coping: [],
 			waiting: [],
 			leaves: leaves.map(leaf => leaf.child),
 			branches: branches.map(branch => branch.child)

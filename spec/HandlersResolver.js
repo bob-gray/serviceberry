@@ -7,18 +7,18 @@ const HandlersResolver = require("../src/HandlersResolver");
 describe("HandlersResolver", () => {
 	var resolver,
 		handlers,
-		catches,
+		coping,
 		waiting;
 
 	beforeEach(() => {
 		resolver = new HandlersResolver();
 		handlers = createHandlers();
-		catches = createHandlers();
+		coping = createHandlers();
 		waiting = createHandlers();
 
 		Object.assign(resolver, {
 			handlers: handlers.map(handler => handler.promise),
-			catches: catches.map(handler => handler.promise),
+			coping: coping.map(handler => handler.promise),
 			waiting: waiting.map(handler => handler.promise)
 		});
 	});
@@ -45,7 +45,7 @@ describe("HandlersResolver", () => {
 
 		resolver.resolved.then(spy);
 
-		handlers.concat(catches)
+		handlers.concat(coping)
 			.concat(waiting)
 			.forEach(handler => handler.resolve(Function.prototype));
 
@@ -56,12 +56,12 @@ describe("HandlersResolver", () => {
 	});
 
 	it("should set resolved handler functions", (done) => {
-		handlers.concat(catches)
+		handlers.concat(coping)
 			.concat(waiting)
 			.forEach(handler => handler.resolve(Function.prototype));
 
 		setImmediate(() => {
-			resolver.handlers.concat(resolver.catches)
+			resolver.handlers.concat(resolver.coping)
 				// eslint-disable-next-line max-nested-callbacks
 				.forEach(handler => expect(handler).toBe(Function.prototype));
 			done();
@@ -71,12 +71,12 @@ describe("HandlersResolver", () => {
 	it("should set resolved handler objects", (done) => {
 		const spy = jasmine.createSpyObj("handler", ["use"]);
 
-		handlers.concat(catches)
+		handlers.concat(coping)
 			.concat(waiting)
 			.forEach(handler => handler.resolve(spy));
 
 		setImmediate(() => {
-			const all = resolver.handlers.concat(resolver.catches);
+			const all = resolver.handlers.concat(resolver.coping);
 
 			// eslint-disable-next-line max-nested-callbacks
 			all.forEach(handler => handler());

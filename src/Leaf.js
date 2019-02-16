@@ -20,8 +20,8 @@ class Leaf extends Base {
 		return this;
 	}
 
-	catch (...handlers) {
-		this.node.catches.push(...handlers);
+	cope (...handlers) {
+		this.node.coping.push(...handlers);
 
 		return this;
 	}

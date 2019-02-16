@@ -21,14 +21,11 @@ function nextTick () {
 
 async function resolveHandlers () {
 	var resolve = Promise.resolve.bind(Promise),
-		handlers = this.handlers.map(resolve),
-		catches = this.catches.map(resolve);
-
-	handlers = await Promise.all(handlers);
-	catches = await Promise.all(catches);
+		handlers = await Promise.all(this.handlers.map(resolve)),
+		coping = await Promise.all(this.coping.map(resolve));
 
 	this.handlers = handlers.map(prepareHandler);
-	this.catches = catches.map(prepareHandler);
+	this.coping = coping.map(prepareHandler);
 
 	await Promise.all(this.waiting);
 	this.waiting = null;

@@ -44,24 +44,39 @@ describe("Branch", () => {
 		expect(foo.node.handlers.length).toBe(2);
 	});
 
-	it("should create a new leaf with on(method)", () => {
-		const leaf = branch.on("OPTIONS");
+	it("should create and return a new leaf with leaf(method)", () => {
+		const leaf = branch.leaf("OPTIONS");
 
-		expect(leaf instanceof Leaf).toBe(true);
+		expect(leaf.constructor).toBe(Leaf);
 		expect(branch.node.leaves.length).toBe(1);
 	});
 
-	it("should create a new leaf with on(options)", () => {
-		const leaf = branch.on({
+	it("should create a new leaf with on(method)", () => {
+		branch.on("OPTIONS");
+
+		expect(branch.node.leaves.length).toBe(1);
+	});
+
+	it("should create and return a new leaf with leaf(options)", () => {
+		const leaf = branch.leaf({
 			method: "GET",
 			produces: "application/json"
 		});
 
-		expect(leaf instanceof Leaf).toBe(true);
+		expect(leaf.constructor).toBe(Leaf);
 		expect(branch.node.leaves.length).toBe(1);
 	});
 
-	it("should return branch when handlers are passed to on()", () => {
+	it("should create a new leaf with on(options)", () => {
+		branch.on({
+			method: "GET",
+			produces: "application/json"
+		});
+
+		expect(branch.node.leaves.length).toBe(1);
+	});
+
+	it("should return branch from on()", () => {
 		const result = branch.on("PATCH", jasmine.createSpy("handler"));
 
 		expect(result).toBe(branch);

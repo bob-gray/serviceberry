@@ -9,7 +9,7 @@ const {createTrunk} = require("serviceberry"),
     });
 
 trunk.use(logger())
-    .catch(logger.error);
+    .cope(logger.error);
 
 users(trunk.at("users"));
 lists(trunk.at("{username}"));

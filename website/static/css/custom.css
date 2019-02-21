@@ -55,9 +55,14 @@ body,
 .mainContainer .wrapper p,
 .mainContainer .wrapper ul,
 .mainContainer .wrapper ol {
-
 	padding-top: 0;
     margin: 0.8em 0;
+}
+
+.mainContainer .wrapper hr {
+	border: 1px solid #e3e3e3;
+	border-width: 1px 0 0 0;
+	margin: 1em 0;
 }
 
 .docMainWrapper.wrapper {
@@ -92,7 +97,7 @@ body,
 
 .mainContainer .wrapper .post h3 {
 	font-size: 140%;
-	color: #026e00;
+	color: #049d01;
 }
 
 .mainContainer .wrapper ul ul {
@@ -129,7 +134,7 @@ body,
 }
 
 .docsNavContainer .toc .toggleNav .navGroup.navGroupActive h3 {
-	color: #026e00;
+	color: #049d01;
     background: none;
     font-style: italic;
     font-size: 1.3em;
@@ -145,7 +150,7 @@ nav.toc .toggleNav ul li a {
 }
 
 a {
-	color: #026e00;
+	color: #049d01;
 }
 
 a:hover {
@@ -153,8 +158,8 @@ a:hover {
 }
 
 .button {
-	border-color: #026e00;
-	color: #026e00;
+	border-color: #049d01;
+	color: #049d01;
 	text-transform: none;
 }
 
@@ -171,6 +176,13 @@ a:hover {
 .docs-prevnext {
 	margin-left: -4px;
 	margin-right: -4px;
+}
+
+.optional,
+.default {
+	font-size: 85%;
+	font-style: italic;
+	opacity: 0.6;
 }
 
 footer.nav-footer {

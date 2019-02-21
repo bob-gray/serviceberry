@@ -5,106 +5,131 @@ title: Branch
 
 ### *class*
 
-Created by calling method `.at()` on the service [trunk](trunk.html) or any service branch.
+*Extends [Leaf](leaf.html)*
 
+A branch is created by calling method .at() on the service
+[trunk](trunk.html) or branch.
+
+
+
+
+--------------------------------------------------
+
+  - [at(path[, ...handlers])](#atpath-handlers-)
+  - [cope(...handlers)](#copehandlers)
+  - [on(options[, ...handlers])](#onoptions-handlers-)
+  - [on(method[, ...handlers])](#onmethod-handlers-)
+  - [use(...handlers)](#usehandlers)
+  - [waitFor(setup)](#waitforsetup)
 
 
 Methods
 -------
 
-  - [use(handler)](#usehandler)
-  - [catch(handler)](#catchhandler)
-  - [at(path)](#atpath)
-  - [on(options[, handler])](#onoptions-handler)
-  - [on(method[, handler])](#onmethod-handler)
-  - [waitFor(setup)](#waitforsetup)
+### at(path[, ...handlers])
 
+Returns *a new branch*
 
-Reference
----------
-
-### use(handler)
-
-Returns *this branch*
-
-Adds a plugin [handler](handlers.html) to this branch.
-
-  - **handler** *function or object* 
-
-
-### catch(handler)
-
-Returns *this branch*
-
-Adds an error [handler](handlers.html) to this branch.
-
-  - **handler** *function or object* 
-
-
-### at(path)
-
-Returns *new branch*
-
-Routes requests at a path (segment) down a new branch. The path is cumulative.
-Creating a new branch only requires the next path segment. For example if a branch's
-path is `/widgets` a new branch created with `.at("{id}")` will have a path of `/widgets/{id}`.
-
-Path paramaters are delimited using a pair of curly braces. Such as `foo/baz/{id}/`.
-The branch will parse the path parameters. They are available to all handlers through the
-[request](request.html) object's methods [getPathParms](request.html#getpathparams) and
-[getPathParam](request.html#getpathparamname).
-
+Routes requests at a path down a new branch.
 
   - **path** *string* 
 
+    Paths are cumulative. Creating a new [branch](branch.html) only requires
+    the next piece of the path. For example, if a branch's path is "widgets"
+    a new [branch](branch.html) created with branch.at("{id}") will recieve
+    a request to "widgets/42".
 
-### on(options[, handler])
+    Path paramaters are delimited using a pair of curly braces. Such as {id}.
+    The branch will parse the path parameters. They are available to all handlers
+    through [request.getPathParam(name)](request.html#getpathparamname)
+    and [request.getPathParms()](request.html#getpathparams).
 
-Returns *new [leaf](leaf.html)*
+  - **handlers** *function or object* <span class="optional">[optional]</span>
 
-Routes requests filtered by options to a new [leaf](leaf.html).
+    See [Handlers](handlers.html) guide.
+
+
+### cope(...handlers)
+
+Returns *this branch*
+
+Adds error [handlers](handlers.html) to this branch.
+
+  - **handlers** *function or object* 
+
+    See [Handlers](handlers.html) guide.
+
+
+### on(options[, ...handlers])
+
+Returns *this branch*
+
+Routes requests to a new [leaf](leaf.html). Requests that match the options
+will be handled by the new [leaf's](leaf.html) [handlers](handlers.html).
+
 
   - **options** *object* 
-    - **method** *string or array* [optional]
+    - **method** *string or array* <span class="optional">[optional]</span>
   
-      HTTP method(s) to handle (`GET`, `POST`...). If not specified or is `*`, all methods are handled. 
+      HTTP methods such as "GET", "POST", "PUT"... If not specified
+      or is "*", all methods are matched. See nodejs.org for a list of
+      [supported methods](https://nodejs.org/dist/latest-v10.x/docs/api/http.html#http_http_methods).
   
-    - **consumes** *string or array* [optional]
+    - **consumes** *string or array* <span class="optional">[optional]</span>
   
-      Request content type(s) to handle (application/json, text/xml...). If not specified all request content types are handled. 
+      Request content types such as "application/json", "text/csv"...
+      If not specified all request content types are matched.
   
-    - **produces** *string or array* [optional]
+    - **produces** *string or array* <span class="optional">[optional]</span>
   
-      Response content type(s) to handle (application/json, text/xml...). If not specified all response content types are handled. 
+      Response content types such as "application/json", "text/csv"...
+      If not specified all response content types are matched.
   
     - **serializers** *object* 
   
-      Property names must be content types (such as `application/json`) and values must be [serializer](plugins.html#serializers-and-deserializers) plugins. 
+      Property names must be content types such as "application/json" and
+      values must be [serializer](plugins.html#serializers-and-deserializers)
+      plugins.
   
     - **deserializers** *object* 
   
-      Property names must be content types (such as `application/json`) and values must be [deserializer](plugins.html#serializers-and-deserializers) plugins. 
+      Property names must be content types such as "application/json" and
+      values must be [deserializer](plugins.html#serializers-and-deserializers)
+      plugins.
   
 
-  - **handler** *function or object* [optional]
+  - **handlers** *function or object* <span class="optional">[optional]</span>
 
-    See [Handlers](handlers.html) guide. 
+    See [Handlers](handlers.html) guide.
 
 
-### on(method[, handler])
+### on(method[, ...handlers])
 
-Returns *new [leaf](leaf.html)*
+Returns *this branch*
 
-Routes requests filtered by method to a new [leaf](leaf.html).
+Routes requests to a new [leaf](leaf.html). Requests that match the method
+will be handled by the new [leaf's](leaf.html) [handlers](handlers.html).
+
 
   - **method** *string or array* 
 
-    HTTP method(s) to handle (`GET`, `POST`...). If `*`, all methods are handled.
- 
+    HTTP methods such as "GET", "POST", "PUT"... "*" matches all methods.
+    See nodejs.org for a list of [supported methods](https://nodejs.org/dist/latest-v10.x/docs/api/http.html#http_http_methods).
 
-  - **handler** *function or object* [optional]
+  - **handlers** *function or object* <span class="optional">[optional]</span>
 
-    See [Handlers](handlers.html) guide. 
+    See [Handlers](handlers.html) guide.
+
+
+### use(...handlers)
+
+Returns *this branch*
+
+Adds plugin [handlers](handlers.html) to this branch.
+
+  - **handlers** *function or object* 
+
+    See [Handlers](handlers.html) guide.
 
 
 ### waitFor(setup)
@@ -116,6 +141,5 @@ asynchronous setup is complete.
 
 
   - **setup** *promise* 
-
 
 

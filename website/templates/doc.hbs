@@ -5,6 +5,10 @@ title: {{title}}
 
 ### *{{type}}*
 
+{{#if extends}}
+*Extends {{extends}}*
+{{/if}}
+
 {{{description}}}
 
 {{#if sample}}
@@ -19,18 +23,7 @@ title: {{title}}
 {{> arguments arguments=constructor.arguments}}
 {{/if}}
 
-{{#if methods}}
-Methods
--------
-
-{{#each methods}}
-  - [{{#if static}}{{../name}}.{{/if}}{{name}}({{signature}})](#{{hash}})
-{{/each}}
-{{/if}}
-
-{{#if properties}}
-Properties
-----------
+--------------------------------------------------
 
 {{#each properties}}
 {{#if function}}
@@ -39,10 +32,48 @@ Properties
   - [{{name}} *{{type}}*](#{{hash}})
 {{/if}}
 {{/each}}
+{{#if properties}}
+{{#if methods}}
+
+{{/if}}
+{{/if}}
+{{#each methods}}
+  - [{{#if static}}{{../name}}.{{/if}}{{name}}({{signature}})](#{{hash}})
+{{/each}}
+
+{{#if properties}}
+Properties
+----------
+
+{{#each properties}}
+{{#if function}}
+### {{name}}({{signature}})
+
+{{#if returns}}Returns *{{returns}}*{{/if}}
+
+{{{description}}}
+
+{{#if sample}}
+```javascript
+{{{sample}}}
+```
 {{/if}}
 
-Reference
----------
+{{> arguments}}
+
+{{else}}
+### {{name}}
+
+{{#if hasDefault}}<span class="default">Default {{default}}</span>{{/if}}
+
+{{{description}}}
+{{/if}}
+{{/each}}
+{{/if}}
+
+{{#if methods}}
+Methods
+-------
 
 {{#each methods}}
 ### {{#if static}}{{../name}}.{{/if}}{{name}}({{signature}})
@@ -54,26 +85,4 @@ Reference
 {{> arguments}}
 
 {{/each}}
-
-{{#each properties}}
-{{#if function}}
-### {{name}}({{signature}})
-
-{{#if returns}}Returns *{{returns}}*{{/if}}
-
-{{{description}}}
-
-{{> arguments}}
-
-{{else}}
-### {{name}}
-
-{{{description}}} {{#if hasDefault}}**Default:** {{default}}{{/if}}
 {{/if}}
-
-{{#if sample}}
-```javascript
-{{{sample}}}
-```
-{{/if}}
-{{/each}}

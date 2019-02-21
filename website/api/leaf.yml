@@ -1,23 +1,27 @@
 name: Leaf
 type: class
-description: Created by calling `.on()` method on the service trunk or any service [branch](branch.html).
+description: Created by calling .on() method on the service [trunk](trunk.html) or any service [branch](branch.html).
 methods:
+- name: cope
+  returns: this leaf
+  description: Adds error [handlers](handlers.html) to this leaf.
+  arguments:
+  - name: handlers
+    type: function or object
+    description: See [Handlers](handlers.html) guide.
+    repeating: true
+
 - name: use
   returns: this leaf
-  description: Adds a plugin [handler](handlers.html) to this leaf.
+  description: Adds plugin [handlers](handlers.html) to this leaf.
   arguments:
-  - name: handler
+  - name: handlers
     type: function or object
-
-- name: catch
-  returns: this leaf
-  description: Adds an error [handler](handlers.html) to this leaf.
-  arguments:
-  - name: handler
-    type: function or object
+    description: See [Handlers](handlers.html) guide.
+    repeating: true
 
 - name: waitFor
-  returns: this branch
+  returns: this leaf
   description: |
     A hook for asynchronous setup tasks. The service won't be started until all
     asynchronous setup is complete.

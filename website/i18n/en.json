@@ -3,7 +3,7 @@
   "localized-strings": {
     "next": "Next",
     "previous": "Previous",
-    "tagline": "A simple HTTP service framework for Node.js",
+    "tagline": "A focused HTTP service framework for Node.js",
     "auto-responses": "Auto Responses",
     "branch": "Branch",
     "contributing": "Contributing",

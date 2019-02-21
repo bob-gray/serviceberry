@@ -1,8 +1,8 @@
 name: HttpError
 type: class
+extends: "[Error](https://nodejs.org/dist/latest-v10.x/docs/api/errors.html#errors_class_error)"
 description: |
-  Extends [Error](https://nodejs.org/dist/latest-v8.x/docs/api/errors.html#errors_class_error) - adding
-  several methods for working with the status and headers of the resulting response.
+  An HTTP specific error class.
 constructor:
   arguments:
   - name: error
@@ -19,18 +19,32 @@ constructor:
   - name: headers
     type: object
     required: false
+
+properties:
+- name: originalError
+  type: Error
+  description: Error passed into constructor
+
 methods:
+- name: clearHeaders
+  description: Removes all headers.
+
+- name: getHeader
+  description: Value is an array when header is duplicated.
+  arguments:
+  - name: name
+    type: string
+    description: Case insensitive.
+  returns: a string or array
+
+- name: getHeaders
+  description: |
+    All headers. Names are lower case and values are arrays when names
+    are duplicated.
+  returns: an object
+
 - name: getMessage
   returns: a string
-
-- name: is
-  description: |
-    `true` when status matches.
-  arguments:
-  - name: status
-    type: string or number
-    description: Status code or standard status text to test against. Case insensitive.
-  returns: a boolean
 
 - name: getStatus
   description: Status code and text if known. May have `code` and/or `text`. May be
@@ -42,6 +56,46 @@ methods:
 
 - name: getStatusText
   returns: a string or undefined
+
+- name: hasHeader
+  description: |
+    `true` when the header is in the request.
+  arguments:
+  - name: name
+    type: string
+    description: Case insensitive.
+  returns: a boolean
+
+- name: is
+  description: |
+    `true` when status matches.
+  arguments:
+  - name: status
+    type: string or number
+    description: Status code or standard status text to test against. Case insensitive.
+  returns: a boolean
+
+- name: removeHeader
+  description: Causes a header not to be sent. Causes `hasHeader` method to return
+    `false`.
+  arguments:
+  - name: name
+    description: Case insensitive.
+    type: string
+
+- name: setHeader
+  arguments:
+  - name: name
+    type: string
+  - name: value
+    type: string, number or array
+
+- name: setHeaders
+  description: Sets headers from an object. Does **NOT** clear headers. Does
+    override headers.
+  arguments:
+  - name: headers
+    type: object
 
 - name: setStatus
   description: |
@@ -68,29 +122,6 @@ methods:
   - name: text
     type: string
 
-- name: getHeaders
-  description: |
-    All headers. Names are lower case and values are arrays when names
-    are duplicated.
-  returns: an object
-
-- name: getHeader
-  description: Value is an array when header is duplicated.
-  arguments:
-  - name: name
-    type: string
-    description: Case insensitive.
-  returns: a string or array
-
-- name: hasHeader
-  description: |
-    `true` when the header is in the request.
-  arguments:
-  - name: name
-    type: string
-    description: Case insensitive.
-  returns: a boolean
-
 - name: withoutHeader
   description: |
     `true` when the header is **NOT** in the request.
@@ -99,33 +130,3 @@ methods:
     type: string
     description: Case insensitive.
   returns: a boolean
-
-- name: setHeaders
-  description: Sets headers from an object. Does **NOT** clear headers. Does
-    override headers.
-  arguments:
-  - name: headers
-    type: object
-
-- name: setHeader
-  arguments:
-  - name: name
-    type: string
-  - name: value
-    type: string, number or array
-
-- name: removeHeader
-  description: Causes a header not to be sent. Causes `hasHeader` method to return
-    `false`.
-  arguments:
-  - name: name
-    description: Case insensitive.
-    type: string
-
-- name: clearHeaders
-  description: Removes all headers.
-
-properties:
-- name: originalError
-  type: Error
-  description: Error passed into constructor

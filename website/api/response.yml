@@ -1,12 +1,77 @@
 name: Response
 type: class
+extends: "[EventEmitter](https://nodejs.org/dist/latest-v8.x/docs/api/events.html#events_class_eventemitter)"
 description: |
   This object is created internally by Serviceberry and passed as the second argument to [Handlers](handlers.html).
   It is a wrapper object around Node's [`http.ServerResponse`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_serverresponse).
 
-  Extends [`EventEmitter`](https://nodejs.org/dist/latest-v8.x/docs/api/).
-
 methods:
+- name: clearHeaders
+  description: Removes all headers.
+
+- name: getBody
+  description: The body, as set by the request, prior to serialization.
+  returns: any
+
+- name: getContentType
+  description: Content mime type without encoding charset, such as `application/json`.
+  returns: a string
+
+- name: getEncoding
+  description: Name of encoding such as `utf-8`.
+  returns: a string
+
+- name: getHeader
+  description: Value is an array when header is duplicated.
+  arguments:
+  - name: name
+    type: string
+    description: Case insensitive.
+  returns: a string or array
+
+- name: getHeaders
+  description: |
+    All headers. Names are lower case and values are arrays when names
+    are duplicated.
+  returns: an object
+
+- name: getStatus
+  description: Status code and text if known. May have `code` and/or `text`. May be
+    an empty object.
+  returns: an object
+
+- name: getStatusCode
+  returns: a number or undefined
+
+- name: getStatusText
+  returns: a string or undefined
+
+- name: hasHeader
+  description: |
+    `true` when the header is in the request.
+  arguments:
+  - name: name
+    type: string
+    description: Case insensitive.
+  returns: a boolean
+
+- name: is
+  description: |
+    `true` when status matches.
+  arguments:
+  - name: status
+    type: string or number
+    description: Status code or standard status text to test against. Case insensitive.
+  returns: a boolean
+
+- name: removeHeader
+  description: Causes a header not to be sent. Causes `hasHeader` method to return
+    `false`.
+  arguments:
+  - name: name
+    description: Case insensitive.
+    type: string
+
 - name: send
   description: |
     Sends a response back to the client - ending the request. A response can also be implicity sent when the request proceeds and
@@ -40,25 +105,31 @@ methods:
           description: |
             Listener for `http.ServerResponse`'s `finish` event.
 
-- name: is
-  description: |
-    `true` when status matches.
+- name: setBody
+  description: The body prior to serialization.
   arguments:
-  - name: status
-    type: string or number
-    description: Status code or standard status text to test against. Case insensitive.
-  returns: a boolean
+  - name: body
+    type: any
 
-- name: getStatus
-  description: Status code and text if known. May have `code` and/or `text`. May be
-    an empty object.
-  returns: an object
+- name: setEncoding
+  description: Name of encoding such as `utf-8`.
+  arguments:
+  - name: encoding
+    type: string
 
-- name: getStatusCode
-  returns: a number or undefined
+- name: setHeader
+  arguments:
+  - name: name
+    type: string
+  - name: value
+    type: string, number or array
 
-- name: getStatusText
-  returns: a string or undefined
+- name: setHeaders
+  description: Sets headers from an object. Does **NOT** clear headers. Does
+    override headers.
+  arguments:
+  - name: headers
+    type: object
 
 - name: setStatus
   description: |
@@ -85,29 +156,6 @@ methods:
   - name: text
     type: string
 
-- name: getHeaders
-  description: |
-    All headers. Names are lower case and values are arrays when names
-    are duplicated.
-  returns: an object
-
-- name: getHeader
-  description: Value is an array when header is duplicated.
-  arguments:
-  - name: name
-    type: string
-    description: Case insensitive.
-  returns: a string or array
-
-- name: hasHeader
-  description: |
-    `true` when the header is in the request.
-  arguments:
-  - name: name
-    type: string
-    description: Case insensitive.
-  returns: a boolean
-
 - name: withoutHeader
   description: |
     `true` when the header is **NOT** in the request.
@@ -116,52 +164,3 @@ methods:
     type: string
     description: Case insensitive.
   returns: a boolean
-
-- name: setHeaders
-  description: Sets headers from an object. Does **NOT** clear headers. Does
-    override headers.
-  arguments:
-  - name: headers
-    type: object
-
-- name: setHeader
-  arguments:
-  - name: name
-    type: string
-  - name: value
-    type: string, number or array
-
-- name: removeHeader
-  description: Causes a header not to be sent. Causes `hasHeader` method to return
-    `false`.
-  arguments:
-  - name: name
-    description: Case insensitive.
-    type: string
-
-- name: clearHeaders
-  description: Removes all headers.
-
-- name: setBody
-  description: The body prior to serialization.
-  arguments:
-  - name: body
-    type: any
-
-- name: getBody
-  description: The body, as set by the request, prior to serialization.
-  returns: any
-
-- name: setEncoding
-  description: Name of encoding such as `utf-8`.
-  arguments:
-  - name: encoding
-    type: string
-
-- name: getEncoding
-  description: Name of encoding such as `utf-8`.
-  returns: a string
-
-- name: getContentType
-  description: Content mime type without encoding charset, such as `application/json`.
-  returns: a string

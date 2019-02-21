@@ -5,263 +5,98 @@ title: Request
 
 ### *class*
 
-This object is created internally by Serviceberry and passed as the first argument to [Handlers](handlers.html).
-It is a wrapper object around Node's [`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage).
+*Extends [EventEmitter](https://nodejs.org/dist/latest-v8.x/docs/api/events.html#events_class_eventemitter)*
 
-Extends [`EventEmitter`](https://nodejs.org/dist/latest-v8.x/docs/api/events.html#events_class_eventemitter).
+Request objects are created internally by Serviceberry and passed as the first
+argument to [Handlers](handlers.html). They are wrapper objects around Node's
+[http.IncomingMessage](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage).
 
 
 
 
-Methods
--------
+--------------------------------------------------
 
-  - [proceed([result])](#proceed-result)
-  - [fail(error[, status[, headers]])](#failerror-status-headers)
-  - [getId()](#getid)
-  - [getElapsedTime()](#getelapsedtime)
-  - [getIp()](#getip)
-  - [getProtocol()](#getprotocol)
-  - [getHost()](#gethost)
-  - [getPort()](#getport)
-  - [getMethod()](#getmethod)
-  - [getUrl()](#geturl)
-  - [getFullUrl()](#getfullurl)
-  - [getContentType()](#getcontenttype)
-  - [getEncoding()](#getencoding)
-  - [getHeaders()](#getheaders)
-  - [getHeader(name)](#getheadername)
-  - [hasHeader(name)](#hasheadername)
-  - [withoutHeader(name)](#withoutheadername)
-  - [getPathParams()](#getpathparams)
-  - [getPathParam(name)](#getpathparamname)
-  - [getQueryParams()](#getqueryparams)
-  - [getQueryParam(name)](#getqueryparamname)
+  - [error *HttpError*](#error)
+  - [incomingMessage *http.IncomingMessage*](#incomingmessage)
+  - [latestResult *any*](#latestresult)
+
+  - [fail(error[, status[, headers]])](#failerror-status-headers-)
   - [getBody()](#getbody)
   - [getBodyParam(name)](#getbodyparamname)
+  - [getContent()](#getcontent)
+  - [getContentType()](#getcontenttype)
+  - [getElapsedTime()](#getelapsedtime)
+  - [getEncoding()](#getencoding)
+  - [getFullUrl()](#getfullurl)
+  - [getHeader(name)](#getheadername)
+  - [getHeaders()](#getheaders)
+  - [getHost()](#gethost)
+  - [getId()](#getid)
+  - [getIp()](#getip)
+  - [getMethod()](#getmethod)
+  - [getPathParam(name)](#getpathparamname)
+  - [getPathParams()](#getpathparams)
   - [getParams()](#getparams)
   - [getParam(name)](#getparamname)
-  - [getContent()](#getcontent)
+  - [getPort()](#getport)
+  - [getProtocol()](#getprotocol)
+  - [getQueryParam(name)](#getqueryparamname)
+  - [getQueryParams()](#getqueryparams)
+  - [getUrl()](#geturl)
+  - [hasHeader(name)](#hasheadername)
+  - [proceed([result])](#proceed-result-)
+  - [withoutHeader(name)](#withoutheadername)
 
 Properties
 ----------
 
-  - [incomingMessage *http.IncomingMessage*](#incomingmessage)
-  - [error *HttpError*](#error)
-  - [latestResult *any*](#latestresult)
-
-Reference
----------
-
-### proceed([result])
+### error
 
 
 
-Call this method to pass control of the request to the next handler. Handlers receiving `Request` may
-optionally pass control by their `return` value in lieu of calling `proceed`. See [Handlers](handlers.html) guide.
+Available within coping handlers.
+### incomingMessage
 
 
-  - **result** *any* [optional]
 
-    Set as [`latestResult`](#latestresult) property with the exception of when a request is being serialized
-or deserialized. When serializing or deserializing the result is the response content or request
-body respectively.
- 
+The preferred way to interact with a request is through it's methods, however
+if a need arises that is not addressed with an existing method, then direct access to the
+[http.IncomingMessage](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage)
+is available.
+### latestResult
 
+
+
+The resolved result of the latest finished handler.
+
+Methods
+-------
 
 ### fail(error[, status[, headers]])
 
 
 
-Call this method to pass control of the request the nearest catch handler. Handlers receiving `Request` may
-optionally pass control by throwing an exception or by their `return` value in lieu of calling `fail`.
+Call this method to pass control of the request the nearest coping handler. Handlers receiving Request may
+optionally pass control by throwing an exception or by their return value in lieu of calling fail.
 See [handlers](handlers.html) guide.
 
 
   - **error** *string or error* 
 
     Can be a error message or an error object.
- 
 
-  - **status** *number, string or object* [optional]
+  - **status** *number, string or object* <span class="optional">[optional]</span>
 
-    Can be a status code, well know status text or an object with properties `code` and `text`. See
-`HttpError` methods [`setStatusCode`](httperror.html#setstatuscodecode), [`setStatusText`](httperror.html#setstatustexttext),
-and [`setStatus`](httperror.html#setstatusstatus).
- **Default:** 500
+    <span class="default">Default 500</span>
 
-  - **headers** *object* [optional]
+    Can be a status code, well know status text or an object with properties code and text. See
+    HttpError methods [setStatusCode](httperror.html#setstatuscodecode), [setStatusText](httperror.html#setstatustexttext),
+    and [setStatus](httperror.html#setstatusstatus).
+
+  - **headers** *object* <span class="optional">[optional]</span>
 
     Response headers if fail results in the end of the request. These headers are not set on the
-response if a catch handler recovers from the fail and the request continues.
- 
-
-
-### getId()
-
-Returns *a string*
-
-Unique identifier for the request.
-
-
-### getElapsedTime()
-
-Returns *a number*
-
-Number of milliseconds since the start of processing the request.
-
-*Starts in the `Request` constructor and is not the same as time since the client sent
-the request.*
-
-
-
-### getIp()
-
-Returns *a string*
-
-Remote IP address of the client making the request.
-
-
-### getProtocol()
-
-Returns *a string*
-
-Protocol of the request such as `http` or `https`. Will be the
-`X-Forwarded-Proto` header value when available.
-
-
-
-### getHost()
-
-Returns *a string*
-
-`Host` header value.
-
-
-
-### getPort()
-
-Returns *a number*
-
-Port number of the request.
-
-
-### getMethod()
-
-Returns *a string*
-
-HTTP method (verb) such as GET, POST, PUT, DELETE...
-
-
-### getUrl()
-
-Returns *an object*
-
-Parsed URL object. See [`url`](https://nodejs.org/dist/latest-v8.x/docs/api/url.html#url_url_strings_and_url_objects).
-
-
-### getFullUrl()
-
-Returns *a string*
-
-Full URL including protocol, host, path and query string.
-
-*Relies on `Host` header.*
-
-
-
-### getContentType()
-
-Returns *a string*
-
-Content mime type without encoding charset, such as `application/json`.
-
-
-### getEncoding()
-
-Returns *a string*
-
-Name of encoding such as `utf-8`.
-
-
-### getHeaders()
-
-Returns *an object*
-
-All headers. Names are lower case and values are arrays when names
-are duplicated.
-
-
-
-### getHeader(name)
-
-Returns *a string or array*
-
-Value is an array when header is duplicated.
-
-  - **name** *string* 
-
-    Case insensitive. 
-
-
-### hasHeader(name)
-
-Returns *a boolean*
-
-`true` when the header is in the request.
-
-
-  - **name** *string* 
-
-    Case insensitive. 
-
-
-### withoutHeader(name)
-
-Returns *a boolean*
-
-`true` when the header is **NOT** in the request.
-
-
-  - **name** *string* 
-
-    Case insensitive. 
-
-
-### getPathParams()
-
-Returns *an object*
-
-All path params. Names are lower case.
-
-
-### getPathParam(name)
-
-Returns *a string*
-
-The value of a path param.
-
-  - **name** *string* 
-
-
-### getQueryParams()
-
-Returns *an object*
-
-All query string params. Names are lower case and values are
-arrays when names are duplicated.
-
-
-
-### getQueryParam(name)
-
-Returns *a string*
-
-The value of a query string param.
-
-  - **name** *string* 
-
-    Case insensitive. 
+    response if a coping handler recovers from the fail and the request continues.
 
 
 ### getBody()
@@ -281,7 +116,114 @@ The value of a body param.
 
   - **name** *string* 
 
-    Case insensitive. 
+    Case insensitive.
+
+
+### getContent()
+
+Returns *a buffer*
+
+Raw request content. Most likely use case is within a deserializer.
+
+
+### getContentType()
+
+Returns *a string*
+
+Content mime type without encoding charset, such as application/json.
+
+
+### getElapsedTime()
+
+Returns *a number*
+
+Number of milliseconds since the start of processing the request.
+
+*Starts in the Request constructor and is not the same as time since the client sent
+the request.*
+
+
+
+### getEncoding()
+
+Returns *a string*
+
+Name of encoding such as utf-8.
+
+
+### getFullUrl()
+
+Returns *a string*
+
+Full URL including protocol, host, path and query string.
+
+*Relies on Host header.*
+
+
+
+### getHeader(name)
+
+Returns *a string or array*
+
+Value is an array when header is duplicated.
+
+  - **name** *string* 
+
+    Case insensitive.
+
+
+### getHeaders()
+
+Returns *an object*
+
+All headers. Names are lower case and values are arrays when names
+are duplicated.
+
+
+
+### getHost()
+
+Returns *a string*
+
+Host header value.
+
+
+
+### getId()
+
+Returns *a string*
+
+Unique identifier for the request.
+
+
+### getIp()
+
+Returns *a string*
+
+Remote IP address of the client making the request.
+
+
+### getMethod()
+
+Returns *a string*
+
+HTTP method (verb) such as GET, POST, PUT, DELETE...
+
+
+### getPathParam(name)
+
+Returns *a string*
+
+The value of a path param.
+
+  - **name** *string* 
+
+
+### getPathParams()
+
+Returns *an object*
+
+All path params. Names are lower case.
 
 
 ### getParams()
@@ -294,8 +236,8 @@ results in an exception.
 
 When params exist in more than one location such as both the path and
 the query string, the order of priority is path, then query string, then request
-body. Because of this ambiguity, it is usually preferable to use [`getPathParms`](#getpathparams),
-[`getQueryParams`](#getqueryparams), or [`getBody`](#getbody) instead of `getParams`.
+body. Because of this ambiguity, it is usually preferable to use [getPathParms](#getpathparams),
+[getQueryParams](#getqueryparams), or [getBody](#getbody) instead of getParams.
 
 
 
@@ -308,35 +250,95 @@ Will throw an exception if deserializing the params results in an exception.
 
 When a param exists in more than one location such as both the path and the
 query string, the order of priority is path, then query string, then request
-body. Because of this ambiguity, it is usually preferable to use [`getPathParm`](#getpathparamname),
-[`getQueryParam`](#getqueryparamname), or [`getBodyParam`](#getbodyparamname) instead of `getParam`.
+body. Because of this ambiguity, it is usually preferable to use [getPathParm](#getpathparamname),
+[getQueryParam](#getqueryparamname), or [getBodyParam](#getbodyparamname) instead of getParam.
 
 
   - **name** *string* 
 
-    Case insensitive. 
+    Case insensitive.
 
 
-### getContent()
+### getPort()
 
-Returns *a buffer*
+Returns *a number*
 
-Raw request content. Most likely use case is within a deserializer.
+Port number of the request.
+
+
+### getProtocol()
+
+Returns *a string*
+
+Protocol of the request such as http or https. Will be the
+X-Forwarded-Proto header value when available.
 
 
 
-### incomingMessage
+### getQueryParam(name)
 
-The preferred way to interact with a request is the methods above, however if a need arises
-that is not addressed with an existing method, then direct access to the
-[`http.IncomingMessage`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage) is available here.
- 
+Returns *a string*
 
-### error
+The value of a query string param.
 
-Available within catch handlers. 
+  - **name** *string* 
 
-### latestResult
+    Case insensitive.
 
-The resolved result of the latest finished handler. 
+
+### getQueryParams()
+
+Returns *an object*
+
+All query string params. Names are lower case and values are
+arrays when names are duplicated.
+
+
+
+### getUrl()
+
+Returns *an object*
+
+Parsed URL object. See [url](https://nodejs.org/dist/latest-v8.x/docs/api/url.html#url_url_strings_and_url_objects).
+
+
+### hasHeader(name)
+
+Returns *a boolean*
+
+true when the header is in the request.
+
+
+  - **name** *string* 
+
+    Case insensitive.
+
+
+### proceed([result])
+
+
+
+Call this method to pass control of the request to the next handler. Handlers
+may optionally pass control by their return value in lieu of calling proceed.
+See [Handlers](handlers.html) guide. Proceed is bound to request
+
+
+  - **result** *any* <span class="optional">[optional]</span>
+
+    Set as [latestResult](#latestresult) property with the exception of when a request is being serialized
+    or deserialized. When serializing or deserializing the result is the response content or request
+    body respectively.
+
+
+### withoutHeader(name)
+
+Returns *a boolean*
+
+true when the header is **NOT** in the request.
+
+
+  - **name** *string* 
+
+    Case insensitive.
+
 

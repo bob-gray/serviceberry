@@ -5,71 +5,37 @@ title: Serviceberry
 
 ### *object*
 
-When you require `serviceberry` this is the object that you receive. The most important property is `createTrunk()`.
-A service is created as a [trunk](trunk.html) then [branches](branch.html) and [leaves](leaf.html) are added using
-`.at()` and `.on()` of the [trunk](trunk.html) and resulting branches. All parts of the tree can have plugins and error handlers attached
-with `.use()` and `.catch()`.
+
+When you require "serviceberry" this is the object that you receive. The most
+important property is the factory function [createTrunk()](#createtrunk). It
+is the entry point of the framework.
+
+A service is created by creating a [trunk](trunk.html) then [branches](branch.html)
+and [leaves](leaf.html) are added using [.at()](trunk.html#atpath-handlers-) and
+[.on()](trunk.html#onmethod-handlers-). Each [branch](branch.html)
+can have it's own [branches](branch.html) and [leaves](leaf.html) allowing
+[plugins](plugins.html) and error handlers to be added at any levels with methods
+[.use()](trunk.html#usehandlers) and [.cope()](trunk.html#copehandlers) on the
+[trunk](trunk.html) or any [branch](branch.html) or [leaf](leaf.html).
 
 
 
 
+--------------------------------------------------
+
+  - [createTrunk([options])](#createtrunk-options-)
+  - [HttpError *class*](#httperror)
+  - [statusCodes *object*](#statuscodes)
 
 Properties
 ----------
-
-  - [createTrunk([options])](#createtrunk-options)
-  - [statusCodes *object*](#statuscodes)
-  - [HttpError *class*](#httperror)
-
-Reference
----------
-
 
 ### createTrunk([options])
 
 
 
-Creating a [trunk](trunk.html) using this factory function is the first thing you'll do when creating a service. This is the entry
-point of the framework.
-
-
-  - **options** *object* [optional]
-    - **port** *number* [optional]
-  
-    - **host** *string* [optional]
-  
-    - **path** *string* [optional]
-  
-      Path for the [trunk](trunk.html). All request handled by the service must begin
-  with this path.
-   **Default:** /
-  
-    - **backlog** *number* [optional]
-  
-    - **autoStart** *boolean* [optional]
-  
-      If `false`, the service won't begin handling requests until `.start()`
-  is called.
-   **Default:** true
-  
-    - **timeout** *number* [optional]
-  
-      Number of milliseconds to wait before aborting requests. 
-  
-    - **serializers** *object* [optional]
-  
-      Property names must be content types (such as `application/json`) and values must be [serializer](plugins.html#serializers-and-deserializers) plugins. 
-  
-    - **deserializers** *object* [optional]
-  
-      Property names must be content types (such as `application/json`) and values must be [deserializer](plugins.html#serializers-and-deserializers) plugins. 
-  
-    - **callback** *function* [optional]
-  
-      Listener for server's `listening` event. 
-  
-
-
+Creating a [trunk](trunk.html) using this factory function is the first thing
+you'll do when creating a service. This is the entry point of the framework.
 
 ```javascript
 const service = serviceberry.createTrunk({
@@ -79,22 +45,92 @@ const service = serviceberry.createTrunk({
 });
 
 ```
-### statusCodes
 
-This is a helper for avoiding magic numbers and helping your services and plugins be more legible.
-It isn't strictly necessary for use with Serviceberry. It is here for your convenience.
+  - **options** *object* <span class="optional">[optional]</span>
+    - **autoStart** *boolean* <span class="optional">[optional]</span>
+  
+      <span class="default">Default true</span>
+  
+      If false, the service won't begin handling requests until [.start()](#startcallback)
+      is called.
+  
+    - **backlog** *number* <span class="optional">[optional]</span>
+  
+      <span class="default">Default 511</span>
+  
+      Maximum number of queued pending connections.
+      See [nodejs.org](https://nodejs.org/dist/latest-v10.x/docs/api/net.html#net_server_listen).
+  
+    - **callback** *function* <span class="optional">[optional]</span>
+  
+      Listener for server's listening event.
+  
+    - **deserializers** *object* <span class="optional">[optional]</span>
+  
+      Property names must be content types such as "application/json" and
+      values must be [deserializer plugins](plugins.html#serializers-and-deserializers).
+  
+      When requests need deserialized, a deserializer matching the request's
+      content type will be used.
+  
+    - **host** *string* <span class="optional">[optional]</span>
+  
+      <span class="default">Default all hosts</span>
+  
+      The host to listen on.
+      See [nodejs.org](https://nodejs.org/dist/latest-v10.x/docs/api/net.html#net_server_listen).
+  
+    - **path** *string* <span class="optional">[optional]</span>
+  
+      <span class="default">Default empty string</span>
+  
+      Base path of the [trunk](trunk.html). All request handled by the service
+      must begin with this path.
+  
+    - **port** *number* <span class="optional">[optional]</span>
+  
+      <span class="default">Default 3000</span>
+  
+      The port to listen on.
+      See [nodejs.org](https://nodejs.org/dist/latest-v10.x/docs/api/net.html#net_server_listen).
+  
+    - **serializers** *object* <span class="optional">[optional]</span>
+  
+      Property names must be content types such as "application/json"
+      and values must be [serializer plugins](plugins.html#serializers-and-deserializers).
+  
+      When responses need serialized, a serializer matching the response's
+      content type will be used.
+  
+    - **timeout** *number* <span class="optional">[optional]</span>
+  
+      <span class="default">Default 10000</span>
+  
+      Number of milliseconds to wait before aborting requests.
+  
 
-It includes all the statuses in Node's [http.STATUS_CODES](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_http_status_codes)
-in addition to codes found at constant case property status names (such as `statusCodes.OK === 200` and `statusCodes.NOT_FOUND === 404`).
- 
 
 ### HttpError
 
-A class for creating HTTP specific error objects. Like [`statusCodes`](#statuscodes) above,
-it isn't strictly necessary for use with Serviceberry.
+
+
+A class for creating HTTP specific error objects. It isn't strictly necessary
+for creating Serviceberry services. It is here for your convenience.
 
 The [HttpError](httperror.html) constructor has the same arguments signature as
-[`request.fail()`](request.html#failerror-status-headers) and is instanced internally when a request fails.
-It is the error object available at `request.error`.
- 
+[request.fail()](request.html#failerror-status-headers) and is instanced
+internally by Serviceberry when a request fails. [HttpError](httperror.html)
+instances are the error objects available at request.error inside of error
+handlers.
+### statusCodes
+
+
+
+This is a helper for avoiding magic numbers and helping your services and [plugins](plugins.html)
+be more legible. It isn't strictly necessary for creating Serviceberry services.
+It is here for your convenience.
+
+It includes all the statuses in Node.js's [http.STATUS_CODES](https://nodejs.org/dist/latest-v10.x/docs/api/http.html#http_http_status_codes).
+It has status codes as properties at constant case status names such as statusCodes.OK
+and status codes as properties at status text names such as statusCode["Not Found"].
 

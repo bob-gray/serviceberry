@@ -5,48 +5,51 @@ title: Leaf
 
 ### *class*
 
-Created by calling `.on()` method on the service trunk or any service [branch](branch.html).
 
+Created by calling .on() method on the service [trunk](trunk.html) or any service [branch](branch.html).
+
+
+
+--------------------------------------------------
+
+  - [cope(...handlers)](#copehandlers)
+  - [use(...handlers)](#usehandlers)
+  - [waitFor(setup)](#waitforsetup)
 
 
 Methods
 -------
 
-  - [use(handler)](#usehandler)
-  - [catch(handler)](#catchhandler)
-  - [waitFor(setup)](#waitforsetup)
-
-
-Reference
----------
-
-### use(handler)
+### cope(...handlers)
 
 Returns *this leaf*
 
-Adds a plugin [handler](handlers.html) to this leaf.
+Adds error [handlers](handlers.html) to this leaf.
 
-  - **handler** *function or object* 
+  - **handlers** *function or object* 
+
+    See [Handlers](handlers.html) guide.
 
 
-### catch(handler)
+### use(...handlers)
 
 Returns *this leaf*
 
-Adds an error [handler](handlers.html) to this leaf.
+Adds plugin [handlers](handlers.html) to this leaf.
 
-  - **handler** *function or object* 
+  - **handlers** *function or object* 
+
+    See [Handlers](handlers.html) guide.
 
 
 ### waitFor(setup)
 
-Returns *this branch*
+Returns *this leaf*
 
 A hook for asynchronous setup tasks. The service won't be started until all
 asynchronous setup is complete.
 
 
   - **setup** *promise* 
-
 
 

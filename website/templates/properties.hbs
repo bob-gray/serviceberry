@@ -1,7 +1,9 @@
 {{#each properties}}
-  - **{{name}}** *{{type}}* {{#unless required}}[optional]{{/unless}}{{#if description}}
+  - **{{name}}** *{{type}}* {{#unless required}}<span class="optional">[optional]</span>{{/unless}}{{#if hasDefault}}
 
-    {{{description}}} {{#if hasDefault}}**Default:** {{default}}{{/if}}{{/if}}
+    <span class="default">Default {{default}}</span>{{/if}}{{#if description}}
+
+    {{{description}}}{{/if}}
   {{> properties}}
 
 {{/each}}

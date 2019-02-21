@@ -27,44 +27,48 @@ function createDoc (doc) {
 	doc.title = doc.name;
 
 	if (typeof doc.constructor === "object") {
-		doc.constructor.signature = doc.constructor.arguments.map(arg => arg.name).join(", ");
-		doc.constructor.arguments.forEach(arg => arg.required !== false);
+		doc.constructor.signature = doc.constructor.arguments.reduceRight(reduceArgsToSignature, "");
 	}
 
 	if (doc.methods) {
 		doc.methods.forEach(setHash);
-		doc.methods.forEach(processFunctionMeta);
+		doc.methods.forEach(method => processFunctionMeta(method));
 	}
 
 	if (doc.properties) {
 		doc.properties.forEach(setHash);
-		doc.properties.forEach(processObjectMeta);
+		doc.properties.forEach(prop => processObjectMeta(prop));
 	}
 
 	fs.writeFileSync(`docs/${doc.id}-api.md`, template(doc));
 
-	function processFunctionMeta (fn) {
+	function processFunctionMeta (fn, indent = "") {
 		if (fn.arguments) {
-			fn.arguments.forEach(processObjectMeta);
+			fn.arguments.forEach(arg => processObjectMeta(arg, indent + "    "));
 			fn.signature = fn.arguments.reduceRight(reduceArgsToSignature, "");
 		}
 
 		if (fn.signature) {
-			fn.hash += fn.signature.replace(/[\[\]\s]+(?=\w)/g, "-")
+			fn.hash += fn.signature.replace(/[\[\]\s]+/g, "-")
 				.replace(/[^\w-]/g, "")
+				.replace(/\-+/g, "-")
 				.toLowerCase();
 		}
 	}
 
-	function processObjectMeta (object) {
+	function processObjectMeta (object, indent = "") {
 		object[object.type] = true;
 		object.hasDefault = "default" in object;
 		object.required = object.required !== false && !object.hasDefault;
 
+		if (object.description) {
+			object.description = object.description.replace(/^(?=.)/gm, indent).trim();
+		}
+
 		if (object.properties) {
-			object.properties.forEach(processObjectMeta);
+			object.properties.forEach(prop => processObjectMeta(prop, indent));
 		} else if (object.function) {
-			processFunctionMeta(object);
+			processFunctionMeta(object, indent);
 		}
 	}
 
@@ -74,6 +78,10 @@ function createDoc (doc) {
 
 	function reduceArgsToSignature (signature, arg, index) {
 		var part = arg.name;
+
+		if (arg.repeating) {
+			part = "..." + part;
+		}
 
 		if (index) {
 			part = ", " + part;

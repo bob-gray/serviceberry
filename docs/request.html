@@ -5,153 +5,68 @@
             nav.classList.toggle('docsSliderActive');
           };
         </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Request</h1></header><article><div><span><h3><a class="anchor" aria-hidden="true" id="class"></a><a href="#class" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a><em>class</em></h3>
-<p>This object is created internally by Serviceberry and passed as the first argument to <a href="handlers.html">Handlers</a>.
-It is a wrapper object around Node's <a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage"><code>http.IncomingMessage</code></a>.</p>
-<p>Extends <a href="https://nodejs.org/dist/latest-v8.x/docs/api/events.html#events_class_eventemitter"><code>EventEmitter</code></a>.</p>
-<h2><a class="anchor" aria-hidden="true" id="methods"></a><a href="#methods" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
+<p><em>Extends <a href="https://nodejs.org/dist/latest-v8.x/docs/api/events.html#events_class_eventemitter">EventEmitter</a></em></p>
+<p>Request objects are created internally by Serviceberry and passed as the first
+argument to <a href="handlers.html">Handlers</a>. They are wrapper objects around Node's
+<a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage">http.IncomingMessage</a>.</p>
+<hr>
 <ul>
-<li><a href="#proceed-result">proceed([result])</a></li>
-<li><a href="#failerror-status-headers">fail(error[, status[, headers]])</a></li>
-<li><a href="#getid">getId()</a></li>
-<li><a href="#getelapsedtime">getElapsedTime()</a></li>
-<li><a href="#getip">getIp()</a></li>
-<li><a href="#getprotocol">getProtocol()</a></li>
-<li><a href="#gethost">getHost()</a></li>
-<li><a href="#getport">getPort()</a></li>
-<li><a href="#getmethod">getMethod()</a></li>
-<li><a href="#geturl">getUrl()</a></li>
-<li><a href="#getfullurl">getFullUrl()</a></li>
-<li><a href="#getcontenttype">getContentType()</a></li>
-<li><a href="#getencoding">getEncoding()</a></li>
-<li><a href="#getheaders">getHeaders()</a></li>
-<li><a href="#getheadername">getHeader(name)</a></li>
-<li><a href="#hasheadername">hasHeader(name)</a></li>
-<li><a href="#withoutheadername">withoutHeader(name)</a></li>
-<li><a href="#getpathparams">getPathParams()</a></li>
-<li><a href="#getpathparamname">getPathParam(name)</a></li>
-<li><a href="#getqueryparams">getQueryParams()</a></li>
-<li><a href="#getqueryparamname">getQueryParam(name)</a></li>
-<li><a href="#getbody">getBody()</a></li>
-<li><a href="#getbodyparamname">getBodyParam(name)</a></li>
-<li><a href="#getparams">getParams()</a></li>
-<li><a href="#getparamname">getParam(name)</a></li>
-<li><a href="#getcontent">getContent()</a></li>
+<li><p><a href="#error">error <em>HttpError</em></a></p></li>
+<li><p><a href="#incomingmessage">incomingMessage <em>http.IncomingMessage</em></a></p></li>
+<li><p><a href="#latestresult">latestResult <em>any</em></a></p></li>
+<li><p><a href="#failerror-status-headers-">fail(error[, status[, headers]])</a></p></li>
+<li><p><a href="#getbody">getBody()</a></p></li>
+<li><p><a href="#getbodyparamname">getBodyParam(name)</a></p></li>
+<li><p><a href="#getcontent">getContent()</a></p></li>
+<li><p><a href="#getcontenttype">getContentType()</a></p></li>
+<li><p><a href="#getelapsedtime">getElapsedTime()</a></p></li>
+<li><p><a href="#getencoding">getEncoding()</a></p></li>
+<li><p><a href="#getfullurl">getFullUrl()</a></p></li>
+<li><p><a href="#getheadername">getHeader(name)</a></p></li>
+<li><p><a href="#getheaders">getHeaders()</a></p></li>
+<li><p><a href="#gethost">getHost()</a></p></li>
+<li><p><a href="#getid">getId()</a></p></li>
+<li><p><a href="#getip">getIp()</a></p></li>
+<li><p><a href="#getmethod">getMethod()</a></p></li>
+<li><p><a href="#getpathparamname">getPathParam(name)</a></p></li>
+<li><p><a href="#getpathparams">getPathParams()</a></p></li>
+<li><p><a href="#getparams">getParams()</a></p></li>
+<li><p><a href="#getparamname">getParam(name)</a></p></li>
+<li><p><a href="#getport">getPort()</a></p></li>
+<li><p><a href="#getprotocol">getProtocol()</a></p></li>
+<li><p><a href="#getqueryparamname">getQueryParam(name)</a></p></li>
+<li><p><a href="#getqueryparams">getQueryParams()</a></p></li>
+<li><p><a href="#geturl">getUrl()</a></p></li>
+<li><p><a href="#hasheadername">hasHeader(name)</a></p></li>
+<li><p><a href="#proceed-result-">proceed([result])</a></p></li>
+<li><p><a href="#withoutheadername">withoutHeader(name)</a></p></li>
 </ul>
 <h2><a class="anchor" aria-hidden="true" id="properties"></a><a href="#properties" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Properties</h2>
-<ul>
-<li><a href="#incomingmessage">incomingMessage <em>http.IncomingMessage</em></a></li>
-<li><a href="#error">error <em>HttpError</em></a></li>
-<li><a href="#latestresult">latestResult <em>any</em></a></li>
-</ul>
-<h2><a class="anchor" aria-hidden="true" id="reference"></a><a href="#reference" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reference</h2>
-<h3><a class="anchor" aria-hidden="true" id="proceed-result"></a><a href="#proceed-result" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>proceed([result])</h3>
-<p>Call this method to pass control of the request to the next handler. Handlers receiving <code>Request</code> may
-optionally pass control by their <code>return</code> value in lieu of calling <code>proceed</code>. See <a href="handlers.html">Handlers</a> guide.</p>
-<ul>
-<li><p><strong>result</strong> <em>any</em> [optional]</p>
-<p>Set as <a href="#latestresult"><code>latestResult</code></a> property with the exception of when a request is being serialized
-or deserialized. When serializing or deserializing the result is the response content or request
-body respectively.</p></li>
-</ul>
+<h3><a class="anchor" aria-hidden="true" id="error"></a><a href="#error" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>error</h3>
+<p>Available within coping handlers.</p>
+<h3><a class="anchor" aria-hidden="true" id="incomingmessage"></a><a href="#incomingmessage" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>incomingMessage</h3>
+<p>The preferred way to interact with a request is through it's methods, however
+if a need arises that is not addressed with an existing method, then direct access to the
+<a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage">http.IncomingMessage</a>
+is available.</p>
+<h3><a class="anchor" aria-hidden="true" id="latestresult"></a><a href="#latestresult" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>latestResult</h3>
+<p>The resolved result of the latest finished handler.</p>
+<h2><a class="anchor" aria-hidden="true" id="methods"></a><a href="#methods" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Methods</h2>
 <h3><a class="anchor" aria-hidden="true" id="failerror-status-headers"></a><a href="#failerror-status-headers" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>fail(error[, status[, headers]])</h3>
-<p>Call this method to pass control of the request the nearest catch handler. Handlers receiving <code>Request</code> may
-optionally pass control by throwing an exception or by their <code>return</code> value in lieu of calling <code>fail</code>.
+<p>Call this method to pass control of the request the nearest coping handler. Handlers receiving Request may
+optionally pass control by throwing an exception or by their return value in lieu of calling fail.
 See <a href="handlers.html">handlers</a> guide.</p>
 <ul>
 <li><p><strong>error</strong> <em>string or error</em></p>
 <p>Can be a error message or an error object.</p></li>
-</ul>
-<ul>
-<li><p><strong>status</strong> <em>number, string or object</em> [optional]</p>
-<p>Can be a status code, well know status text or an object with properties <code>code</code> and <code>text</code>. See
-<code>HttpError</code> methods <a href="httperror.html#setstatuscodecode"><code>setStatusCode</code></a>, <a href="httperror.html#setstatustexttext"><code>setStatusText</code></a>,
-and <a href="httperror.html#setstatusstatus"><code>setStatus</code></a>.
-<strong>Default:</strong> 500</p></li>
-<li><p><strong>headers</strong> <em>object</em> [optional]</p>
+<li><p><strong>status</strong> <em>number, string or object</em> <span class="optional">[optional]</span></p>
+<p><span class="default">Default 500</span></p>
+<p>Can be a status code, well know status text or an object with properties code and text. See
+HttpError methods <a href="httperror.html#setstatuscodecode">setStatusCode</a>, <a href="httperror.html#setstatustexttext">setStatusText</a>,
+and <a href="httperror.html#setstatusstatus">setStatus</a>.</p></li>
+<li><p><strong>headers</strong> <em>object</em> <span class="optional">[optional]</span></p>
 <p>Response headers if fail results in the end of the request. These headers are not set on the
-response if a catch handler recovers from the fail and the request continues.</p></li>
-</ul>
-<h3><a class="anchor" aria-hidden="true" id="getid"></a><a href="#getid" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getId()</h3>
-<p>Returns <em>a string</em></p>
-<p>Unique identifier for the request.</p>
-<h3><a class="anchor" aria-hidden="true" id="getelapsedtime"></a><a href="#getelapsedtime" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getElapsedTime()</h3>
-<p>Returns <em>a number</em></p>
-<p>Number of milliseconds since the start of processing the request.</p>
-<p><em>Starts in the <code>Request</code> constructor and is not the same as time since the client sent
-the request.</em></p>
-<h3><a class="anchor" aria-hidden="true" id="getip"></a><a href="#getip" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getIp()</h3>
-<p>Returns <em>a string</em></p>
-<p>Remote IP address of the client making the request.</p>
-<h3><a class="anchor" aria-hidden="true" id="getprotocol"></a><a href="#getprotocol" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getProtocol()</h3>
-<p>Returns <em>a string</em></p>
-<p>Protocol of the request such as <code>http</code> or <code>https</code>. Will be the
-<code>X-Forwarded-Proto</code> header value when available.</p>
-<h3><a class="anchor" aria-hidden="true" id="gethost"></a><a href="#gethost" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getHost()</h3>
-<p>Returns <em>a string</em></p>
-<p><code>Host</code> header value.</p>
-<h3><a class="anchor" aria-hidden="true" id="getport"></a><a href="#getport" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getPort()</h3>
-<p>Returns <em>a number</em></p>
-<p>Port number of the request.</p>
-<h3><a class="anchor" aria-hidden="true" id="getmethod"></a><a href="#getmethod" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getMethod()</h3>
-<p>Returns <em>a string</em></p>
-<p>HTTP method (verb) such as GET, POST, PUT, DELETE...</p>
-<h3><a class="anchor" aria-hidden="true" id="geturl"></a><a href="#geturl" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getUrl()</h3>
-<p>Returns <em>an object</em></p>
-<p>Parsed URL object. See <a href="https://nodejs.org/dist/latest-v8.x/docs/api/url.html#url_url_strings_and_url_objects"><code>url</code></a>.</p>
-<h3><a class="anchor" aria-hidden="true" id="getfullurl"></a><a href="#getfullurl" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getFullUrl()</h3>
-<p>Returns <em>a string</em></p>
-<p>Full URL including protocol, host, path and query string.</p>
-<p><em>Relies on <code>Host</code> header.</em></p>
-<h3><a class="anchor" aria-hidden="true" id="getcontenttype"></a><a href="#getcontenttype" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getContentType()</h3>
-<p>Returns <em>a string</em></p>
-<p>Content mime type without encoding charset, such as <code>application/json</code>.</p>
-<h3><a class="anchor" aria-hidden="true" id="getencoding"></a><a href="#getencoding" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getEncoding()</h3>
-<p>Returns <em>a string</em></p>
-<p>Name of encoding such as <code>utf-8</code>.</p>
-<h3><a class="anchor" aria-hidden="true" id="getheaders"></a><a href="#getheaders" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getHeaders()</h3>
-<p>Returns <em>an object</em></p>
-<p>All headers. Names are lower case and values are arrays when names
-are duplicated.</p>
-<h3><a class="anchor" aria-hidden="true" id="getheadername"></a><a href="#getheadername" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getHeader(name)</h3>
-<p>Returns <em>a string or array</em></p>
-<p>Value is an array when header is duplicated.</p>
-<ul>
-<li><p><strong>name</strong> <em>string</em></p>
-<p>Case insensitive.</p></li>
-</ul>
-<h3><a class="anchor" aria-hidden="true" id="hasheadername"></a><a href="#hasheadername" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>hasHeader(name)</h3>
-<p>Returns <em>a boolean</em></p>
-<p><code>true</code> when the header is in the request.</p>
-<ul>
-<li><p><strong>name</strong> <em>string</em></p>
-<p>Case insensitive.</p></li>
-</ul>
-<h3><a class="anchor" aria-hidden="true" id="withoutheadername"></a><a href="#withoutheadername" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>withoutHeader(name)</h3>
-<p>Returns <em>a boolean</em></p>
-<p><code>true</code> when the header is <strong>NOT</strong> in the request.</p>
-<ul>
-<li><p><strong>name</strong> <em>string</em></p>
-<p>Case insensitive.</p></li>
-</ul>
-<h3><a class="anchor" aria-hidden="true" id="getpathparams"></a><a href="#getpathparams" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getPathParams()</h3>
-<p>Returns <em>an object</em></p>
-<p>All path params. Names are lower case.</p>
-<h3><a class="anchor" aria-hidden="true" id="getpathparamname"></a><a href="#getpathparamname" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getPathParam(name)</h3>
-<p>Returns <em>a string</em></p>
-<p>The value of a path param.</p>
-<ul>
-<li><strong>name</strong> <em>string</em></li>
-</ul>
-<h3><a class="anchor" aria-hidden="true" id="getqueryparams"></a><a href="#getqueryparams" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getQueryParams()</h3>
-<p>Returns <em>an object</em></p>
-<p>All query string params. Names are lower case and values are
-arrays when names are duplicated.</p>
-<h3><a class="anchor" aria-hidden="true" id="getqueryparamname"></a><a href="#getqueryparamname" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getQueryParam(name)</h3>
-<p>Returns <em>a string</em></p>
-<p>The value of a query string param.</p>
-<ul>
-<li><p><strong>name</strong> <em>string</em></p>
-<p>Case insensitive.</p></li>
+response if a coping handler recovers from the fail and the request continues.</p></li>
 </ul>
 <h3><a class="anchor" aria-hidden="true" id="getbody"></a><a href="#getbody" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getBody()</h3>
 <p>Returns <em>any (probably an object - determined by the deserializer)</em></p>
@@ -164,6 +79,56 @@ by the deserializer. Deserializers are encouraged to preserve case.</p>
 <li><p><strong>name</strong> <em>string</em></p>
 <p>Case insensitive.</p></li>
 </ul>
+<h3><a class="anchor" aria-hidden="true" id="getcontent"></a><a href="#getcontent" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getContent()</h3>
+<p>Returns <em>a buffer</em></p>
+<p>Raw request content. Most likely use case is within a deserializer.</p>
+<h3><a class="anchor" aria-hidden="true" id="getcontenttype"></a><a href="#getcontenttype" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getContentType()</h3>
+<p>Returns <em>a string</em></p>
+<p>Content mime type without encoding charset, such as application/json.</p>
+<h3><a class="anchor" aria-hidden="true" id="getelapsedtime"></a><a href="#getelapsedtime" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getElapsedTime()</h3>
+<p>Returns <em>a number</em></p>
+<p>Number of milliseconds since the start of processing the request.</p>
+<p><em>Starts in the Request constructor and is not the same as time since the client sent
+the request.</em></p>
+<h3><a class="anchor" aria-hidden="true" id="getencoding"></a><a href="#getencoding" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getEncoding()</h3>
+<p>Returns <em>a string</em></p>
+<p>Name of encoding such as utf-8.</p>
+<h3><a class="anchor" aria-hidden="true" id="getfullurl"></a><a href="#getfullurl" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getFullUrl()</h3>
+<p>Returns <em>a string</em></p>
+<p>Full URL including protocol, host, path and query string.</p>
+<p><em>Relies on Host header.</em></p>
+<h3><a class="anchor" aria-hidden="true" id="getheadername"></a><a href="#getheadername" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getHeader(name)</h3>
+<p>Returns <em>a string or array</em></p>
+<p>Value is an array when header is duplicated.</p>
+<ul>
+<li><p><strong>name</strong> <em>string</em></p>
+<p>Case insensitive.</p></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="getheaders"></a><a href="#getheaders" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getHeaders()</h3>
+<p>Returns <em>an object</em></p>
+<p>All headers. Names are lower case and values are arrays when names
+are duplicated.</p>
+<h3><a class="anchor" aria-hidden="true" id="gethost"></a><a href="#gethost" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getHost()</h3>
+<p>Returns <em>a string</em></p>
+<p>Host header value.</p>
+<h3><a class="anchor" aria-hidden="true" id="getid"></a><a href="#getid" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getId()</h3>
+<p>Returns <em>a string</em></p>
+<p>Unique identifier for the request.</p>
+<h3><a class="anchor" aria-hidden="true" id="getip"></a><a href="#getip" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getIp()</h3>
+<p>Returns <em>a string</em></p>
+<p>Remote IP address of the client making the request.</p>
+<h3><a class="anchor" aria-hidden="true" id="getmethod"></a><a href="#getmethod" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getMethod()</h3>
+<p>Returns <em>a string</em></p>
+<p>HTTP method (verb) such as GET, POST, PUT, DELETE...</p>
+<h3><a class="anchor" aria-hidden="true" id="getpathparamname"></a><a href="#getpathparamname" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getPathParam(name)</h3>
+<p>Returns <em>a string</em></p>
+<p>The value of a path param.</p>
+<ul>
+<li><strong>name</strong> <em>string</em></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="getpathparams"></a><a href="#getpathparams" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getPathParams()</h3>
+<p>Returns <em>an object</em></p>
+<p>All path params. Names are lower case.</p>
 <h3><a class="anchor" aria-hidden="true" id="getparams"></a><a href="#getparams" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getParams()</h3>
 <p>Returns <em>an object</em></p>
 <p>All params deserialized from the path, the query string
@@ -171,32 +136,66 @@ and the request body. Will throw an exception if deserializing the params
 results in an exception.</p>
 <p>When params exist in more than one location such as both the path and
 the query string, the order of priority is path, then query string, then request
-body. Because of this ambiguity, it is usually preferable to use <a href="#getpathparams"><code>getPathParms</code></a>,
-<a href="#getqueryparams"><code>getQueryParams</code></a>, or <a href="#getbody"><code>getBody</code></a> instead of <code>getParams</code>.</p>
+body. Because of this ambiguity, it is usually preferable to use <a href="#getpathparams">getPathParms</a>,
+<a href="#getqueryparams">getQueryParams</a>, or <a href="#getbody">getBody</a> instead of getParams.</p>
 <h3><a class="anchor" aria-hidden="true" id="getparamname"></a><a href="#getparamname" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getParam(name)</h3>
 <p>Returns <em>any</em></p>
 <p>Param deserialized from the path, the query string or the request body.
 Will throw an exception if deserializing the params results in an exception.</p>
 <p>When a param exists in more than one location such as both the path and the
 query string, the order of priority is path, then query string, then request
-body. Because of this ambiguity, it is usually preferable to use <a href="#getpathparamname"><code>getPathParm</code></a>,
-<a href="#getqueryparamname"><code>getQueryParam</code></a>, or <a href="#getbodyparamname"><code>getBodyParam</code></a> instead of <code>getParam</code>.</p>
+body. Because of this ambiguity, it is usually preferable to use <a href="#getpathparamname">getPathParm</a>,
+<a href="#getqueryparamname">getQueryParam</a>, or <a href="#getbodyparamname">getBodyParam</a> instead of getParam.</p>
 <ul>
 <li><p><strong>name</strong> <em>string</em></p>
 <p>Case insensitive.</p></li>
 </ul>
-<h3><a class="anchor" aria-hidden="true" id="getcontent"></a><a href="#getcontent" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getContent()</h3>
-<p>Returns <em>a buffer</em></p>
-<p>Raw request content. Most likely use case is within a deserializer.</p>
-<h3><a class="anchor" aria-hidden="true" id="incomingmessage"></a><a href="#incomingmessage" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>incomingMessage</h3>
-<p>The preferred way to interact with a request is the methods above, however if a need arises
-that is not addressed with an existing method, then direct access to the
-<a href="https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage"><code>http.IncomingMessage</code></a> is available here.</p>
-<h3><a class="anchor" aria-hidden="true" id="error"></a><a href="#error" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>error</h3>
-<p>Available within catch handlers.</p>
-<h3><a class="anchor" aria-hidden="true" id="latestresult"></a><a href="#latestresult" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>latestResult</h3>
-<p>The resolved result of the latest finished handler.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="leaf.html">← Leaf</a><a class="docs-next button" href="response.html">Response →</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#methods">Methods</a></li><li><a href="#properties">Properties</a></li><li><a href="#reference">Reference</a><ul class="toc-headings"><li><a href="#proceed-result">proceed([result])</a></li><li><a href="#failerror-status-headers">fail(error[, status[, headers]])</a></li><li><a href="#getid">getId()</a></li><li><a href="#getelapsedtime">getElapsedTime()</a></li><li><a href="#getip">getIp()</a></li><li><a href="#getprotocol">getProtocol()</a></li><li><a href="#gethost">getHost()</a></li><li><a href="#getport">getPort()</a></li><li><a href="#getmethod">getMethod()</a></li><li><a href="#geturl">getUrl()</a></li><li><a href="#getfullurl">getFullUrl()</a></li><li><a href="#getcontenttype">getContentType()</a></li><li><a href="#getencoding">getEncoding()</a></li><li><a href="#getheaders">getHeaders()</a></li><li><a href="#getheadername">getHeader(name)</a></li><li><a href="#hasheadername">hasHeader(name)</a></li><li><a href="#withoutheadername">withoutHeader(name)</a></li><li><a href="#getpathparams">getPathParams()</a></li><li><a href="#getpathparamname">getPathParam(name)</a></li><li><a href="#getqueryparams">getQueryParams()</a></li><li><a href="#getqueryparamname">getQueryParam(name)</a></li><li><a href="#getbody">getBody()</a></li><li><a href="#getbodyparamname">getBodyParam(name)</a></li><li><a href="#getparams">getParams()</a></li><li><a href="#getparamname">getParam(name)</a></li><li><a href="#getcontent">getContent()</a></li><li><a href="#incomingmessage">incomingMessage</a></li><li><a href="#error">error</a></li><li><a href="#latestresult">latestResult</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"></a><div><h5>Guides</h5><a href="/docs/getting-started.html">Getting Started</a><a href="/docs/handlers.html">Handlers</a><a href="/docs/plugins.html">Plugins</a><a href="/docs/service-tree.html">Serice Tree</a><a href="/docs/auto-responses.html">Auto Responses</a><a href="/docs/how-it-works.html">How it Works</a></div><div><h5>API Reference</h5><a href="/docs/serviceberry.html">Serviceberry</a><a href="/docs/trunk.html">Trunk</a><a href="/docs/branch.html">Branch</a><a href="/docs/leaf.html">Leaf</a><a href="/docs/request.html">Reqeust</a><a href="/docs/response.html">Response</a><a href="/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/blog">Blog</a><a class="github-link" href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/docs/contributing.html">Contributing</a><a href="/docs/license.html">License</a></div></section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
+<h3><a class="anchor" aria-hidden="true" id="getport"></a><a href="#getport" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getPort()</h3>
+<p>Returns <em>a number</em></p>
+<p>Port number of the request.</p>
+<h3><a class="anchor" aria-hidden="true" id="getprotocol"></a><a href="#getprotocol" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getProtocol()</h3>
+<p>Returns <em>a string</em></p>
+<p>Protocol of the request such as http or https. Will be the
+X-Forwarded-Proto header value when available.</p>
+<h3><a class="anchor" aria-hidden="true" id="getqueryparamname"></a><a href="#getqueryparamname" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getQueryParam(name)</h3>
+<p>Returns <em>a string</em></p>
+<p>The value of a query string param.</p>
+<ul>
+<li><p><strong>name</strong> <em>string</em></p>
+<p>Case insensitive.</p></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="getqueryparams"></a><a href="#getqueryparams" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getQueryParams()</h3>
+<p>Returns <em>an object</em></p>
+<p>All query string params. Names are lower case and values are
+arrays when names are duplicated.</p>
+<h3><a class="anchor" aria-hidden="true" id="geturl"></a><a href="#geturl" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>getUrl()</h3>
+<p>Returns <em>an object</em></p>
+<p>Parsed URL object. See <a href="https://nodejs.org/dist/latest-v8.x/docs/api/url.html#url_url_strings_and_url_objects">url</a>.</p>
+<h3><a class="anchor" aria-hidden="true" id="hasheadername"></a><a href="#hasheadername" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>hasHeader(name)</h3>
+<p>Returns <em>a boolean</em></p>
+<p>true when the header is in the request.</p>
+<ul>
+<li><p><strong>name</strong> <em>string</em></p>
+<p>Case insensitive.</p></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="proceed-result"></a><a href="#proceed-result" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>proceed([result])</h3>
+<p>Call this method to pass control of the request to the next handler. Handlers
+may optionally pass control by their return value in lieu of calling proceed.
+See <a href="handlers.html">Handlers</a> guide. Proceed is bound to request</p>
+<ul>
+<li><p><strong>result</strong> <em>any</em> <span class="optional">[optional]</span></p>
+<p>Set as <a href="#latestresult">latestResult</a> property with the exception of when a request is being serialized
+or deserialized. When serializing or deserializing the result is the response content or request
+body respectively.</p></li>
+</ul>
+<h3><a class="anchor" aria-hidden="true" id="withoutheadername"></a><a href="#withoutheadername" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>withoutHeader(name)</h3>
+<p>Returns <em>a boolean</em></p>
+<p>true when the header is <strong>NOT</strong> in the request.</p>
+<ul>
+<li><p><strong>name</strong> <em>string</em></p>
+<p>Case insensitive.</p></li>
+</ul>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="leaf.html">← Leaf</a><a class="docs-next button" href="response.html">Response →</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#properties">Properties</a><ul class="toc-headings"><li><a href="#error">error</a></li><li><a href="#incomingmessage">incomingMessage</a></li><li><a href="#latestresult">latestResult</a></li></ul></li><li><a href="#methods">Methods</a><ul class="toc-headings"><li><a href="#failerror-status-headers">fail(error[, status[, headers]])</a></li><li><a href="#getbody">getBody()</a></li><li><a href="#getbodyparamname">getBodyParam(name)</a></li><li><a href="#getcontent">getContent()</a></li><li><a href="#getcontenttype">getContentType()</a></li><li><a href="#getelapsedtime">getElapsedTime()</a></li><li><a href="#getencoding">getEncoding()</a></li><li><a href="#getfullurl">getFullUrl()</a></li><li><a href="#getheadername">getHeader(name)</a></li><li><a href="#getheaders">getHeaders()</a></li><li><a href="#gethost">getHost()</a></li><li><a href="#getid">getId()</a></li><li><a href="#getip">getIp()</a></li><li><a href="#getmethod">getMethod()</a></li><li><a href="#getpathparamname">getPathParam(name)</a></li><li><a href="#getpathparams">getPathParams()</a></li><li><a href="#getparams">getParams()</a></li><li><a href="#getparamname">getParam(name)</a></li><li><a href="#getport">getPort()</a></li><li><a href="#getprotocol">getProtocol()</a></li><li><a href="#getqueryparamname">getQueryParam(name)</a></li><li><a href="#getqueryparams">getQueryParams()</a></li><li><a href="#geturl">getUrl()</a></li><li><a href="#hasheadername">hasHeader(name)</a></li><li><a href="#proceed-result">proceed([result])</a></li><li><a href="#withoutheadername">withoutHeader(name)</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"></a><div><h5>Guides</h5><a href="/docs/getting-started.html">Getting Started</a><a href="/docs/handlers.html">Handlers</a><a href="/docs/plugins.html">Plugins</a><a href="/docs/service-tree.html">Serice Tree</a><a href="/docs/auto-responses.html">Auto Responses</a><a href="/docs/how-it-works.html">How it Works</a></div><div><h5>API Reference</h5><a href="/docs/serviceberry.html">Serviceberry</a><a href="/docs/trunk.html">Trunk</a><a href="/docs/branch.html">Branch</a><a href="/docs/leaf.html">Leaf</a><a href="/docs/request.html">Reqeust</a><a href="/docs/response.html">Response</a><a href="/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/blog">Blog</a><a class="github-link" href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/docs/contributing.html">Contributing</a><a href="/docs/license.html">License</a></div></section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
               (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

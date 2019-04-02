@@ -48,7 +48,7 @@ class Request extends EventEmitter {
 	}
 
 	getIp () {
-		return this.incomingMessage.socket.remoteAddress;
+		return this.getHeader("X-Forwarded-For") || this.incomingMessage.socket.remoteAddress;
 	}
 
 	getProtocol () {
@@ -62,7 +62,7 @@ class Request extends EventEmitter {
 	}
 
 	getHost () {
-		return this.getHeader("Host");
+		return this.getHeader("X-Forwarded-Host") || this.getHeader("Host");
 	}
 
 	getPort () {

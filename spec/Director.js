@@ -79,7 +79,7 @@ describe("Director", () => {
 			serverResponse = response.serverResponse;
 
 		serverResponse.on("end", () => {
-			expect(serverResponse._getData()).toBe(responseContent);
+			expect(serverResponse._getChunks().toString()).toBe(responseContent);
 			done();
 		});
 

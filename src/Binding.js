@@ -23,8 +23,12 @@ class Binding extends Binder {
 		this.operator.resolve(value);
 	}
 
-	fail (error) {
-		this.operator.reject(error);
+	fail (...args) {
+		this.operator.reject(args);
+	}
+
+	send () {
+		this.operator.kill();
 	}
 }
 

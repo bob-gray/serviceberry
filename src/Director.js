@@ -4,7 +4,6 @@ const Base = require("solv/src/abstract/base"),
 	Binding = require("./Binding"),
 	Deserializer = require("./Deserializer"),
 	Serializer = require("./Serializer"),
-	statusCodes = require("./statusCodes"),
 	HttpError = require("./HttpError");
 
 class Director extends Base {
@@ -37,8 +36,6 @@ function proceed () {
 	if (handler) {
 		this.invoke(callHandler, handler);
 	} else {
-		// TODO: don't call send again when send is called within an async
-		// function which results in a resolved promise to the binding
 		this.invoke(send, {
 			body: this.request.latestResult
 		});
@@ -48,7 +45,8 @@ function proceed () {
 function fail (error) {
 	const handler = this.route.getNextCoping();
 
-	error = new HttpError(...arguments);
+	error = new HttpError(...toArray(error));
+
 	this.request.error = error;
 
 	if (handler) {
@@ -78,8 +76,8 @@ function bind () {
 	this.response = this.response.copy();
 
 	return binding.bind(this.request, "proceed")
-		.bind(this.request, "fail", this.proxy(fail))
-		.bind(this.response, "send", this.proxy("delay", send));
+		.bind(this.request, "fail")
+		.bind(this.response, "send", this.proxy(send));
 }
 
 function callHandler (handler) {
@@ -105,7 +103,7 @@ function end () {
 		content = response.getContent();
 
 	if (!content.length && response.is("OK")) {
-		response.setStatus(statusCodes.NO_CONTENT);
+		response.setStatus("No Content");
 	} else if (content.length && response.withoutHeader("Content-Length")) {
 		response.setHeader("Content-Length", content.length);
 	}
@@ -140,13 +138,20 @@ function setTimer () {
 	var timeout = this.route.options.timeout;
 
 	if (timeout) {
-		this.timer = setTimeout(this.proxy(timedout), timeout);
+		this.timer = setTimeout(this.proxy(timedOut), timeout);
 		this.timer.unref();
 	}
 }
 
-function timedout () {
-	this.invoke(fail, new HttpError("Request timed out", statusCodes.SERVICE_UNAVAILABLE));
+function timedOut () {
+	this.invoke(fail, [
+		"Request timed out",
+		"Service Unavailable"
+	]);
+}
+
+function toArray (value) {
+	return [].concat(value);
 }
 
 module.exports = Director;

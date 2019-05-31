@@ -10,51 +10,34 @@ describe("Binder", () => {
 		steward;
 
 	beforeEach(() => {
-		binder = new Binder();
+		binder = Object.assign(new Binder(), {
+			walk: jasmine.createSpy("walk"),
+			run: jasmine.createSpy("run")
+		});
+
 		steward = new EventEmitter();
 	});
 
-	it("should set a function property on a steward object", () => {
-		binder.bind(steward, "run", Function.prototype);
-
-		expect(typeof steward.run).toBe("function");
-	});
-
-	it("should permanently bind a function to a binder object", () => {
-		var bound;
-
-		binder.bind(steward, "run", test);
-
-		bound = steward.run;
-		bound();
-
-		function test () {
-			expect(this).toBe(binder);
-		}
-	});
-
 	it("should allow chaining of bind method", () => {
-		var result = binder.bind(steward, "dummy", Function.prototype);
+		const result = binder.bind(steward, "run");
 
 		expect(result).toBe(binder);
 	});
 
 	it("should allow binding more than one function", () => {
-		var run = jasmine.createSpy("run");
-
-		binder.bind(steward, "dummy", Function.prototype)
-			.bind(steward, "run", run);
+		binder.bind(steward, "walk")
+			.bind(steward, "run");
 
 		steward.run();
 
-		expect(run).toHaveBeenCalled();
+		expect(binder.run).toHaveBeenCalled();
 	});
 
 	it("should allow binding more then one steward", () => {
 		var run = jasmine.createSpy("run"),
 			secondSteward = {};
 
-		binder.bind(steward, "dummy", Function.prototype)
+		binder.bind(steward, "walk")
 			.bind(secondSteward, "run", run);
 
 		secondSteward.run();
@@ -63,7 +46,6 @@ describe("Binder", () => {
 	});
 
 	it("should allow binding by a method name", () => {
-		binder.run = jasmine.createSpy("run");
 		binder.bind(steward, "run");
 
 		steward.run();
@@ -72,55 +54,55 @@ describe("Binder", () => {
 	});
 
 	it("should forward arguments to bound function", () => {
-		var run = jasmine.createSpy("run");
+		const callback = jasmine.createSpy("callback");
 
-		binder.bind(steward, "run", run);
+		binder.bind(steward, "run", callback);
 
 		steward.run(1, 2, 3);
 
-		expect(run).toHaveBeenCalledWith(1, 2, 3);
+		expect(callback).toHaveBeenCalledWith(1, 2, 3);
 	});
 
 	it("should guard against calling the bound function more than once", () => {
-		const run = jasmine.createSpy("run");
+		const callback = jasmine.createSpy("callback");
 
-		binder.bind(steward, "run", run);
+		binder.bind(steward, "run", callback);
 
 		steward.run();
 		steward.run();
 
-		expect(run).toHaveBeenCalledTimes(1);
+		expect(callback).toHaveBeenCalledTimes(1);
 	});
 
 	it("should guard across all bound functions", () => {
-		const run = jasmine.createSpy("run");
+		const callback = jasmine.createSpy("callback");
 
-		binder.bind(steward, "run", run)
-			.bind(steward, "walk", run);
+		binder.bind(steward, "run", callback)
+			.bind(steward, "walk", callback);
 
 		steward.run();
 		steward.walk();
 
-		expect(run).toHaveBeenCalledTimes(1);
+		expect(callback).toHaveBeenCalledTimes(1);
 	});
 
 	it("should guard across all stewards", () => {
-		const run = jasmine.createSpy("run"),
+		const callback = jasmine.createSpy("callback"),
 			secondSteward = {};
 
-		binder.bind(secondSteward, "run", run)
-			.bind(steward, "walk", run);
+		binder.bind(secondSteward, "run", callback)
+			.bind(steward, "walk", callback);
 
 		secondSteward.run();
 		steward.walk();
 
-		expect(run).toHaveBeenCalledTimes(1);
+		expect(callback).toHaveBeenCalledTimes(1);
 	});
 
 	it("should trigger 'No Control' on steward if bound function is called more then once", () => {
 		const handler = jasmine.createSpy("handler");
 
-		binder.bind(steward, "run", Function.prototype);
+		binder.bind(steward, "run");
 
 		steward.on("No Control", handler);
 

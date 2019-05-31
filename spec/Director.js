@@ -37,7 +37,7 @@ describe("Director", () => {
 			],
 			coping: [
 				req => {
-					expect(req.error.is("Service Unavailable")).toBe(true);
+					expect(req.error.getStatusText()).toBe("Service Unavailable");
 					done();
 				}
 			]
@@ -153,7 +153,7 @@ describe("Director", () => {
 		director.run(route);
 	});
 
-	it("should send set status to 204 on a success response without content", (done) => {
+	it("should set status to 204 on a success response without content", (done) => {
 		const serverResponse = response.serverResponse;
 
 		serverResponse.on("end", () => {
@@ -163,7 +163,28 @@ describe("Director", () => {
 
 		route = createRoute(request, response, {
 			handlers: [
-				(req, res) => res.send()
+				async (req, res) => res.send()
+			],
+			coping: []
+		});
+
+		director.run(route);
+	});
+
+	it("should not fail with write after end", (done) => {
+		const serverResponse = response.serverResponse;
+
+		serverResponse.on("end", () => {
+			expect(serverResponse.statusCode).toBe(422);
+			done();
+		});
+
+		route = createRoute(request, response, {
+			handlers: [
+				req => {
+					req.fail("Aw Snap!", 422);
+					req.fail("And again");
+				}
 			],
 			coping: []
 		});

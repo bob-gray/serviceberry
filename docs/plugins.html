@@ -1,16 +1,76 @@
-<html lang="en"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Plugins · Serviceberry</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta property="og:title" content="Plugins · Serviceberry"/><meta property="og:type" content="website"/><meta property="og:url" content="https://serviceberry.js.org/index.html"/><meta property="og:description" content="This guide will walk you through creating and using a simple Serviceberry plugin."/><meta property="og:image" content="https://serviceberry.js.org/img/serviceberry.svg"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css"/><link rel="alternate" type="application/atom+xml" href="https://serviceberry.js.org/blog/atom.xml" title="Serviceberry Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://serviceberry.js.org/blog/feed.xml" title="Serviceberry Blog RSS Feed"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/css/main.css"/></head><body class="sideNavVisible doc separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/serviceberry-horizontal.svg"/><h2 class="headerTitle">Serviceberry</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/getting-started.html" target="_self">Guides</a></li><li class="siteNavGroupActive"><a href="/docs/serviceberry.html" target="_self">API Reference</a></li><li class=""><a href="/blog" target="_self">Blog</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Guides</span></h2></div><div class="navGroups"><div class="navGroup navGroupActive"><h3>Guides</h3><ul><li class="navListItem"><a class="navItem" href="/docs/getting-started.html">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/docs/handlers.html">Handlers</a></li><li class="navListItem navListItemActive"><a class="navItem navItemActive" href="/docs/plugins.html">Plugins</a></li><li class="navListItem"><a class="navItem" href="/docs/service-tree.html">Service Tree</a></li><li class="navListItem"><a class="navItem" href="/docs/auto-responses.html">Auto Responses</a></li><li class="navListItem"><a class="navItem" href="/docs/how-it-works.html">How It Works</a></li></ul></div><div class="navGroup navGroupActive"><h3>API Reference</h3><ul><li class="navListItem"><a class="navItem" href="/docs/serviceberry.html">Serviceberry</a></li><li class="navListItem"><a class="navItem" href="/docs/trunk.html">Trunk</a></li><li class="navListItem"><a class="navItem" href="/docs/branch.html">Branch</a></li><li class="navListItem"><a class="navItem" href="/docs/leaf.html">Leaf</a></li><li class="navListItem"><a class="navItem" href="/docs/request.html">Request</a></li><li class="navListItem"><a class="navItem" href="/docs/response.html">Response</a></li><li class="navListItem"><a class="navItem" href="/docs/httperror.html">HttpError</a></li></ul></div></div></section></div><script>
-          var toggler = document.getElementById('navToggler');
-          var nav = document.getElementById('docsNav');
-          toggler.onclick = function() {
-            nav.classList.toggle('docsSliderActive');
-          };
-        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1>Plugins</h1></header><article><div><span><p>This guide will walk you through creating and using a simple Serviceberry plugin.</p>
-<h2><a class="anchor" aria-hidden="true" id="plugins-are-handlers"></a><a href="#plugins-are-handlers" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Plugins Are Handlers</h2>
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Plugins · Serviceberry</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;p&gt;This guide will walk you through creating and using a simple Serviceberry plugin.&lt;/p&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Plugins · Serviceberry"/><meta property="og:type" content="website"/><meta property="og:url" content="https://serviceberry.js.org/index.html"/><meta property="og:description" content="&lt;p&gt;This guide will walk you through creating and using a simple Serviceberry plugin.&lt;/p&gt;
+"/><meta property="og:image" content="https://serviceberry.js.org/img/serviceberry.svg"/><meta name="twitter:card" content="summary"/><link rel="shortcut icon" href="/img/favicon.ico"/><link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/agate.min.css"/><link rel="alternate" type="application/atom+xml" href="https://serviceberry.js.org/blog/atom.xml" title="Serviceberry Blog ATOM Feed"/><link rel="alternate" type="application/rss+xml" href="https://serviceberry.js.org/blog/feed.xml" title="Serviceberry Blog RSS Feed"/><script>
+              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+              ga('create', 'UA-116036661-1', 'auto');
+              ga('send', 'pageview');
+            </script><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/serviceberry-horizontal.svg" alt="Serviceberry"/><h2 class="headerTitleWithLogo">Serviceberry</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/getting-started.html" target="_self">Guides</a></li><li class="siteNavGroupActive"><a href="/docs/serviceberry.html" target="_self">API Reference</a></li><li class=""><a href="/blog/" target="_self">Blog</a></li><li class="navSearchWrapper reactNavSearchWrapper"><input type="text" id="search_input_react" placeholder="Search" title="Search"/></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Guides</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Guides</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/getting-started.html">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/docs/handlers.html">Handlers</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/plugins.html">Plugins</a></li><li class="navListItem"><a class="navItem" href="/docs/service-tree.html">Service Tree</a></li><li class="navListItem"><a class="navItem" href="/docs/auto-responses.html">Auto Responses</a></li><li class="navListItem"><a class="navItem" href="/docs/how-it-works.html">How It Works</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">API Reference</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/serviceberry.html">Serviceberry</a></li><li class="navListItem"><a class="navItem" href="/docs/trunk.html">Trunk</a></li><li class="navListItem"><a class="navItem" href="/docs/branch.html">Branch</a></li><li class="navListItem"><a class="navItem" href="/docs/leaf.html">Leaf</a></li><li class="navListItem"><a class="navItem" href="/docs/request.html">Request</a></li><li class="navListItem"><a class="navItem" href="/docs/response.html">Response</a></li><li class="navListItem"><a class="navItem" href="/docs/httperror.html">HttpError</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Plugins</h1></header><article><div><span><p>This guide will walk you through creating and using a simple Serviceberry plugin.</p>
+<h2><a class="anchor" aria-hidden="true" id="plugins-are-handlers"></a><a href="#plugins-are-handlers" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Plugins Are Handlers</h2>
 <p>Plugins are handlers that are designed for reuse. <em>If you haven't read the <a href="handlers.html">Handlers</a>
 guide you may want to back up and start there.</em> The great thing about plugins being handlers is
 that creating a plugin is just as easy as creating a handler for your endpoint. To show you what
 I mean, let's create a plugin.</p>
-<h2><a class="anchor" aria-hidden="true" id="json-schema-plugin"></a><a href="#json-schema-plugin" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>JSON Schema Plugin</h2>
+<h2><a class="anchor" aria-hidden="true" id="json-schema-plugin"></a><a href="#json-schema-plugin" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>JSON Schema Plugin</h2>
 <p>We'll create a plugin for validating a <code>POST</code> request body with a <a href="http://json-schema.org/">JSON Schema</a>.
 All the heavy lifting will be done by <a href="https://www.npmjs.com/package/jsonschema">jsonschema</a> which
 we'll install using <a href="https://www.npmjs.com">npm</a>. Our plugin will be a thin wrapper that responds
@@ -24,9 +84,9 @@ with an appropriate error when validation fails.</p>
 </ul></li>
 <li>Create a new file <code>echo/validate.js</code> and save the JavaScript below as its contents.</li>
 </ul>
-<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> {validate} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"jsonschema"</span>);
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">const</span> {validate} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"jsonschema"</span>);
 
-<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-params">schema</span> =&gt;</span> request =&gt; {
+<span class="hljs-built_in">module</span>.exports = <span class="hljs-function"><span class="hljs-params">schema</span> =&gt;</span> <span class="hljs-function"><span class="hljs-params">request</span> =&gt;</span> {
     <span class="hljs-keyword">const</span> result = validate(request.getBody(), schema);
 
     <span class="hljs-keyword">if</span> (result.valid) {
@@ -38,15 +98,15 @@ with an appropriate error when validation fails.</p>
     }
 };
 </code></pre>
-<h3><a class="anchor" aria-hidden="true" id="let-s-break-it-down"></a><a href="#let-s-break-it-down" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Let's Break It Down</h3>
+<h3><a class="anchor" aria-hidden="true" id="let-s-break-it-down"></a><a href="#let-s-break-it-down" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Let's Break It Down</h3>
 <p>First our plugin requires <code>jsonschema</code> and assigns its validate function to a variable. Then it exports a
 function that accepts a schema and returns a handler function. The handler function will validate the
 body of each request using <code>jsonschema</code> and the schema passed into our plugin. The request proceeds
 if it's body matches the schema and it fails if it does not match. Failed requests will send the reason for the fail in the response.</p>
-<h3><a class="anchor" aria-hidden="true" id="using-our-plugin"></a><a href="#using-our-plugin" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Using Our Plugin</h3>
+<h3><a class="anchor" aria-hidden="true" id="using-our-plugin"></a><a href="#using-our-plugin" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Using Our Plugin</h3>
 <p>Let's create a simple service to allow us to use our plugin.</p>
 <p>First create a new file <code>echo/person.json</code> and save the JSON below as its contents.</p>
-<pre><code class="hljs css json">{
+<pre><code class="hljs css language-json">{
     <span class="hljs-attr">"type"</span>: <span class="hljs-string">"object"</span>,
     <span class="hljs-attr">"properties"</span>: {
         <span class="hljs-attr">"name"</span>: {
@@ -62,7 +122,7 @@ if it's body matches the schema and it fails if it does not match. Failed reques
 </code></pre>
 <p>Next run <code>npm install serviceberry</code> in <code>echo/</code>.</p>
 <p>Next create a new file <code>echo/service.js</code> and save the JavaScript below as its contents.</p>
-<pre><code class="hljs css javascript"><span class="hljs-keyword">const</span> {createTrunk} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>),
+<pre><code class="hljs css language-javascript"><span class="hljs-keyword">const</span> {createTrunk} = <span class="hljs-built_in">require</span>(<span class="hljs-string">"serviceberry"</span>),
     validate = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./validate"</span>),
     schema = <span class="hljs-built_in">require</span>(<span class="hljs-string">"./person"</span>),
     trunk = createTrunk();
@@ -80,7 +140,7 @@ didn't match.</p>
 <p><em>TIP: A couple good options for sending HTTP requests are <a href="https://www.getpostman.com">Postman</a>
 and <a href="https://curl.haxx.se">curl</a></em></p>
 <p>Code for this echo service can be found at <a href="https://github.com/bob-gray/serviceberry/tree/master/examples/echo">https://github.com/bob-gray/serviceberry/tree/master/examples/echo</a>.</p>
-<h2><a class="anchor" aria-hidden="true" id="serializers-and-deserializers"></a><a href="#serializers-and-deserializers" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Serializers and Deserializers</h2>
+<h2><a class="anchor" aria-hidden="true" id="serializers-and-deserializers"></a><a href="#serializers-and-deserializers" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Serializers and Deserializers</h2>
 <p>Serializers and deserializers are plugins which means they are <a href="handers.html">handlers</a> but they have a specific mission.
 Serviceberry loads a JSON serializer by default. All other serializers will be loaded by your service.
 Serializers transform the <a href="response.html">response</a> body into <a href="response.html">response</a> content. Deserializers transform the <a href="request.html">request</a> content
@@ -91,22 +151,25 @@ other plugins. See <a href="https://www.npmjs.com/package/serviceberry-json"><co
 prior to any handlers in the queue, if it results is an error, the error will only surface if
 and when <code>request.getBody()</code> is called from a handler. This allows deserializers to be asychronous and
 deserializing error handling to be more intuitive.</p>
-<h2><a class="anchor" aria-hidden="true" id="authoring-plugins"></a><a href="#authoring-plugins" aria-hidden="true" class="hash-link" ><svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Authoring Plugins</h2>
+<h2><a class="anchor" aria-hidden="true" id="authoring-plugins"></a><a href="#authoring-plugins" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Authoring Plugins</h2>
 <p>If you create a plugin for Serviceberry that you think could be useful to someone else please consider
 publishing it on <a href="https://npmjs.com">npm</a> with a package name that's prefixed with <code>serviceberry-</code> (such as
 <a href="https://www.npmjs.com/package/serviceberry-json"><code>serviceberry-json</code></a>). In the future I'd like to show
 a list of plugins on this site.</p>
 <p>Searching <a href="https://www.npmjs.org">npm</a> for Serviceberry plugins is a good way to see examples of plugins as a reference when
 creating your own.</p>
-</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="handlers.html">← Handlers</a><a class="docs-next button" href="service-tree.html">Service Tree →</a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#plugins-are-handlers">Plugins Are Handlers</a></li><li><a href="#json-schema-plugin">JSON Schema Plugin</a><ul class="toc-headings"><li><a href="#let-s-break-it-down">Let&#x27;s Break It Down</a></li><li><a href="#using-our-plugin">Using Our Plugin</a></li></ul></li><li><a href="#serializers-and-deserializers">Serializers and Deserializers</a></li><li><a href="#authoring-plugins">Authoring Plugins</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"></a><div><h5>Guides</h5><a href="/docs/getting-started.html">Getting Started</a><a href="/docs/handlers.html">Handlers</a><a href="/docs/plugins.html">Plugins</a><a href="/docs/service-tree.html">Serice Tree</a><a href="/docs/auto-responses.html">Auto Responses</a><a href="/docs/how-it-works.html">How it Works</a></div><div><h5>API Reference</h5><a href="/docs/serviceberry.html">Serviceberry</a><a href="/docs/trunk.html">Trunk</a><a href="/docs/branch.html">Branch</a><a href="/docs/leaf.html">Leaf</a><a href="/docs/request.html">Reqeust</a><a href="/docs/response.html">Response</a><a href="/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/blog">Blog</a><a class="github-link" href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/docs/contributing.html">Contributing</a><a href="/docs/license.html">License</a></div></section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>
-              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-              ga('create', 'UA-116036661-1', 'auto');
-              ga('send', 'pageview');
-            </script><script>window.twttr=(function(d,s, id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return t;js=d.createElement(s);js.id=id;js.src='https://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, 'script', 'twitter-wjs'));</script><script>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/handlers.html"><span class="arrow-prev">← </span><span>Handlers</span></a><a class="docs-next button" href="/docs/service-tree.html"><span>Service Tree</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#plugins-are-handlers">Plugins Are Handlers</a></li><li><a href="#json-schema-plugin">JSON Schema Plugin</a><ul class="toc-headings"><li><a href="#let-s-break-it-down">Let's Break It Down</a></li><li><a href="#using-our-plugin">Using Our Plugin</a></li></ul></li><li><a href="#serializers-and-deserializers">Serializers and Deserializers</a></li><li><a href="#authoring-plugins">Authoring Plugins</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"></a><div><h5>Guides</h5><a href="/docs/getting-started.html">Getting Started</a><a href="/docs/handlers.html">Handlers</a><a href="/docs/plugins.html">Plugins</a><a href="/docs/service-tree.html">Serice Tree</a><a href="/docs/auto-responses.html">Auto Responses</a><a href="/docs/how-it-works.html">How it Works</a></div><div><h5>API Reference</h5><a href="/docs/serviceberry.html">Serviceberry</a><a href="/docs/trunk.html">Trunk</a><a href="/docs/branch.html">Branch</a><a href="/docs/leaf.html">Leaf</a><a href="/docs/request.html">Reqeust</a><a href="/docs/response.html">Response</a><a href="/docs/httperror.html">HttpError</a></div><div><h5>More</h5><a href="/blog">Blog</a><a class="github-link" href="https://github.com/bob-gray/serviceberry">GitHub</a><a class="github-button" href="https://github.com/bob-gray/serviceberry" data-icon="octicon-star" data-count-href="/facebook/docusaurus/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a><a href="/docs/contributing.html">Contributing</a><a href="/docs/license.html">License</a></div></section></footer></div><script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script><script>window.twttr=(function(d,s, id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return t;js=d.createElement(s);js.id=id;js.src='https://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js, fjs);t._e = [];t.ready = function(f) {t._e.push(f);};return t;}(document, 'script', 'twitter-wjs'));</script><script>
+                document.addEventListener('keyup', function(e) {
+                  if (e.target !== document.body) {
+                    return;
+                  }
+                  // keyCode for '/' (slash)
+                  if (e.keyCode === 191) {
+                    const search = document.getElementById('search_input_react');
+                    search && search.focus();
+                  }
+                });
+              </script><script>
               var search = docsearch({
                 
                 apiKey: 'd8f71d3fca61a88437ddb93081120da2',

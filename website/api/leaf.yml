@@ -28,3 +28,4 @@ methods:
   arguments:
   - name: setup
     type: promise
+    repeating: true

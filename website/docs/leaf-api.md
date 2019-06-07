@@ -14,7 +14,7 @@ Created by calling .on() method on the service [trunk](trunk.html) or any servic
 
   - [cope(...handlers)](#copehandlers)
   - [use(...handlers)](#usehandlers)
-  - [waitFor(setup)](#waitforsetup)
+  - [waitFor(...setup)](#waitforsetup)
 
 
 Methods
@@ -42,7 +42,7 @@ Adds plugin [handlers](handlers.html) to this leaf.
     See [Handlers](handlers.html) guide.
 
 
-### waitFor(setup)
+### waitFor(...setup)
 
 Returns *this leaf*
 

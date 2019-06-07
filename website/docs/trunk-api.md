@@ -23,7 +23,7 @@ A service has only one trunk.
   - [on(method, ...handlers)](#onmethod-handlers)
   - [start(callback)](#startcallback)
   - [use(...handlers)](#usehandlers)
-  - [waitFor(setup)](#waitforsetup)
+  - [waitFor(...setup)](#waitforsetup)
 
 
 Methods
@@ -158,7 +158,7 @@ Adds plugin [handlers](handlers.html) to this trunk.
     See [Handlers](handlers.html) guide.
 
 
-### waitFor(setup)
+### waitFor(...setup)
 
 Returns *this branch*
 

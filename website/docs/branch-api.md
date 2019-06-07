@@ -20,7 +20,7 @@ A branch is created by calling method .at() on the service
   - [on(options[, ...handlers])](#onoptions-handlers-)
   - [on(method[, ...handlers])](#onmethod-handlers-)
   - [use(...handlers)](#usehandlers)
-  - [waitFor(setup)](#waitforsetup)
+  - [waitFor(...setup)](#waitforsetup)
 
 
 Methods
@@ -132,7 +132,7 @@ Adds plugin [handlers](handlers.html) to this branch.
     See [Handlers](handlers.html) guide.
 
 
-### waitFor(setup)
+### waitFor(...setup)
 
 Returns *this branch*
 

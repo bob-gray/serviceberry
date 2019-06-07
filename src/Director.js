@@ -22,7 +22,7 @@ class Director extends Base {
 }
 
 function deserialize () {
-	var deserializer = new Deserializer(this.route.options.deserializers);
+	const deserializer = new Deserializer(this.route.options.deserializers);
 
 	return this.invoke(bind)
 		.call(deserializer.proxy("deserialize"), this.request, this.response)
@@ -31,7 +31,7 @@ function deserialize () {
 }
 
 function proceed () {
-	var handler = this.route.getNextHandler();
+	const handler = this.route.getNextHandler();
 
 	if (handler) {
 		this.invoke(callHandler, handler);
@@ -61,7 +61,7 @@ function fail (error) {
 }
 
 function serialize () {
-	var serializer = new Serializer(this.route.options.serializers);
+	const serializer = new Serializer(this.route.options.serializers);
 
 	return this.invoke(bind)
 		.call(serializer.proxy("serialize"), this.request, this.response)
@@ -70,7 +70,7 @@ function serialize () {
 }
 
 function bind () {
-	var binding = new Binding();
+	const binding = new Binding();
 
 	this.request = this.request.copy();
 	this.response = this.response.copy();
@@ -100,7 +100,7 @@ function send (options = {}) {
 // eslint-disable-next-line max-statements
 // eslint-disable-next-line complexity
 function end () {
-	var response = this.response,
+	const response = this.response,
 		{serverResponse} = response,
 		content = response.getContent();
 
@@ -141,7 +141,7 @@ function setDeserializeFail (error) {
 }
 
 function setTimer () {
-	var timeout = this.route.options.timeout;
+	const {timeout} = this.route.options;
 
 	if (timeout) {
 		this.timer = setTimeout(this.proxy(timedOut), timeout);

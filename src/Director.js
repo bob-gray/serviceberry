@@ -97,15 +97,21 @@ function send (options = {}) {
 	this.invoke(serialize).then(this.proxy(end));
 }
 
+// eslint-disable-next-line max-statements
+// eslint-disable-next-line complexity
 function end () {
 	var response = this.response,
-		serverResponse = response.serverResponse,
+		{serverResponse} = response,
 		content = response.getContent();
 
 	if (!content.length && response.is("OK")) {
 		response.setStatus("No Content");
 	} else if (content.length && response.withoutHeader("Content-Length")) {
 		response.setHeader("Content-Length", content.length);
+	}
+
+	if (!content.length) {
+		response.removeHeader("Content-Type");
 	}
 
 	serverResponse.writeHead(

@@ -16,9 +16,11 @@ module.exports = {
 		label: "Blog",
 		blog: true
 	}],
+	cleanUrl: true,
+	disableHeaderTitle: true,
 	algolia: {
 		apiKey: "d8f71d3fca61a88437ddb93081120da2",
-		indexName: "serviceberry",
+		indexName: "serviceberry"
 	},
 	gaTrackingId: "UA-116036661-1",
 	headerIcon: "img/serviceberry-horizontal.svg",
@@ -32,7 +34,7 @@ module.exports = {
 	organizationName: "bob-gray",
 	projectName: "serviceberry",
 	highlight: {
-		theme: "agate",
+		theme: "agate"
 	},
 	ogImage: "img/serviceberry.svg",
 	twitter: true,

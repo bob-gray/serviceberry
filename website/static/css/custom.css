@@ -1,11 +1,9 @@
-.headerWrapper .headerTitle {
-	overflow: hidden;
-	text-indent: -9999px;
+body {
+	color: #2a190e;
 }
 
 .headerWrapper header img {
 	margin: 0 10px;
-	display: block;
 }
 
 code {
@@ -22,19 +20,24 @@ code.hljs {
 	line-height: 25px;
 }
 
+.reactNavSearchWrapper input#search_input_react::placeholder {
+	opacity: 0.5;
+}
+
 .navSearchWrapper::before {
 	border-width: 2px;
 }
 
 .navSearchWrapper::after {
 	width: 2px;
+	left: 33px;
+	top: 54%;
 }
 
 .navigationWrapper .slidingNav > ul > li > a {
 	background: #2b1100;
 }
 
-body,
 .mainContainer {
 	background: none;
 	padding-bottom: 80px;
@@ -104,28 +107,19 @@ body,
 	list-style-type: circle;
 }
 
-.docsNavContainer nav.toc .navBreadcrumb {
-	height: 50px;
+.docsSliderActive .toc .navBreadcrumb {
+	border-bottom-width: 0;
 }
 
 .docsNavContainer nav.toc .navBreadcrumb .navToggle i,
 .docsNavContainer nav.toc .navBreadcrumb .navToggle::before,
-.docsNavContainer nav.toc .navBreadcrumb .navToggle::after {
+.docsNavContainer nav.toc .navBreadcrumb .navToggle::after,
+.docsNavContainer nav.toc .navBreadcrumb .tocToggler {
 	display: none;
-}
-
-.docsNavContainer nav.toc .navBreadcrumb .navToggle  {
-	background: no-repeat center url(/img/menu-bars.svg);
-	width: 40px;
-	height: 40px;
 }
 
 .navBreadcrumb h2 {
 	display: none;
-}
-
-.docsNavContainer .toc .toggleNav .navGroups {
-	padding-top: 90px;
 }
 
 .docsNavContainer .toc .toggleNav,
@@ -186,7 +180,9 @@ a:hover {
 }
 
 footer.nav-footer {
-	box-shadow: inset 0 20px 30px 0 rgba(0,0,0,0.05)
+	box-shadow: inset 0 20px 30px 0 rgba(0,0,0,0.05);
+	padding-bottom: 80px;
+	background-color: #2a190e;
 }
 
 footer .sitemap a.github-link {

@@ -4,24 +4,62 @@
     "next": "Next",
     "previous": "Previous",
     "tagline": "A focused HTTP service framework for Node.js",
-    "auto-responses": "Auto Responses",
-    "branch": "Branch",
-    "contributing": "Contributing",
-    "getting-started": "Getting Started",
-    "handlers": "Handlers",
-    "how-it-works": "How It Works",
-    "httperror": "HttpError",
-    "leaf": "Leaf",
-    "license": "License (MIT)",
-    "plugins": "Plugins",
-    "request": "Request",
-    "response": "Response",
-    "service-tree": "Service Tree",
-    "serviceberry": "Serviceberry",
-    "trunk": "Trunk",
-    "Guides": "Guides",
-    "API Reference": "API Reference",
-    "Blog": "Blog"
+    "docs": {
+      "auto-responses": {
+        "title": "Auto Responses"
+      },
+      "branch": {
+        "title": "Branch"
+      },
+      "contributing": {
+        "title": "Contributing"
+      },
+      "getting-started": {
+        "title": "Getting Started"
+      },
+      "handlers": {
+        "title": "Handlers"
+      },
+      "how-it-works": {
+        "title": "How It Works"
+      },
+      "httperror": {
+        "title": "HttpError"
+      },
+      "leaf": {
+        "title": "Leaf"
+      },
+      "license": {
+        "title": "License (MIT)"
+      },
+      "plugins": {
+        "title": "Plugins"
+      },
+      "request": {
+        "title": "Request"
+      },
+      "response": {
+        "title": "Response"
+      },
+      "service-tree": {
+        "title": "Service Tree"
+      },
+      "serviceberry": {
+        "title": "Serviceberry"
+      },
+      "trunk": {
+        "title": "Trunk"
+      }
+    },
+    "links": {
+      "Guides": "Guides",
+      "API Reference": "API Reference",
+      "Blog": "Blog"
+    },
+    "categories": {
+      "Guides": "Guides",
+      "API Reference": "API Reference"
+    }
   },
   "pages-strings": {
     "Help Translate|recruit community translators for your project": "Help Translate",

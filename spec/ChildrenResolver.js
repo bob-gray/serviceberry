@@ -40,18 +40,15 @@ describe("ChildrenResolver", () => {
 		}, 100);
 	});
 
-	it("should resolve when its children are resolved", (done) => {
+	it("should resolve when its children are resolved", async () => {
 		const spy = jasmine.createSpy("resolved");
-
-		resolver.resolved.then(spy);
 
 		leaves.forEach(leaf => leaf.resolve());
 		branches.forEach(branch => branch.resolve());
 
-		setImmediate(() => {
-			expect(spy).toHaveBeenCalled();
-			done();
-		});
+		await resolver.resolved.then(spy);
+
+		expect(spy).toHaveBeenCalled();
 	});
 });
 

@@ -1,6 +1,8 @@
 "use strict";
 
-const Base = require("solv/src/abstract/base");
+const Base = require("solv/src/abstract/base"),
+	{promisify} = require("util"),
+	nextEventLoop = promisify(setImmediate);
 
 class HandlersResolver extends Base {
 	constructor () {
@@ -10,13 +12,9 @@ class HandlersResolver extends Base {
 }
 
 async function init () {
-	await nextTick();
+	await nextEventLoop();
 
 	return this.invoke(resolveHandlers);
-}
-
-function nextTick () {
-	return new Promise(process.nextTick);
 }
 
 async function resolveHandlers () {

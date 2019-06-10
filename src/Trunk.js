@@ -25,7 +25,7 @@ class Trunk extends Branch {
 		this.server = http.createServer();
 
 		if (this.options.autoStart) {
-			process.nextTick(this.proxy("start"));
+			setImmediate(this.proxy("start"));
 		}
 
 		if (this.options.callback) {

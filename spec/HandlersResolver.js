@@ -40,50 +40,46 @@ describe("HandlersResolver", () => {
 		}, 100);
 	});
 
-	it("should resolve when its children are resolved", (done) => {
+	it("should resolve when its children are resolved", async () => {
 		const spy = jasmine.createSpy("resolved");
 
-		resolver.resolved.then(spy);
-
 		handlers.concat(coping)
 			.concat(waiting)
 			.forEach(handler => handler.resolve(Function.prototype));
 
-		setImmediate(() => {
-			expect(spy).toHaveBeenCalled();
-			done();
-		});
+		await resolver.resolved.then(spy);
+
+		expect(spy).toHaveBeenCalled();
 	});
 
-	it("should set resolved handler functions", (done) => {
+	it("should set resolved handler functions", async () => {
 		handlers.concat(coping)
 			.concat(waiting)
 			.forEach(handler => handler.resolve(Function.prototype));
 
-		setImmediate(() => {
-			resolver.handlers.concat(resolver.coping)
-				// eslint-disable-next-line max-nested-callbacks
-				.forEach(handler => expect(handler).toBe(Function.prototype));
-			done();
-		});
+		await resolver.resolved;
+
+		resolver.handlers.concat(resolver.coping)
+			// eslint-disable-next-line max-nested-callbacks
+			.forEach(handler => expect(handler).toBe(Function.prototype));
 	});
 
-	it("should set resolved handler objects", (done) => {
-		const spy = jasmine.createSpyObj("handler", ["use"]);
+	it("should set resolved handler objects", async () => {
+		var spy = jasmine.createSpyObj("handler", ["use"]),
+			all;
 
 		handlers.concat(coping)
 			.concat(waiting)
 			.forEach(handler => handler.resolve(spy));
 
-		setImmediate(() => {
-			const all = resolver.handlers.concat(resolver.coping);
+		await resolver.resolved;
 
-			// eslint-disable-next-line max-nested-callbacks
-			all.forEach(handler => handler());
-			expect(spy.use).toHaveBeenCalledTimes(all.length);
+		all = resolver.handlers.concat(resolver.coping);
 
-			done();
-		});
+		// eslint-disable-next-line max-nested-callbacks
+		all.forEach(handler => handler());
+
+		expect(spy.use).toHaveBeenCalledTimes(all.length);
 	});
 });
 

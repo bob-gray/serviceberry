@@ -105,6 +105,7 @@ control over the <a href="request.html">request</a> and <a href="response.html">
 <li>Return nothing and call <a href="response.html#send-options"><code>response.send()</code></a>.</li>
 <li>Return nothing and call <a href="request.html#failerror-status-headers"><code>request.fail()</code></a>.</li>
 <li>Return <code>false</code>.</li>
+<li>Return an error.</li>
 <li>Throw an error.</li>
 </ol>
 <p>Returning a <code>promise</code> that is resolved or eventually resolved, returning anything other than <code>false</code> or a
@@ -112,7 +113,7 @@ thennable, or returning nothing and calling <a href="request.html#proceed-value"
 proceeding. Control will be given to the next handler in the queue. If the queue has no more handlers,
 the request will end and a response sent to the client.</p>
 <p>Returning nothing and calling <a href="response.html#send-options"><code>response.send()</code></a> will complete the request and send the response to the client.</p>
-<p>Returning a <code>promise</code> that is rejected or eventually rejected, returning <code>false</code>, throwing an error, or returning
+<p>Returning a <code>promise</code> that is rejected or eventually rejected, returning <code>false</code>, return an error or throwing an error, or returning
 nothing and calling <a href="request.html#failerror-status-headers"><code>request.fail()</code></a> are all functionally equivalent. They all result in control falling back to the nearest error handler. If no error handler is found the request will be ended. Errors are available in error handlers
 at <a href="request.html#error"><code>request.error</code></a>.</p>
 <p><a href="request.html#proceed-value"><code>request.proceed()</code></a>, <a href="request.html#failerror-status-headers"><code>request.fail()</code></a> and <a href="response.html#send-options"><code>response.send()</code></a> can all be called asynchronously as long

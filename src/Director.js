@@ -43,20 +43,20 @@ function proceed () {
 }
 
 function fail (error) {
-	const handler = this.route.getNextCoping();
+	const coping = this.route.getNextCoping();
 
 	error = new HttpError(...toArray(error));
 
 	this.request.error = error;
 
-	if (handler) {
-		this.invoke(callHandler, handler);
+	if (coping) {
+		this.invoke(callHandler, coping);
 	} else {
 		this.invoke(send, {
 			status: error.getStatus(),
 			headers: error.getHeaders(),
 			body: error.getMessage()
-		});
+		}, !coping);
 	}
 }
 
@@ -65,8 +65,7 @@ function serialize () {
 
 	return this.invoke(bind)
 		.call(serializer.proxy("serialize"), this.request, this.response)
-		.then(this.response.proxy("setContent"))
-		.catch(this.proxy(fail));
+		.then(this.response.proxy("setContent"));
 }
 
 function bind () {
@@ -92,9 +91,29 @@ function call (handler) {
 		.catch(this.proxy(fail));
 }
 
-function send (options = {}) {
+function send (options = {}, noCopingHandler) {
+	var promise;
+
 	this.response.set(options);
-	this.invoke(serialize).then(this.proxy(end));
+	promise = this.invoke(serialize).then(this.proxy(end));
+
+	if (noCopingHandler) {
+		promise.catch(this.proxy(sendSerializationError));
+	} else {
+		promise.catch(this.proxy(fail));
+	}
+}
+
+function sendSerializationError (error) {
+	error = new HttpError(error);
+
+	this.response.set({
+		status: error.getStatus(),
+		headers: error.getHeaders(),
+		content: error.getMessage()
+	});
+
+	this.invoke(end);
 }
 
 // eslint-disable-next-line max-statements

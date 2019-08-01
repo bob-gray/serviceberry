@@ -17,6 +17,10 @@ class HttpError extends Error {
 		}
 	}
 
+	get name () {
+		return this.constructor.name;
+	}
+
 	getMessage () {
 		return this.message;
 	}

@@ -43,8 +43,10 @@ function regulate () {
 }
 
 function handleResult (result) {
-	if (result instanceof Error || result === false) {
+	if (result instanceof Error) {
 		this.reject(result);
+	} else if (result === false) {
+		this.reject();
 	} else if (typeof result !== "undefined") {
 		Promise.resolve(result).then(this.resolve, this.reject);
 	}

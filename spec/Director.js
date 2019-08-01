@@ -74,6 +74,63 @@ describe("Director", () => {
 		director.run(route);
 	});
 
+	it("should send an error when serializer fails", (done) => {
+		const serverResponse = response.serverResponse,
+			contentType = "text/plain",
+			error = new Error("Bad serializer");
+
+		response.setHeader("Content-Type", contentType);
+		director = new Director(request, response);
+
+		serverResponse.on("end", () => {
+			expect(serverResponse.statusCode).toBe(500);
+			expect(serverResponse._getChunks().toString()).toBe(error.message);
+			done();
+		});
+
+		route = createRoute(request, response, {
+			handlers: [
+				req => req.getBody()
+			],
+			coping: [],
+			options: {
+				serializers: {
+					[contentType]: () => error
+				}
+			}
+		});
+
+		director.run(route);
+	});
+
+	it("should send an error when serializer returns boolean false", (done) => {
+		const serverResponse = response.serverResponse,
+			contentType = "text/plain";
+
+		response.setHeader("Content-Type", contentType);
+		director = new Director(request, response);
+
+		serverResponse.on("end", () => {
+			expect(serverResponse.statusCode).toBe(500);
+			expect(serverResponse._getChunks().toString()).toBe("");
+			done();
+		});
+
+		route = createRoute(request, response, {
+			handlers: [
+				req => req.getBody()
+			],
+			coping: [],
+			options: {
+				serializers: {
+					[contentType]: () => false
+				}
+			}
+		});
+
+		director.run(route);
+	});
+
 	it("should send latest result when reaching the end of the handler queue", (done) => {
 		const responseContent = "Plain text response",
 			serverResponse = response.serverResponse;

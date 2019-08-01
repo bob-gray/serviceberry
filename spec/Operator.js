@@ -1,3 +1,4 @@
+/* globals expectAsync */
 /* eslint max-nested-callbacks: ["error", 3] */
 
 "use strict";
@@ -29,40 +30,52 @@ describe("Operator", () => {
 	it("should return a promise from call that resolves to a simple value returned from handler", () => {
 		var handler = jasmine.createSpy("handler").and.returnValue(1);
 
-		return operator.call(handler).then((value) => expect(value).toBe(1));
+		return expectAsync(operator.call(handler)).toBeResolvedTo(1);
 	});
 
 	it("should return a promise from call that 'follows' a promise returned from handler", () => {
 		var handler = jasmine.createSpy("handler").and.returnValue(Promise.resolve(1));
 
-		return operator.call(handler).then((value) => expect(value).toBe(1));
+		return expectAsync(operator.call(handler)).toBeResolvedTo(1);
 	});
 
 	it("should return a promise from call that 'follows' a rejected promise returned from handler", () => {
-		var handler = jasmine.createSpy("handler").and.returnValue(Promise.reject(new Error("Oh Snap!")));
+		var error = new Error("Oh Snap!"),
+			handler = jasmine.createSpy("handler").and.returnValue(Promise.reject(error));
 
-		return operator.call(handler).catch((error) => expect(error.message).toBe("Oh Snap!"));
+		return expectAsync(operator.call(handler)).toBeRejectedWith(error);
+	});
+
+	it("should return a rejected promise from call when handler returns an error", () => {
+		var error = new Error("Oh Snap!"),
+			handler = jasmine.createSpy("handler").and.returnValue(error);
+
+		return expectAsync(operator.call(handler)).toBeRejectedWith(error);
 	});
 
 	it("should return a rejected promise from call when false is returned from handler", () => {
 		var handler = jasmine.createSpy("handler").and.returnValue(false);
 
-		return operator.call(handler).catch((error) => expect(error).toBe(false));
+		return expectAsync(operator.call(handler)).toBeRejected();
 	});
 
 	it("should return a rejected promise from call when handler throws an error", () => {
-		var handler = () => {
-			throw new Error("Oh Snap!");
-		};
+		var error = new Error("Oh Snap!"),
+			handler = () => {
+				throw error;
+			};
 
-		return operator.call(handler).catch((error) => expect(error.message).toBe("Oh Snap!"));
+		return expectAsync(operator.call(handler)).toBeRejectedWith(error);
 	});
 
-	it("should return a promise from call that remains unresolved when the handler returns undefined", () => {
-		var handler = jasmine.createSpy("handler");
+	it("should return a promise from call that remains unresolved when the handler returns undefined", done => {
+		var next = jasmine.createSpy("next");
 
-		operator.call(Function.prototype).then(handler);
+		operator.call(Function.prototype).then(next, next);
 
-		expect(handler).not.toHaveBeenCalled();
+		setTimeout(() => {
+			expect(next).not.toHaveBeenCalled();
+			done();
+		}, 500);
 	});
 });

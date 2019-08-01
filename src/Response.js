@@ -58,6 +58,7 @@ class Response extends EventEmitter {
 		this.encoding = encoding;
 	}
 
+	// eslint-disable-next-line complexity
 	set (options) {
 		if (options.status) {
 			this.setStatus(options.status);
@@ -71,7 +72,9 @@ class Response extends EventEmitter {
 			this.setEncoding(options.encoding);
 		}
 
-		if ("body" in options) {
+		if (options.hasOwnProperty("content")) {
+			this.setContent(options.content);
+		} else if (options.hasOwnProperty("body")) {
 			this.setBody(options.body);
 		}
 

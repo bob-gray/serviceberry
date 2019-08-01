@@ -51,7 +51,8 @@ control over the [request](request.html) and [response](response.html) by the fo
   4. Return nothing and call [`response.send()`](response.html#send-options).
   5. Return nothing and call [`request.fail()`](request.html#failerror-status-headers).
   6. Return `false`.
-  7. Throw an error.
+  7. Return an error.
+  8. Throw an error.
 
 Returning a `promise` that is resolved or eventually resolved, returning anything other than `false` or a
 thennable, or returning nothing and calling [`request.proceed()`](request.html#proceed-value) are all functionally equivalent. They all result in the request
@@ -60,7 +61,7 @@ the request will end and a response sent to the client.
 
 Returning nothing and calling [`response.send()`](response.html#send-options) will complete the request and send the response to the client.
 
-Returning a `promise` that is rejected or eventually rejected, returning `false`, throwing an error, or returning
+Returning a `promise` that is rejected or eventually rejected, returning `false`, return an error or throwing an error, or returning
 nothing and calling [`request.fail()`](request.html#failerror-status-headers) are all functionally equivalent. They all result in control falling back to the nearest error handler. If no error handler is found the request will be ended. Errors are available in error handlers
 at [`request.error`](request.html#error).
 

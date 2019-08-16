@@ -33,6 +33,7 @@ Object.assign(
 	headersAccessor.setters
 );
 
+// eslint-disable-next-line complexity
 function init (error, status, headers = {}) {
 	this.message = error.message || error;
 	this.initStatus(status || error.status || statusCodes.INTERNAL_SERVER_ERROR);
@@ -44,6 +45,10 @@ function init (error, status, headers = {}) {
 
 	if (error.message) {
 		this.originalError = error;
+	}
+
+	if (error.stack) {
+		this.stack = error.stack;
 	}
 }
 

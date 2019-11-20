@@ -98,7 +98,7 @@ class Request extends EventEmitter {
 	}
 
 	getPathParam (name) {
-		return this.pathParams[name.toLowerCase()];
+		return getCaseInsensitive(this.pathParams, name);
 	}
 
 	getPathParams () {
@@ -106,9 +106,7 @@ class Request extends EventEmitter {
 	}
 
 	getQueryParam (name) {
-		var params = this.getQueryParams();
-
-		return params[name.toLowerCase()];
+		return getCaseInsensitive(this.getQueryParams(), name);
 	}
 
 	getQueryParams () {
@@ -124,17 +122,7 @@ class Request extends EventEmitter {
 	}
 
 	getBodyParam (name) {
-		var param,
-			lower = name.toLowerCase(),
-			body = this.body || {};
-
-		if (name in body) {
-			param = body[name];
-		} else if (lower in body) {
-			param = body[lower];
-		}
-
-		return param;
+		return getCaseInsensitive(this.body || {}, name);
 	}
 
 	getParams () {
@@ -150,17 +138,7 @@ class Request extends EventEmitter {
 	}
 
 	getParam (name) {
-		var params = this.getParams(),
-			param,
-			lower = name.toLowerCase();
-
-		if (name in params) {
-			param = params[name];
-		} else if (lower in params) {
-			param = params[lower];
-		}
-
-		return param;
+		return getCaseInsensitive(this.getParams(), name);
 	}
 
 	setAllowedMethods (allow) {
@@ -191,6 +169,19 @@ function parseContentType (incomingMessage) {
 	}
 
 	return parsed;
+}
+
+function getCaseInsensitive (params, name) {
+	var lower = name.toLowerCase(),
+		param;
+
+	if (name in params) {
+		param = params[name];
+	} else if (lower in params) {
+		param = params[lower];
+	}
+
+	return param;
 }
 
 module.exports = Request;

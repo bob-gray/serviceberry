@@ -126,7 +126,7 @@ methods:
   returns: a string
 
 - name: getPathParams
-  description: All path params. Names are lower case.
+  description: All path params.
   returns: an object
 
 - name: getParams
@@ -176,8 +176,7 @@ methods:
 
 - name: getQueryParams
   description: |
-    All query string params. Names are lower case and values are
-    arrays when names are duplicated.
+    All query string params.
   returns: an object
 
 - name: getUrl

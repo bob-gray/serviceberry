@@ -223,7 +223,7 @@ The value of a path param.
 
 Returns *an object*
 
-All path params. Names are lower case.
+All path params.
 
 
 ### getParams()
@@ -290,8 +290,7 @@ The value of a query string param.
 
 Returns *an object*
 
-All query string params. Names are lower case and values are
-arrays when names are duplicated.
+All query string params.
 
 
 

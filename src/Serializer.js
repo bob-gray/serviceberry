@@ -1,26 +1,22 @@
 "use strict";
 
-const Base = require("solv/src/abstract/base"),
+const {freeze, base} = require("./class"),
 	json = require("serviceberry-json"),
 	defaultHandlers = {
 		[json.contentType]: json.serialize
 	};
 
-class Serializer extends Base {
+module.exports = freeze(base(class Serializer {
 	constructor (handlers = {}) {
-		super();
-		this.handlers = {...defaultHandlers, ...handlers};
+		this.handlers = Object.freeze(Object.assign(Object.create(null), defaultHandlers, handlers));
+		Object.freeze(this);
 	}
 
 	serialize (request, response) {
-		var handler = this.invoke(getHandler, response),
-			serialized;
+		const type = response.getContentType(),
+			handler = this.handlers[type] || response.getBody.bind(response);
 
-		if (handler) {
-			serialized = handler.call(this, request, response);
-		} else {
-			serialized = response.getBody();
-		}
+		var serialized = handler(request, response);
 
 		if (typeof serialized === "undefined") {
 			serialized = "";
@@ -28,12 +24,4 @@ class Serializer extends Base {
 
 		return serialized;
 	}
-}
-
-function getHandler (response) {
-	var type = response.getContentType();
-
-	return this.handlers[type];
-}
-
-module.exports = Serializer;
+}));

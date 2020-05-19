@@ -74,7 +74,7 @@ describe("Director", () => {
 		director.run(route);
 	});
 
-	it("should send an error when serializer fails", (done) => {
+	it("should send an error when serializer returns an error", (done) => {
 		const serverResponse = response.serverResponse,
 			contentType = "text/plain",
 			error = new Error("Bad serializer");
@@ -103,7 +103,30 @@ describe("Director", () => {
 		director.run(route);
 	});
 
-	it("should send an error when serializer returns boolean false", (done) => {
+	xit("should stream a response", (done) => {
+		const serverResponse = response.serverResponse;
+
+		response.setHeader("Content-Type", "text/plain");
+		director = new Director(request, response);
+
+		serverResponse.on("end", () => {
+			expect(serverResponse.statusCode).toBe(200);
+			expect(serverResponse._getChunks().toString()).toBe("Test response content");
+			done();
+		});
+
+		route = createRoute(request, response, {
+			handlers: [
+				() => createReadStream(join(__dirname, "fixtures", "response.txt"))
+			],
+			coping: [],
+			options: {}
+		});
+
+		director.run(route);
+	});
+
+	it("should send an error when serializer throws an error", (done) => {
 		const serverResponse = response.serverResponse,
 			contentType = "text/plain";
 
@@ -123,7 +146,9 @@ describe("Director", () => {
 			coping: [],
 			options: {
 				serializers: {
-					[contentType]: () => false
+					[contentType]: () => {
+						throw new Error();
+					}
 				}
 			}
 		});
@@ -256,7 +281,16 @@ function createRequest (options = {}) {
 		...options
 	});
 
-	incomingMessage.setEncoding = Function.prototype;
+	Object.assign(incomingMessage, {
+		setEncoding: Function.prototype,
+		socket: {
+			remoteAddress: options.ip,
+			localPort: options.port
+		},
+		connection: {
+			encrypted: options.protocol === "https"
+		}
+	});
 
 	setImmediate(emitRequestContent, incomingMessage, options.content);
 

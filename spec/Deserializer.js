@@ -32,25 +32,23 @@ describe("Deserializer", () => {
 
 	it("should call text/plain handler", async () => {
 		const request = createRequest(text),
-			response = {},
-			result = undefined;
+			response = {};
 
 		await deserializer.deserialize(request, response);
 
 		expect(request.content).toBe(text.string);
-		expect(text.handler).toHaveBeenCalledWith(request, response, result);
+		expect(text.handler).toHaveBeenCalledWith(request, response);
 		expect(text.handler).toHaveBeenCalledTimes(1);
 	});
 
 	it("should call application/json handler", async () => {
 		const request = createRequest(json),
-			response = {},
-			result = undefined;
+			response = {};
 
 		await deserializer.deserialize(request, response);
 
 		expect(request.content).toBe(json.string);
-		expect(json.handler).toHaveBeenCalledWith(request, response, result);
+		expect(json.handler).toHaveBeenCalledWith(request, response);
 		expect(json.handler).toHaveBeenCalledTimes(1);
 	});
 
@@ -75,7 +73,11 @@ function createRequest (content) {
 	var incomingMessage = new Readable(),
 		request = {
 			incomingMessage,
-			getContentType: () => content.type
+			getContentType: () => content.type,
+			getContent: () => request.content || "",
+			setContent (value) {
+				request.content = value;
+			}
 		};
 
 	incomingMessage.push(content.string);

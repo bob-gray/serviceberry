@@ -1,6 +1,6 @@
 "use strict";
 
-const Base = require("solv/src/abstract/base"),
+const {freeze, base} = require("./class"),
 	form = require("serviceberry-form"),
 	json = require("serviceberry-json"),
 	defaultHandlers = {
@@ -8,42 +8,21 @@ const Base = require("solv/src/abstract/base"),
 		[json.contentType]: json.deserialize
 	};
 
-class Deserializer extends Base {
+module.exports = freeze(base(class Deserializer {
 	constructor (handlers = {}) {
-		super();
-		this.handlers = {...defaultHandlers, ...handlers};
+		this.handlers = Object.freeze(Object.assign(Object.create(null), defaultHandlers, handlers));
+		Object.freeze(this);
 	}
 
-	deserialize (request, response) {
-		var handler = this.invoke(getHandler, request);
+	async deserialize (request, response) {
+		const type = request.getContentType(),
+			handler = this.handlers[type] || request.getContent.bind(request);
 
-		if (!handler) {
-			handler = getRawContent;
-		}
+		await new Promise(resolve => request.incomingMessage
+			.on("data", content => request.setContent(request.getContent() + content))
+			.on("end", resolve)
+		);
 
-		return new Promise(this.proxy(read, request))
-			.then(handler.bind(this, request, response));
+		return handler(request, response);
 	}
-}
-
-function read (request, resolve) {
-	request.content = "";
-	request.incomingMessage.on("data", this.proxy(writeContent, request))
-		.on("end", resolve);
-}
-
-function writeContent (request, content) {
-	request.content += content;
-}
-
-function getHandler (request) {
-	var type = request.getContentType();
-
-	return this.handlers[type];
-}
-
-function getRawContent (request) {
-	return request.content;
-}
-
-module.exports = Deserializer;
+}));

@@ -70,7 +70,16 @@ describe("ErrorNode", () => {
 function createRequest (options) {
 	var incomingMessage = httpMocks.createRequest(options);
 
-	incomingMessage.setEncoding = Function.prototype;
+	Object.assign(incomingMessage, {
+		setEncoding: Function.prototype,
+		socket: {
+			remoteAddress: options.ip,
+			localPort: options.port
+		},
+		connection: {
+			encrypted: options.protocol === "https"
+		}
+	});
 
 	return new Request(incomingMessage);
 }

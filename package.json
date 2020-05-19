@@ -42,6 +42,7 @@
     "solv": "^1.0.1"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "eslint": "^5.16.0",
     "jasmine": "^3.4.0",
     "jasmine-spec-reporter": "^4.2.1",

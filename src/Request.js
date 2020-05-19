@@ -1,6 +1,7 @@
 "use strict";
 
-const headersAccessor = require("./headersAccessor"),
+const {freeze, base} = require("./class"),
+	headersAccessor = require("./headersAccessor"),
 	HttpError = require("./HttpError"),
 	{URL} = require("url"),
 	querystring = require("querystring"),
@@ -10,39 +11,26 @@ const headersAccessor = require("./headersAccessor"),
 class Request {
 	#startStamp;
 	#id;
-	#incomingMessage;
 	#url;
-	#pathParams;
-	#headers;
 	#contentType;
 	#content;
 	#body;
 
 	constructor (incomingMessage) {
+		Object.assign(this, {
+			incomingMessage,
+			headers: incomingMessage.headers,
+			pathParams: Object.create(null)
+		});
+
 		this.#startStamp = process.hrtime();
 		this.#id = createId();
-		this.#incomingMessage = incomingMessage;
-		this.#headers = Object.freeze(incomingMessage.headers);
 		this.#url = Object.freeze(new URL(this.getFullUrl()));
-		this.#pathParams = Object.create(null);
 		this.#contentType = parseContentType(incomingMessage);
 		this.#content = "";
 
 		this.remainingPath = this.#url.pathname.slice(1);
 		incomingMessage.setEncoding(this.getEncoding());
-	}
-
-	get incomingMessage () {
-		return this.#incomingMessage;
-	}
-
-	get pathParams () {
-		return this.#pathParams;
-	}
-
-	// headersAccessor mixin can't access #headers directly
-	get headers () {
-		return this.#headers;
 	}
 
 	getId () {
@@ -60,13 +48,13 @@ class Request {
 	}
 
 	getIp () {
-		return this.getHeader("X-Forwarded-For") || this.#incomingMessage.socket.remoteAddress;
+		return this.getHeader("X-Forwarded-For") || this.incomingMessage.socket.remoteAddress;
 	}
 
 	getProtocol () {
 		var protocol = this.getHeader("X-Forwarded-Proto") || "http";
 
-		if (this.#incomingMessage.connection.encrypted) {
+		if (this.incomingMessage.connection.encrypted) {
 			protocol = "https";
 		}
 
@@ -78,11 +66,11 @@ class Request {
 	}
 
 	getPort () {
-		return this.#incomingMessage.socket.localPort;
+		return this.incomingMessage.socket.localPort;
 	}
 
 	getMethod () {
-		return this.#incomingMessage.method;
+		return this.incomingMessage.method;
 	}
 
 	getUrl () {
@@ -90,7 +78,7 @@ class Request {
 	}
 
 	getFullUrl () {
-		return this.getProtocol() + "://" + this.getHost() + this.#incomingMessage.url;
+		return this.getProtocol() + "://" + this.getHost() + this.incomingMessage.url;
 	}
 
 	setContent (content) {
@@ -110,11 +98,11 @@ class Request {
 	}
 
 	getPathParam (name) {
-		return getCaseInsensitive(this.#pathParams, name);
+		return getCaseInsensitive(this.pathParams, name);
 	}
 
 	getPathParams () {
-		return Object.assign(Object.create(null), this.#pathParams);
+		return Object.assign(Object.create(null), this.pathParams);
 	}
 
 	getQueryParam (name) {
@@ -130,6 +118,10 @@ class Request {
 	}
 
 	getBody () {
+		if (this.#body instanceof Error) {
+			throw this.#body;
+		}
+
 		return this.#body;
 	}
 
@@ -146,7 +138,7 @@ class Request {
 			body = {body};
 		}
 
-		return Object.assign(Object.create(null), body, this.getQueryParams(), this.#pathParams);
+		return Object.assign(Object.create(null), body, this.getQueryParams(), this.pathParams);
 	}
 
 	getParam (name) {
@@ -171,11 +163,6 @@ class Request {
 		throw new HttpError(...args);
 	}
 }
-
-Object.assign(
-	Request.prototype,
-	headersAccessor.getters
-);
 
 function createId () {
 	return randomBytes(8).toString("hex").toLowerCase();
@@ -206,4 +193,9 @@ function getCaseInsensitive (params, name) {
 	return param;
 }
 
-module.exports = Request;
+Object.assign(
+	Request.prototype,
+	headersAccessor.getters
+);
+
+module.exports = freeze(base(Request));

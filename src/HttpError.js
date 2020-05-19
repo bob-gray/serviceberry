@@ -35,16 +35,18 @@ Object.assign(
 
 // eslint-disable-next-line complexity
 function init (error, status, headers = {}) {
-	this.message = error.message || error;
+	if (error instanceof Error) {
+		this.message = error.message;
+		this.originalError = error;
+	} else {
+		this.message = error;
+	}
+
 	this.initStatus(status || error.status || statusCodes.INTERNAL_SERVER_ERROR);
 	this.initHeaders(headers);
 
 	if (this.withoutHeader("Content-Type")) {
 		this.setHeader("Content-Type", "text/plain; charset=utf-8");
-	}
-
-	if (error.message) {
-		this.originalError = error;
 	}
 
 	if (error.stack) {

@@ -1,182 +1,202 @@
 "use strict";
 
-const Base = require("solv/src/abstract/base"),
-	Binding = require("./Binding"),
+const {freeze, base} = require("./class"),
+	YieldableProxy = require("./YieldableProxy"),
 	Deserializer = require("./Deserializer"),
 	Serializer = require("./Serializer"),
 	HttpError = require("./HttpError");
 
-class Director extends Base {
-	constructor (request, reponse) {
-		super();
-		request.incomingMessage.on("error", this.proxy(fail));
-		this.request = request;
-		this.response = reponse;
+module.exports = freeze(base(class Director {
+	#yieldProxies;
+	#yielding;
+
+	constructor (request, response) {
+		const fail = this.fail.bind(this);
+
+		// just in case
+		request.incomingMessage.on("error", fail);
+		response.serverResponse.on("error", fail);
+
+		Object.assign(this, {request, response});
 	}
 
-	run (route) {
+	async run (route) {
 		this.route = route;
-		this.invoke(setTimer);
-		this.invoke(deserialize).then(this.proxy(proceed));
-	}
-}
+		this.setTimer();
+		this.response.on("serialize", this.serialize.bind(this));
 
-function deserialize () {
-	const deserializer = new Deserializer(this.route.options.deserializers);
-
-	return this.invoke(bind)
-		.call(deserializer.proxy("deserialize"), this.request, this.response)
-		.then(this.request.proxy("setBody"))
-		.catch(this.proxy(setDeserializeFail));
-}
-
-function proceed () {
-	const handler = this.route.getNextHandler();
-
-	if (handler) {
-		this.invoke(callHandler, handler);
-	} else {
-		this.invoke(send, {
-			body: this.request.latestResult
-		});
-	}
-}
-
-function fail (error) {
-	const coping = this.route.getNextCoping();
-
-	error = new HttpError(...toArray(error));
-
-	this.request.error = error;
-
-	if (coping) {
-		this.invoke(callHandler, coping);
-	} else {
-		this.invoke(send, {
-			status: error.getStatus(),
-			headers: error.getHeaders(),
-			body: error.getMessage()
-		}, !coping);
-	}
-}
-
-function serialize () {
-	const serializer = new Serializer(this.route.options.serializers);
-
-	return this.invoke(bind)
-		.call(serializer.proxy("serialize"), this.request, this.response)
-		.then(this.response.proxy("setContent"));
-}
-
-function bind () {
-	const binding = new Binding();
-
-	this.request = this.request.copy();
-	this.response = this.response.copy();
-
-	return binding.bind(this.request, "proceed")
-		.bind(this.request, "fail")
-		.bind(this.response, "send", this.proxy(send));
-}
-
-function callHandler (handler) {
-	setImmediate(this.proxy(call, handler));
-}
-
-function call (handler) {
-	this.invoke(bind)
-		.call(handler, this.request, this.response)
-		.then(this.proxy(setLatestResult))
-		.then(this.proxy(proceed))
-		.catch(this.proxy(fail));
-}
-
-function send (options = {}, noCopingHandler) {
-	var promise;
-
-	this.response.set(options);
-	promise = this.invoke(serialize).then(this.proxy(end));
-
-	if (noCopingHandler) {
-		promise.catch(this.proxy(sendSerializationError));
-	} else {
-		promise.catch(this.proxy(fail));
-	}
-}
-
-function sendSerializationError (error) {
-	error = new HttpError(error);
-
-	this.response.set({
-		status: error.getStatus(),
-		headers: error.getHeaders(),
-		content: error.getMessage()
-	});
-
-	this.invoke(end);
-}
-
-// eslint-disable-next-line max-statements
-// eslint-disable-next-line complexity
-function end () {
-	const response = this.response,
-		{serverResponse} = response,
-		content = response.getContent();
-
-	if (!content.length && response.is("OK")) {
-		response.setStatus("No Content");
-	} else if (content.length && response.withoutHeader("Content-Length")) {
-		response.setHeader("Content-Length", content.length);
+		await this.deserialize();
+		await this.proceed();
 	}
 
-	if (!content.length) {
-		response.removeHeader("Content-Type");
+	setTimer () {
+		var {timeout} = this.route.options,
+			timer;
+
+		if (timeout) {
+			timer = setTimeout(() => this.fail(new HttpError("Request timed out", "Service Unavailable")), timeout);
+			this.response.on("finish", () => clearTimeout(timer));
+		}
 	}
 
-	serverResponse.writeHead(
-		response.getStatusCode(),
-		response.getStatusText(),
-		response.getHeaders()
-	);
+	async deserialize () {
+		const deserializer = new Deserializer(this.route.options.deserializers),
+			[request, response] = this.getSerializationProxies();
 
-	// TODO: maybe check status instead or as well (204, 304, ...)
-	if (content.length) {
-		serverResponse.write(content, response.getEncoding());
+		var result;
+
+		try {
+			result = await this.processResult(deserializer.deserialize(request, response));
+		} catch (error) {
+			result = new HttpError(error, error.status || "Bad Request");
+		}
+
+		this.#yieldProxies();
+		this.request.setBody(result);
 	}
 
-	clearTimeout(this.timer);
+	// eslint-disable-next-line consistent-return
+	async proceed () {
+		const handler = this.route.getNextHandler();
 
-	serverResponse.end();
-}
+		if (handler) {
+			await this.call(handler);
+		} else if (this.response.notBegun()) {
+			try {
+				await this.response.send({
+					body: this.request.latestResult
+				});
+			} catch (error) {
+				await this.fail(error);
+			}
+		}
 
-function setLatestResult (result) {
-	this.request.latestResult = result;
-}
-
-function setDeserializeFail (error) {
-	this.request.getBody = () => {
-		throw error;
-	};
-}
-
-function setTimer () {
-	const {timeout} = this.route.options;
-
-	if (timeout) {
-		this.timer = setTimeout(this.proxy(timedOut), timeout);
-		this.timer.unref();
+		if (this.response.notBegun()) {
+			return this.proceed();
+		}
 	}
-}
 
-function timedOut () {
-	this.invoke(fail, [
-		"Request timed out",
-		"Service Unavailable"
-	]);
-}
+	async serialize (resolve, reject) {
+		const serializer = new Serializer(this.route.options.serializers),
+			[request, response] = this.getSerializationProxies();
 
-function toArray (value) {
-	return [].concat(value);
-}
+		var finalizer = resolve,
+			result;
 
-module.exports = Director;
+		try {
+			result = await this.processResult(serializer.serialize(request, response));
+		} catch (error) {
+			finalizer = reject;
+			result = error;
+		}
+
+		this.#yieldProxies();
+		finalizer(result);
+	}
+
+	async fail (error) {
+		const coping = this.route.getNextCoping();
+
+		if (this.#yieldProxies) {
+			this.#yieldProxies();
+		}
+
+		error = new HttpError(error);
+		this.request.error = error;
+
+		if (coping) {
+			await this.call(coping);
+		} else {
+			await this.sendError(error);
+		}
+	}
+
+	async sendError (error) {
+		try {
+			await this.response.send({
+				status: error.getStatus(),
+				headers: error.getHeaders(),
+				body: error.getMessage()
+			});
+		} catch (err) {
+			const sendingError = new HttpError(err);
+
+			await this.response.send({
+				status: sendingError.getStatus(),
+				headers: sendingError.getHeaders(),
+				content: sendingError.getMessage()
+			});
+		}
+	}
+
+	getSerializationProxies () {
+		const hiddenResponseMethods = ["send"];
+
+		return this.getProxies(hiddenResponseMethods);
+	}
+
+	getProxies (hiddenResponseMethods = []) {
+		const {yieldable: requestYieldable, proxy: request} = new YieldableProxy(
+				this.request,
+				["proceed", "fail"]
+			),
+			{yieldable: responseYieldable, proxy: response} = new YieldableProxy(
+				this.response,
+				["send"],
+				hiddenResponseMethods
+			);
+
+		if (this.#yieldProxies) {
+			this.#yieldProxies();
+		}
+
+		this.#yieldProxies = () => {
+			requestYieldable.yield();
+			responseYieldable.yield();
+		};
+
+		this.#yielding = requestYieldable.yielding;
+
+		// once either proxy yields - remove control from both proxies
+		Promise.race([
+			requestYieldable.yielding,
+			responseYieldable.yielding
+		]).finally(this.#yieldProxies);
+
+		return [request, response];
+	}
+
+	async call (handler) {
+		const [request, response] = this.getProxies();
+
+		var error;
+
+		try {
+			this.request.latestResult = await this.processResult(handler(request, response));
+		} catch (err) {
+			error = err;
+		}
+
+		this.#yieldProxies();
+
+		if (error) {
+			await this.fail(error);
+		}
+	}
+
+	async processResult (result) {
+		// if the handler didn't return a value use yielding instead
+		// the yielding promise will resolve to the value passed to proceed
+		if (typeof result === "undefined") {
+			result = this.#yielding;
+		}
+
+		result = await result;
+
+		if (result instanceof Error) {
+			throw result;
+		}
+
+		return result;
+	}
+}));

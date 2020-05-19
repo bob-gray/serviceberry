@@ -1,6 +1,8 @@
 "use strict";
 
-class Yieldable {
+const {freeze, base} = require("./class");
+
+module.exports = freeze(base(class Yieldable {
 	#yielding;
 	#yielded;
 
@@ -20,9 +22,4 @@ class Yieldable {
 	get yielded () {
 		return this.#yielded;
 	}
-}
-
-Object.setPrototypeOf(Yieldable.prototype, null);
-Object.freeze(Yieldable.prototype);
-
-module.exports = Object.freeze(Yieldable);
+}));

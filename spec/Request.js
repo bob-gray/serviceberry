@@ -3,7 +3,7 @@
 "use strict";
 
 const Request = require("../src/Request"),
-	url = require("url"),
+	{URL} = require("url"),
 	httpMocks = require("node-mocks-http");
 
 describe("Request (GET)", () => {
@@ -35,12 +35,7 @@ describe("Request (GET)", () => {
 			awesome: "yes"
 		};
 
-		request.pathParams = pathParams;
-	});
-
-	it("should be abled to be copied", () => {
-		expect(request.copy()).toEqual(request);
-		expect(request.copy()).not.toBe(request);
+		Object.assign(request.pathParams, pathParams);
 	});
 
 	it("should return id from getId()", () => {
@@ -59,7 +54,12 @@ describe("Request (GET)", () => {
 	});
 
 	it("should return parsed url object from getUrl()", () => {
-		expect(request.getUrl()).toEqual(url.parse(options.url));
+		const {protocol, hostname, pathname, search} = request.getUrl();
+
+		expect(protocol).toBe("https:");
+		expect(hostname).toBe("www.example.com");
+		expect(pathname).toBe("/path/to/items/105");
+		expect(search).toBe("?awesome=yes");
 	});
 
 	it("should return path params from getPathParams()", () => {

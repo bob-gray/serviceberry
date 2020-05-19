@@ -1,60 +1,72 @@
 "use strict";
 
-require("solv/src/object/for-each");
-
-const EventEmitter = require("events"),
-	headersAccessor = require("./headersAccessor"),
-	url = require("url"),
+const headersAccessor = require("./headersAccessor"),
+	HttpError = require("./HttpError"),
+	{URL} = require("url"),
 	querystring = require("querystring"),
 	contentType = require("content-type"),
 	{randomBytes} = require("crypto");
 
-class Request extends EventEmitter {
+class Request {
+	#startStamp;
+	#id;
+	#incomingMessage;
+	#url;
+	#pathParams;
+	#headers;
+	#contentType;
+	#content;
+	#body;
+
 	constructor (incomingMessage) {
-		super();
+		this.#startStamp = process.hrtime();
+		this.#id = createId();
+		this.#incomingMessage = incomingMessage;
+		this.#headers = Object.freeze(incomingMessage.headers);
+		this.#url = Object.freeze(new URL(this.getFullUrl()));
+		this.#pathParams = Object.create(null);
+		this.#contentType = parseContentType(incomingMessage);
+		this.#content = "";
 
-		Object.assign(this, {
-			incomingMessage,
-			headers: incomingMessage.headers,
-			id: createId(),
-			startStamp: process.hrtime(),
-			contentType: parseContentType(incomingMessage),
-			pathParams: {},
-			content: ""
-		});
-
-		this.remainingPath = this.getUrl().pathname.slice(1);
+		this.remainingPath = this.#url.pathname.slice(1);
 		incomingMessage.setEncoding(this.getEncoding());
 	}
 
-	copy () {
-		var copied = Object.create(this.constructor.prototype);
+	get incomingMessage () {
+		return this.#incomingMessage;
+	}
 
-		return Object.assign(copied, this);
+	get pathParams () {
+		return this.#pathParams;
+	}
+
+	// headersAccessor mixin can't access #headers directly
+	get headers () {
+		return this.#headers;
 	}
 
 	getId () {
-		return this.id;
+		return this.#id;
 	}
 
 	getElapsedTime () {
 		const seconds = 0,
 			nanoseconds = 1,
 			milliseconds = 1e3,
-			elapsed = process.hrtime(this.startStamp);
+			elapsed = process.hrtime(this.#startStamp);
 
 		return (elapsed[seconds] * milliseconds) +
 			(elapsed[nanoseconds] / milliseconds / milliseconds);
 	}
 
 	getIp () {
-		return this.getHeader("X-Forwarded-For") || this.incomingMessage.socket.remoteAddress;
+		return this.getHeader("X-Forwarded-For") || this.#incomingMessage.socket.remoteAddress;
 	}
 
 	getProtocol () {
 		var protocol = this.getHeader("X-Forwarded-Proto") || "http";
 
-		if (this.incomingMessage.connection.encrypted) {
+		if (this.#incomingMessage.connection.encrypted) {
 			protocol = "https";
 		}
 
@@ -66,43 +78,43 @@ class Request extends EventEmitter {
 	}
 
 	getPort () {
-		return this.incomingMessage.socket.localPort;
+		return this.#incomingMessage.socket.localPort;
 	}
 
 	getMethod () {
-		return this.incomingMessage.method;
+		return this.#incomingMessage.method;
 	}
 
 	getUrl () {
-		return url.parse(this.incomingMessage.url);
+		return this.#url;
 	}
 
 	getFullUrl () {
-		return this.getProtocol() + "://" + this.getHost() + this.getUrl().href;
+		return this.getProtocol() + "://" + this.getHost() + this.#incomingMessage.url;
 	}
 
 	setContent (content) {
-		this.content = content;
+		this.#content = content;
 	}
 
 	getContent () {
-		return this.content;
+		return this.#content;
 	}
 
 	getContentType () {
-		return this.contentType && this.contentType.type;
+		return this.#contentType && this.#contentType.type;
 	}
 
 	getEncoding () {
-		return this.contentType && (this.contentType.parameters.charset || "utf-8");
+		return this.#contentType && (this.#contentType.parameters.charset || "utf8");
 	}
 
 	getPathParam (name) {
-		return getCaseInsensitive(this.pathParams, name);
+		return getCaseInsensitive(this.#pathParams, name);
 	}
 
 	getPathParams () {
-		return Object.assign({}, this.pathParams);
+		return Object.assign(Object.create(null), this.#pathParams);
 	}
 
 	getQueryParam (name) {
@@ -110,31 +122,31 @@ class Request extends EventEmitter {
 	}
 
 	getQueryParams () {
-		return querystring.parse(this.getUrl().query);
+		return querystring.parse(this.getUrl().search.slice(1));
 	}
 
 	setBody (body) {
-		this.body = body;
+		this.#body = body;
 	}
 
 	getBody () {
-		return this.body;
+		return this.#body;
 	}
 
 	getBodyParam (name) {
-		return getCaseInsensitive(this.body || {}, name);
+		return getCaseInsensitive(this.#body || Object.create(null), name);
 	}
 
 	getParams () {
-		var body = this.getBody();
+		var body = this.#body;
 
 		if (typeof body === "undefined") {
-			body = {};
+			body = Object.create(null);
 		} else if (typeof body !== "object" || Array.isArray(body)) {
 			body = {body};
 		}
 
-		return Object.assign({}, body, this.getQueryParams(), this.pathParams);
+		return Object.assign(Object.create(null), body, this.getQueryParams(), this.#pathParams);
 	}
 
 	getParam (name) {
@@ -147,6 +159,16 @@ class Request extends EventEmitter {
 
 	getAllowedMethods () {
 		return this.allowedMethods;
+	}
+
+	proceed (latestResult) {
+		// Calling proceed on a request proxy yields control
+		// and signals to the director to proceed
+		this.latestResult = latestResult;
+	}
+
+	fail (...args) {
+		throw new HttpError(...args);
 	}
 }
 
@@ -163,7 +185,7 @@ function parseContentType (incomingMessage) {
 	var parsed;
 
 	try {
-		parsed = contentType.parse(incomingMessage);
+		parsed = Object.freeze(contentType.parse(incomingMessage));
 	} catch (error) {
 		// throws if missing header or header is malformed
 	}

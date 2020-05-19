@@ -3,7 +3,6 @@
 "use strict";
 
 const Request = require("../src/Request"),
-	{URL} = require("url"),
 	httpMocks = require("node-mocks-http");
 
 describe("Request (GET)", () => {

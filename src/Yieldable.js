@@ -7,6 +7,7 @@ module.exports = freeze(base(class Yieldable {
 	#yielded;
 
 	constructor () {
+		// eslint-disable-next-line no-return-assign
 		this.#yielding = new Promise(resolve => this.yield = value => {
 			this.#yielded = true;
 			resolve(value);

@@ -103,29 +103,6 @@ describe("Director", () => {
 		director.run(route);
 	});
 
-	xit("should stream a response", (done) => {
-		const serverResponse = response.serverResponse;
-
-		response.setHeader("Content-Type", "text/plain");
-		director = new Director(request, response);
-
-		serverResponse.on("end", () => {
-			expect(serverResponse.statusCode).toBe(200);
-			expect(serverResponse._getChunks().toString()).toBe("Test response content");
-			done();
-		});
-
-		route = createRoute(request, response, {
-			handlers: [
-				() => createReadStream(join(__dirname, "fixtures", "response.txt"))
-			],
-			coping: [],
-			options: {}
-		});
-
-		director.run(route);
-	});
-
 	it("should send an error when serializer throws an error", (done) => {
 		const serverResponse = response.serverResponse,
 			contentType = "text/plain";

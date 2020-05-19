@@ -1,25 +1,24 @@
 "use strict";
 
 const EventEmitter = require("events"),
+	{freeze} = require("./class"),
 	statusAccessor = require("./statusAccessor"),
 	headersAccessor = require("./headersAccessor"),
 	contentType = require("content-type");
 
 class Response extends EventEmitter {
+	#body;
+	#content;
+	#encoding = "utf8";
+
 	constructor (serverResponse) {
 		super();
+
 		this.serverResponse = serverResponse;
 		this.initStatus();
 		this.initHeaders();
-		this.setEncoding("utf-8");
-		this.serverResponse.on("finish", this.proxy("emit", "finish"))
-			.on("error", this.proxy("emit", "error"));
-	}
 
-	copy () {
-		var copied = Object.create(this.constructor.prototype);
-
-		return Object.assign(copied, this);
+		serverResponse.on("finish", this.emit.bind(this, "finish"));
 	}
 
 	getContentType () {
@@ -35,27 +34,95 @@ class Response extends EventEmitter {
 	}
 
 	getContent () {
-		return Buffer.from(this.content || "", this.getEncoding());
+		return this.#content || "";
 	}
 
 	setContent (content) {
-		this.content = content;
-	}
-
-	setBody (body) {
-		this.body = body;
+		this.#content = content;
 	}
 
 	getBody () {
-		return this.body;
+		return this.#body;
+	}
+
+	setBody (body) {
+		this.#body = body;
 	}
 
 	getEncoding () {
-		return this.encoding;
+		return this.#encoding;
 	}
 
 	setEncoding (encoding) {
-		this.encoding = encoding;
+		this.#encoding = encoding;
+	}
+
+	async send (options = {}) {
+		this.set(options);
+
+		if (typeof this.#body !== "undefined" && typeof this.#content === "undefined") {
+			await this.serialize();
+		}
+
+		if (this.isContentStreamable()) {
+			this.streamContent();
+		} else {
+			this.sendBufferedContent();
+		}
+	}
+
+	async serialize () {
+		this.#content = await new Promise(this.emit.bind(this, "serialize"));
+	}
+
+	notBegun () {
+		return !this.serverResponse.headersSent;
+	}
+
+	isBodyStreamable () {
+		return isStreamable(this.#body);
+	}
+
+	isContentStreamable () {
+		return isStreamable(this.#content);
+	}
+
+	streamContent () {
+		this.removeHeader("Content-Type");
+		this.writeHead();
+		this.#content.pipe(this.serverResponse);
+	}
+
+	// eslint-disable-next-line complexity
+	sendBufferedContent () {
+		const {serverResponse} = this,
+			buffer = Buffer.from(this.getContent(), this.#encoding);
+
+		if (!buffer.length && this.is("OK")) {
+			this.setStatus("No Content");
+		} else if (buffer.length && this.withoutHeader("Content-Length")) {
+			this.setHeader("Content-Length", buffer.length);
+		}
+
+		if (!buffer.length) {
+			this.removeHeader("Content-Type");
+		}
+
+		this.writeHead();
+
+		if (buffer.length) {
+			serverResponse.write(buffer, this.#encoding);
+		}
+
+		serverResponse.end();
+	}
+
+	writeHead () {
+		this.serverResponse.writeHead(
+			this.getStatusCode(),
+			this.getStatusText(),
+			this.getHeaders()
+		);
 	}
 
 	// eslint-disable-next-line complexity
@@ -72,9 +139,9 @@ class Response extends EventEmitter {
 			this.setEncoding(options.encoding);
 		}
 
-		if (options.hasOwnProperty("content")) {
+		if ("content" in options) {
 			this.setContent(options.content);
-		} else if (options.hasOwnProperty("body")) {
+		} else if ("body" in options) {
 			this.setBody(options.body);
 		}
 
@@ -84,6 +151,12 @@ class Response extends EventEmitter {
 	}
 }
 
+function isStreamable (value) {
+	const type = typeof value;
+
+	return value !== null && (type === "object" || type === "function") && typeof value.pipe === "function";
+}
+
 Object.assign(
 	Response.prototype,
 	statusAccessor,
@@ -91,4 +164,4 @@ Object.assign(
 	headersAccessor.setters
 );
 
-module.exports = Response;
+module.exports = freeze(Response);

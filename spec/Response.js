@@ -12,11 +12,6 @@ describe("Response", () => {
 		response = createResponse();
 	});
 
-	it("should be abled to be copied", () => {
-		expect(response.copy()).toEqual(response);
-		expect(response.copy()).not.toBe(response);
-	});
-
 	it("should have property serverResponse", () => {
 		expect("serverResponse" in response).toBe(true);
 	});
@@ -29,20 +24,6 @@ describe("Response", () => {
 
 	it("should return undefined content type from getContentType()", () => {
 		expect(response.getContentType()).toBeUndefined();
-	});
-
-	it("should return buffer from getContent()", () => {
-		const content = "hello";
-
-		response.setContent(content);
-
-		expect(response.getContent() instanceof Buffer).toBe(true);
-		expect(response.getContent().toString()).toBe(content);
-	});
-
-	it("should return empty buffer if content is undefined", () => {
-		expect(response.getContent().toString()).toBe("");
-		expect(response.getContent().length).toBe(0);
 	});
 
 	it("should set and get body", () => {

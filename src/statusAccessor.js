@@ -14,7 +14,7 @@ module.exports = {
 		if (isNaN(test)) {
 			test = String(test);
 
-			result = test.toLowerCase() === this.status.text.toLowerCase() ||
+			result = test.toUpperCase() === this.status.text.toUpperCase() ||
 				statusCodes[test.toUpperCase()] === this.status.code;
 		} else {
 			result = Number(test) === this.status.code;

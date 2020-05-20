@@ -8,6 +8,7 @@ class Branch extends Leaf {
 		this.node = new BranchNode(options);
 	}
 
+	// TODO: allow options for serializers and deserializers
 	at (path, ...handlers) {
 		const branch = new Branch({path});
 

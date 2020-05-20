@@ -64,8 +64,7 @@ describe("Director", () => {
 			coping: [
 				req => {
 					expect(req.error).toBeDefined();
-					// TODO: figure out why this is ok on my machine but fails on CircleCI
-					// expect(request.error.is("Bad Request")).toBe(true);
+					expect(req.error.is("Bad Request")).toBe(true);
 					done();
 				}
 			]

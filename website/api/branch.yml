@@ -1,9 +1,9 @@
 name: Branch
 type: class
-extends: "[Leaf](leaf.html)"
+extends: "[Leaf](leaf)"
 description: |
   A branch is created by calling method .at() on the service
-  [trunk](trunk.html) or branch.
+  [trunk](trunk) or branch.
 methods:
 - name: at
   returns: a new branch
@@ -12,35 +12,35 @@ methods:
   - name: path
     type: string
     description: |
-      Paths are cumulative. Creating a new [branch](branch.html) only requires
+      Paths are cumulative. Creating a new [branch](branch) only requires
       the next piece of the path. For example, if a branch's path is "widgets"
-      a new [branch](branch.html) created with branch.at("{id}") will recieve
+      a new [branch](branch) created with branch.at("{id}") will recieve
       a request to "widgets/42".
 
       Path paramaters are delimited using a pair of curly braces. Such as {id}.
       The branch will parse the path parameters. They are available to all handlers
-      through [request.getPathParam(name)](request.html#getpathparamname)
-      and [request.getPathParms()](request.html#getpathparams).
+      through [request.getPathParam(name)](request#getpathparamname)
+      and [request.getPathParms()](request#getpathparams).
   - name: handlers
-    description: See [Handlers](handlers.html) guide.
+    description: See [Handlers](handlers) guide.
     type: function or object
     required: false
     repeating: true
 
 - name: cope
   returns: this branch
-  description: Adds error [handlers](handlers.html) to this branch.
+  description: Adds error [handlers](handlers) to this branch.
   arguments:
   - name: handlers
     type: function or object
-    description: See [Handlers](handlers.html) guide.
+    description: See [Handlers](handlers) guide.
     repeating: true
 
 - name: on
   returns: this branch
   description: |
-    Routes requests to a new [leaf](leaf.html). Requests that match the options
-    will be handled by the new [leaf's](leaf.html) [handlers](handlers.html).
+    Routes requests to a new [leaf](leaf). Requests that match the options
+    will be handled by the new [leaf's](leaf) [handlers](handlers).
   arguments:
   - name: options
     type: object
@@ -50,7 +50,7 @@ methods:
         description: |
           HTTP methods such as "GET", "POST", "PUT"... If not specified
           or is "*", all methods are matched. See nodejs.org for a list of
-          [supported methods](https://nodejs.org/dist/latest-v10.x/docs/api/http.html#http_http_methods).
+          [supported methods](https://nodejs.org/dist/latest/docs/api/http.html#http_http_methods).
         required: false
       - name: consumes
         type: string or array
@@ -68,44 +68,44 @@ methods:
         type: object
         description: |
           Property names must be content types such as "application/json" and
-          values must be [serializer](plugins.html#serializers-and-deserializers)
+          values must be [serializer](plugins#serializers-and-deserializers)
           plugins.
       - name: deserializers
         type: object
         description: |
           Property names must be content types such as "application/json" and
-          values must be [deserializer](plugins.html#serializers-and-deserializers)
+          values must be [deserializer](plugins#serializers-and-deserializers)
           plugins.
   - name: handlers
     type: function or object
-    description: See [Handlers](handlers.html) guide.
+    description: See [Handlers](handlers) guide.
     required: false
     repeating: true
 
 - name: on
   returns: this branch
   description: |
-    Routes requests to a new [leaf](leaf.html). Requests that match the method
-    will be handled by the new [leaf's](leaf.html) [handlers](handlers.html).
+    Routes requests to a new [leaf](leaf). Requests that match the method
+    will be handled by the new [leaf's](leaf) [handlers](handlers).
   arguments:
   - name: method
     type: string or array
     description: |
       HTTP methods such as "GET", "POST", "PUT"... "*" matches all methods.
-      See nodejs.org for a list of [supported methods](https://nodejs.org/dist/latest-v10.x/docs/api/http.html#http_http_methods).
+      See nodejs.org for a list of [supported methods](https://nodejs.org/dist/latest/docs/api/http.html#http_http_methods).
   - name: handlers
     type: function or object
-    description: See [Handlers](handlers.html) guide.
+    description: See [Handlers](handlers) guide.
     required: false
     repeating: true
 
 - name: use
   returns: this branch
-  description: Adds plugin [handlers](handlers.html) to this branch.
+  description: Adds plugin [handlers](handlers) to this branch.
   arguments:
   - name: handlers
     type: function or object
-    description: See [Handlers](handlers.html) guide.
+    description: See [Handlers](handlers) guide.
     repeating: true
 
 - name: waitFor

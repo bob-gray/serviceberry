@@ -5,7 +5,7 @@ title: HttpError
 
 ### *class*
 
-*Extends [Error](https://nodejs.org/dist/latest-v10.x/docs/api/errors.html#errors_class_error)*
+*Extends [Error](https://nodejs.org/dist/latest/docs/api/errors.html#errors_class_error)*
 
 An HTTP specific error class.
 

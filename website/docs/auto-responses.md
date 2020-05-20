@@ -8,6 +8,9 @@ To help you do HTTP well, Serviceberry responds automatically in the following s
 Auto Error Statuses
 -------------------
 
+[Handlers](handlers) will be executed as normal so [plugins](plugins) (*for example logging and error handling*)
+will still run.
+
   - **404 Not Found**
 
     When no route is found.
@@ -40,9 +43,11 @@ To override these auto methods, implement your own `OPTI0NS` and `HEAD` handlers
 
     Any request path that implements methods will respond to `OPTIONS`
     requests with a status of `204 No Content` and an `Allow` header.
-    All plugins and catches in the queue will be executed as usual.
+    All plugins and coping in the queue will be executed as usual.
 
   - **HEAD**
 
     Any request path that implements a `GET` method will respond to `HEAD`
-    requests with the head written while executing all the [handlers](handlers.html) in the `GET` queue.
+    requests with the head written while executing all the [handlers](handlers) in the `GET` queue.
+
+To learn a little about how Serviceberry works internally, checkout the [next guide](how-it-works).

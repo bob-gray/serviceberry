@@ -7,10 +7,12 @@ const fs = require("fs"),
 	leaf = yaml.safeLoad(fs.readFileSync("api/leaf.yml", "utf8")),
 	request = yaml.safeLoad(fs.readFileSync("api/request.yml", "utf8")),
 	response = yaml.safeLoad(fs.readFileSync("api/response.yml", "utf8")),
-	httperror = yaml.safeLoad(fs.readFileSync("api/httperror.yml", "utf8")),
-	args = Handlebars.registerPartial("arguments", fs.readFileSync("templates/arguments.hbs", "utf8")),
-	properties = Handlebars.registerPartial("properties", fs.readFileSync("templates/properties.hbs", "utf8")),
-	template = Handlebars.compile(fs.readFileSync("templates/doc.hbs", "utf8"));
+	httperror = yaml.safeLoad(fs.readFileSync("api/httperror.yml", "utf8"));
+
+Handlebars.registerPartial("arguments", fs.readFileSync("templates/arguments.hbs", "utf8"));
+Handlebars.registerPartial("properties", fs.readFileSync("templates/properties.hbs", "utf8"));
+
+var template = Handlebars.compile(fs.readFileSync("templates/doc.hbs", "utf8"));
 
 createDoc(serviceberry);
 createDoc(trunk);
@@ -21,6 +23,8 @@ createDoc(response);
 createDoc(httperror);
 
 createContributing();
+
+console.log("success");
 
 function createDoc (doc) {
 	doc.id = doc.name.toLowerCase().replace(/\W+/g, "-");

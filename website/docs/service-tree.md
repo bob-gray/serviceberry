@@ -10,7 +10,7 @@ Trunk Plugins and Error Handlers
 
 Some plugins like logging are often best at the root of your service. If you call
 `trunk.use(handler)` you can add plugins at the service root so that all requests into
-the service pass through these plugins. You can also call `trunk.catch(handler)` to
+the service pass through these plugins. You can also call `trunk.cope(handler)` to
 add error handlers to the service root.
 
 Lets create a quick example using [`serviceberry-logger`](https://www.npmjs.com/package/serviceberry-logger).
@@ -32,10 +32,10 @@ trunk.use(logger())
 ```
 
 Run `node service` in `todos/` to start your service then visit [http://localhost:3000](http://localhost:3000).
-Your service should respond with the [request](request.html#getid) id. The request will
+Your service should respond with the [request](request#getid) id. The request will
 be logged in `todos/logs/server.log`.
 
-Next we'll add an error handler on the [trunk](trunk.html) and introduce a bug so
+Next we'll add an error handler on the [trunk](trunk) and introduce a bug so
 we can see the resulting error logged. For the error handler we'll use the error handler
 provided by [`serviceberry-logger`](https://www.npmjs.com/package/serviceberry-logger).
 
@@ -47,7 +47,7 @@ const {createTrunk} = require("serviceberry"),
     trunk = createTrunk();
 
 trunk.use(logger())
-    .catch(logger.error)
+    .cope(logger.error)
     .on("*", request => request.getIdd());
 ```
 

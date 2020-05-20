@@ -41,6 +41,9 @@
       "response": {
         "title": "Response"
       },
+      "serializers-and-deserializers": {
+        "title": "Serializers and Deserializers"
+      },
       "service-tree": {
         "title": "Service Tree"
       },

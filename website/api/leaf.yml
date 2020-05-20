@@ -1,23 +1,23 @@
 name: Leaf
 type: class
-description: Created by calling .on() method on the service [trunk](trunk.html) or any service [branch](branch.html).
+description: Created by calling .on() method on the service [trunk](trunk) or any service [branch](branch).
 methods:
 - name: cope
   returns: this leaf
-  description: Adds error [handlers](handlers.html) to this leaf.
+  description: Adds error [handlers](handlers) to this leaf.
   arguments:
   - name: handlers
     type: function or object
-    description: See [Handlers](handlers.html) guide.
+    description: See [Handlers](handlers) guide.
     repeating: true
 
 - name: use
   returns: this leaf
-  description: Adds plugin [handlers](handlers.html) to this leaf.
+  description: Adds plugin [handlers](handlers) to this leaf.
   arguments:
   - name: handlers
     type: function or object
-    description: See [Handlers](handlers.html) guide.
+    description: See [Handlers](handlers) guide.
     repeating: true
 
 - name: waitFor

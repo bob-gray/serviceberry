@@ -5,10 +5,10 @@ title: Response
 
 ### *class*
 
-*Extends [EventEmitter](https://nodejs.org/dist/latest-v8.x/docs/api/events.html#events_class_eventemitter)*
+*Extends [EventEmitter](https://nodejs.org/dist/latest/docs/api/events.html#events_class_eventemitter)*
 
-This object is created internally by Serviceberry and passed as the second argument to [Handlers](handlers.html).
-It is a wrapper object around Node's [`http.ServerResponse`](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_serverresponse).
+This object is created internally by Serviceberry and passed as the second argument to [Handlers](handlers).
+It is a wrapper object around Node's [`http.ServerResponse`](https://nodejs.org/dist/latest/docs/api/http.html#http_class_http_serverresponse).
 
 
 

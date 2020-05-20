@@ -5,11 +5,11 @@ title: Request
 
 ### *class*
 
-*Extends [EventEmitter](https://nodejs.org/dist/latest-v8.x/docs/api/events.html#events_class_eventemitter)*
+*Extends [EventEmitter](https://nodejs.org/dist/latest/docs/api/events.html#events_class_eventemitter)*
 
 Request objects are created internally by Serviceberry and passed as the first
-argument to [Handlers](handlers.html). They are wrapper objects around Node's
-[http.IncomingMessage](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage).
+argument to [Handlers](handlers). They are wrapper objects around Node's
+[http.IncomingMessage](https://nodejs.org/dist/latest/docs/api/http.html#http_class_http_incomingmessage).
 
 
 
@@ -61,7 +61,7 @@ Available within coping handlers.
 
 The preferred way to interact with a request is through it's methods, however
 if a need arises that is not addressed with an existing method, then direct access to the
-[http.IncomingMessage](https://nodejs.org/dist/latest-v8.x/docs/api/http.html#http_class_http_incomingmessage)
+[http.IncomingMessage](https://nodejs.org/dist/latest/docs/api/http.html#http_class_http_incomingmessage)
 is available.
 ### latestResult
 
@@ -78,7 +78,7 @@ Methods
 
 Call this method to pass control of the request the nearest coping handler. Handlers receiving Request may
 optionally pass control by throwing an exception or by their return value in lieu of calling fail.
-See [handlers](handlers.html) guide.
+See [handlers](handlers) guide.
 
 
   - **error** *string or error* 
@@ -90,8 +90,8 @@ See [handlers](handlers.html) guide.
     <span class="default">Default 500</span>
 
     Can be a status code, well know status text or an object with properties code and text. See
-    HttpError methods [setStatusCode](httperror.html#setstatuscodecode), [setStatusText](httperror.html#setstatustexttext),
-    and [setStatus](httperror.html#setstatusstatus).
+    HttpError methods [setStatusCode](httperror#setstatuscodecode), [setStatusText](httperror#setstatustexttext),
+    and [setStatus](httperror#setstatusstatus).
 
   - **headers** *object* <span class="optional">[optional]</span>
 
@@ -298,7 +298,7 @@ All query string params.
 
 Returns *an object*
 
-Parsed URL object. See [url](https://nodejs.org/dist/latest-v8.x/docs/api/url.html#url_url_strings_and_url_objects).
+Parsed URL object. See [url](https://nodejs.org/dist/latest/docs/api/url.html#url_url_strings_and_url_objects).
 
 
 ### hasHeader(name)
@@ -319,7 +319,7 @@ true when the header is in the request.
 
 Call this method to pass control of the request to the next handler. Handlers
 may optionally pass control by their return value in lieu of calling proceed.
-See [Handlers](handlers.html) guide. Proceed is bound to request
+See [Handlers](handlers) guide. Proceed is bound to request
 
 
   - **result** *any* <span class="optional">[optional]</span>

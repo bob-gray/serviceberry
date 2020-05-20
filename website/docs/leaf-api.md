@@ -6,7 +6,7 @@ title: Leaf
 ### *class*
 
 
-Created by calling .on() method on the service [trunk](trunk.html) or any service [branch](branch.html).
+Created by calling .on() method on the service [trunk](trunk) or any service [branch](branch).
 
 
 
@@ -24,22 +24,22 @@ Methods
 
 Returns *this leaf*
 
-Adds error [handlers](handlers.html) to this leaf.
+Adds error [handlers](handlers) to this leaf.
 
   - **handlers** *function or object* 
 
-    See [Handlers](handlers.html) guide.
+    See [Handlers](handlers) guide.
 
 
 ### use(...handlers)
 
 Returns *this leaf*
 
-Adds plugin [handlers](handlers.html) to this leaf.
+Adds plugin [handlers](handlers) to this leaf.
 
   - **handlers** *function or object* 
 
-    See [Handlers](handlers.html) guide.
+    See [Handlers](handlers) guide.
 
 
 ### waitFor(...setup)

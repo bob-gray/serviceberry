@@ -4,6 +4,7 @@
       "getting-started",
       "handlers",
       "plugins",
+      "serializers-and-deserializers",
       "service-tree",
       "auto-responses",
       "how-it-works"

@@ -1,6 +1,6 @@
 name: HttpError
 type: class
-extends: "[Error](https://nodejs.org/dist/latest-v10.x/docs/api/errors.html#errors_class_error)"
+extends: "[Error](https://nodejs.org/dist/latest/docs/api/errors.html#errors_class_error)"
 description: |
   An HTTP specific error class.
 constructor:

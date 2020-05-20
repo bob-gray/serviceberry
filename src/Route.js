@@ -63,6 +63,7 @@ function addCoping (handlers) {
 }
 
 function setOptions (options) {
+	// TODO: deep merge - important for serializers and deserializers
 	Object.assign(this.options, options);
 }
 

@@ -6,6 +6,7 @@ require("solv/src/array/add");
 require("solv/src/array/is-empty");
 
 const ChildrenResolver = require("./ChildrenResolver"),
+	ErrorNode = require("./ErrorNode"),
 	placeholders = /\{[^}]+\}/g,
 	escapedBraces = /\\([{}])/g;
 
@@ -152,24 +153,23 @@ function autoOptions (request) {
 }
 
 function notFound () {
-	// TODO: create error object and set request.error for these error nodes so handlers can check it
-	return createErrorNode("Not Found");
+	return new ErrorNode("Not Found");
 }
 
 function notAllowed (request) {
 	request.setAllowedMethods(this.invoke(getAllow));
 
-	return createErrorNode("Method Not Allowed", {
+	return new ErrorNode("Method Not Allowed", {
 		Allow: request.getAllowedMethods()
 	});
 }
 
 function unsupported () {
-	return createErrorNode("Unsupported Media Type");
+	return new ErrorNode("Unsupported Media Type");
 }
 
 function notAcceptable () {
-	return createErrorNode("Not Acceptable");
+	return new ErrorNode("Not Acceptable");
 }
 
 function getAllow () {
@@ -185,12 +185,6 @@ function getAllow () {
 	allow.sort();
 
 	return allow.join(", ");
-}
-
-function createErrorNode () {
-	const ErrorNode = require("./ErrorNode");
-
-	return new ErrorNode(...arguments);
 }
 
 module.exports = BranchNode;

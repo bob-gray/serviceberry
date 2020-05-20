@@ -188,10 +188,13 @@ module.exports = freeze(base(class Director {
 		// if the handler didn't return a value use yielding instead
 		// the yielding promise will resolve to the value passed to proceed
 		if (typeof result === "undefined") {
-			result = this.#yielding;
+			result = await this.#yielding;
+		} else {
+			result = await Promise.race([
+				result,
+				this.#yielding
+			]);
 		}
-
-		result = await result;
 
 		if (result instanceof Error) {
 			throw result;

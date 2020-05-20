@@ -5,8 +5,8 @@
         <link>https://serviceberry.js.org/blog</link>
         <description>The best place to stay up-to-date with the latest Serviceberry news and events.</description>
         <lastBuildDate>Thu, 15 Mar 2018 06:00:00 GMT</lastBuildDate>
-        <docs>http://blogs.law.harvard.edu/tech/rss</docs>
-        <generator>Feed for Node.js</generator>
+        <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
+        <generator>https://github.com/jpmonette/feed</generator>
         <image>
             <title>Serviceberry Blog</title>
             <url>https://serviceberry.js.org/img/serviceberry-horizontal.svg</url>

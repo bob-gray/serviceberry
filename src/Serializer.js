@@ -16,12 +16,6 @@ module.exports = freeze(base(class Serializer {
 		const type = response.getContentType(),
 			handler = this.handlers[type] || response.getBody.bind(response);
 
-		var serialized = handler(request, response);
-
-		if (typeof serialized === "undefined") {
-			serialized = "";
-		}
-
-		return serialized;
+		return handler(request, response);
 	}
 }));

@@ -88,16 +88,29 @@ class Response extends EventEmitter {
 	}
 
 	streamContent () {
-		this.removeHeader("Content-Type");
-		this.writeHead();
+		if (!this.serverResponse.headersSent) {
+			this.writeHead();
+		}
+
 		this.#content.pipe(this.serverResponse);
 	}
 
-	// eslint-disable-next-line complexity
 	sendBufferedContent () {
 		const {serverResponse} = this,
 			buffer = Buffer.from(this.getContent(), this.#encoding);
 
+		if (!serverResponse.headersSent) {
+			this.writeBufferedHead(buffer);
+		}
+
+		if (buffer.length) {
+			serverResponse.write(buffer, this.#encoding);
+		}
+
+		serverResponse.end();
+	}
+
+	writeBufferedHead (buffer) {
 		if (!buffer.length && this.is("OK")) {
 			this.setStatus("No Content");
 		} else if (buffer.length && this.withoutHeader("Content-Length")) {
@@ -105,16 +118,10 @@ class Response extends EventEmitter {
 		}
 
 		if (!buffer.length) {
-			this.removeHeader("Content-Type");
+			this.removeHeader("Content-Length");
 		}
 
 		this.writeHead();
-
-		if (buffer.length) {
-			serverResponse.write(buffer, this.#encoding);
-		}
-
-		serverResponse.end();
 	}
 
 	writeHead () {

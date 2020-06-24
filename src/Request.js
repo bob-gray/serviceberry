@@ -157,6 +157,8 @@ class Request {
 		// Calling proceed on a request proxy yields control
 		// and signals to the director to proceed
 		this.latestResult = latestResult;
+
+		return latestResult;
 	}
 
 	fail (...args) {

@@ -13,6 +13,7 @@ describe("YieldableProxy", () => {
 	beforeEach(() => {
 		yielder = createSpyObj("yielder", ["yielding", "anotherYielding", "hidden", "other"]);
 
+		yielder.yielding.and.returnValue("yielding return");
 		yielder.foo = "baz";
 
 		({yieldable, proxy} = new YieldableProxy(
@@ -79,11 +80,9 @@ describe("YieldableProxy", () => {
 	});
 
 	it("should resolve yieldable yielding with value passed to proxy yielding", async () => {
-		const value = {};
+		proxy.yielding();
 
-		proxy.yielding(value);
-
-		expect(await yieldable.yielding).toBe(value);
+		expect(await yieldable.yielding).toBe("yielding return");
 	});
 
 	it("should not allow a property to be overridden", () => {

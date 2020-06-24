@@ -24,6 +24,8 @@ function YieldableProxy (yielder, yieldingMethods, hiddenMethods = []) {
 				if (value && yieldingMethods.includes(name)) {
 					value = new Proxy(value, {
 						apply (method, context, args) {
+							var result;
+
 							// the first time any one of the yielding methods are called control is yielded
 							// the next call to any yielding methods will throw an error
 							if (yieldable.yielded) {
@@ -31,10 +33,16 @@ function YieldableProxy (yielder, yieldingMethods, hiddenMethods = []) {
 									" proxy has yielded and is no longer controllable");
 							}
 
-							yieldable.yield(args[0]);
+							try {
+								// always bind yieldingMethods to the target
+								result = Reflect.apply(method, target, args);
+								yieldable.yield(result);
+							} catch (error) {
+								yieldable.yield(error);
+								throw error;
+							}
 
-							// always bind yieldingMethods to the target
-							return Reflect.apply(method, target, args);
+							return result;
 						}
 					});
 				} else if (typeof value === "function") {

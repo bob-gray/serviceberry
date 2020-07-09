@@ -15,7 +15,7 @@ A branch is created by calling method .at() on the service
 
 --------------------------------------------------
 
-  - [at(path[, ...handlers])](#atpath-handlers-)
+  - [at(path[, options[, ...handlers]])](#atpath-options-handlers-)
   - [cope(...handlers)](#copehandlers)
   - [on(options[, ...handlers])](#onoptions-handlers-)
   - [on(method[, ...handlers])](#onmethod-handlers-)
@@ -26,7 +26,7 @@ A branch is created by calling method .at() on the service
 Methods
 -------
 
-### at(path[, ...handlers])
+### at(path[, options[, ...handlers]])
 
 Returns *a new branch*
 
@@ -43,6 +43,20 @@ Routes requests at a path down a new branch.
     The branch will parse the path parameters. They are available to all handlers
     through [request.getPathParam(name)](request#getpathparamname)
     and [request.getPathParms()](request#getpathparams).
+
+  - **options** *object* <span class="optional">[optional]</span>
+    - **serializers** *object* 
+  
+      Property names must be content types such as "application/json" and
+      values must be [serializer](plugins#serializers-and-deserializers)
+      plugins.
+  
+    - **deserializers** *object* 
+  
+      Property names must be content types such as "application/json" and
+      values must be [deserializer](plugins#serializers-and-deserializers)
+      plugins.
+  
 
   - **handlers** *function or object* <span class="optional">[optional]</span>
 

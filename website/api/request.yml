@@ -20,6 +20,10 @@ properties:
 - name: latestResult
   type: any
   description: The resolved result of the latest finished handler.
+- name: remainingPath
+  type: string
+  description: |
+    The portion of the URL pathname that is after the current path to of the currently executing handler.
 
 methods:
 - name: fail
@@ -66,6 +70,10 @@ methods:
 
 - name: getContentType
   description: Content mime type without encoding charset, such as application/json.
+  returns: a string
+
+- name: getCurrentPath
+  description: The URL path of the currently executing handler.
   returns: a string
 
 - name: getElapsedTime

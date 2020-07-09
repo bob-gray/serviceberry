@@ -19,12 +19,14 @@ argument to [Handlers](handlers). They are wrapper objects around Node's
   - [error *HttpError*](#error)
   - [incomingMessage *http.IncomingMessage*](#incomingmessage)
   - [latestResult *any*](#latestresult)
+  - [remainingPath *string*](#remainingpath)
 
   - [fail(error[, status[, headers]])](#failerror-status-headers-)
   - [getBody()](#getbody)
   - [getBodyParam(name)](#getbodyparamname)
   - [getContent()](#getcontent)
   - [getContentType()](#getcontenttype)
+  - [getCurrentPath()](#getcurrentpath)
   - [getElapsedTime()](#getelapsedtime)
   - [getEncoding()](#getencoding)
   - [getFullUrl()](#getfullurl)
@@ -68,6 +70,11 @@ is available.
 
 
 The resolved result of the latest finished handler.
+### remainingPath
+
+
+
+The portion of the URL pathname that is after the current path to of the currently executing handler.
 
 Methods
 -------
@@ -131,6 +138,13 @@ Raw request content. Most likely use case is within a deserializer.
 Returns *a string*
 
 Content mime type without encoding charset, such as application/json.
+
+
+### getCurrentPath()
+
+Returns *a string*
+
+The URL path of the currently executing handler.
 
 
 ### getElapsedTime()

@@ -10,8 +10,12 @@ methods:
   description: Removes all headers.
 
 - name: getBody
-  description: The body, as set by the request, prior to serialization.
+  description: The body prior to serialization.
   returns: any
+
+- name: getContent
+  description: The body after serialization.
+  returns: string, buffer, or readable stream
 
 - name: getContentType
   description: Content mime type without encoding charset, such as `application/json`.
@@ -96,6 +100,10 @@ methods:
         - name: body
           type: any
           required: false
+        - name: content
+          type: string, buffer, or readable stream
+          required: false
+          description: Mutually exclusive with `body` options. Content will not be serialized.
         - name: encoding
           type: string
           default: utf8
@@ -110,6 +118,12 @@ methods:
   arguments:
   - name: body
     type: any
+
+- name: setContent
+  description: Set the content to bypass serialization.
+  arguments:
+  - name: content
+    type: string, buffer, or readable stream
 
 - name: setEncoding
   description: Name of encoding such as `utf-8`.

@@ -17,6 +17,7 @@ It is a wrapper object around Node's [`http.ServerResponse`](https://nodejs.org/
 
   - [clearHeaders()](#clearheaders)
   - [getBody()](#getbody)
+  - [getContent()](#getcontent)
   - [getContentType()](#getcontenttype)
   - [getEncoding()](#getencoding)
   - [getHeader(name)](#getheadername)
@@ -29,6 +30,7 @@ It is a wrapper object around Node's [`http.ServerResponse`](https://nodejs.org/
   - [removeHeader(name)](#removeheadername)
   - [send([options])](#send-options-)
   - [setBody(body)](#setbodybody)
+  - [setContent(content)](#setcontentcontent)
   - [setEncoding(encoding)](#setencodingencoding)
   - [setHeader(name, value)](#setheadername-value)
   - [setHeaders(headers)](#setheadersheaders)
@@ -52,7 +54,14 @@ Removes all headers.
 
 Returns *any*
 
-The body, as set by the request, prior to serialization.
+The body prior to serialization.
+
+
+### getContent()
+
+Returns *string, buffer, or readable stream*
+
+The body after serialization.
 
 
 ### getContentType()
@@ -168,6 +177,10 @@ there are no more handlers in the queue.
   
     - **body** *any* <span class="optional">[optional]</span>
   
+    - **content** *string, buffer, or readable stream* <span class="optional">[optional]</span>
+  
+      Mutually exclusive with `body` options. Content will not be serialized.
+  
     - **encoding** *string* <span class="optional">[optional]</span>
   
       <span class="default">Default utf8</span>
@@ -185,6 +198,15 @@ there are no more handlers in the queue.
 The body prior to serialization.
 
   - **body** *any* 
+
+
+### setContent(content)
+
+
+
+Set the content to bypass serialization.
+
+  - **content** *string, buffer, or readable stream* 
 
 
 ### setEncoding(encoding)

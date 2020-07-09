@@ -22,6 +22,22 @@ methods:
       The branch will parse the path parameters. They are available to all handlers
       through [request.getPathParam(name)](request#getpathparamname)
       and [request.getPathParms()](request#getpathparams).
+  - name: options
+    type: object
+    required: false
+    properties:
+      - name: serializers
+        type: object
+        description: |
+          Property names must be content types such as "application/json" and
+          values must be [serializer](plugins#serializers-and-deserializers)
+          plugins.
+      - name: deserializers
+        type: object
+        description: |
+          Property names must be content types such as "application/json" and
+          values must be [deserializer](plugins#serializers-and-deserializers)
+          plugins.
   - name: handlers
     description: See [Handlers](handlers) guide.
     type: function or object

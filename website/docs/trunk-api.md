@@ -16,7 +16,7 @@ A service has only one trunk.
 
 --------------------------------------------------
 
-  - [at(path[, ...handlers])](#atpath-handlers-)
+  - [at(path[, options[, ...handlers]])](#atpath-options-handlers-)
   - [cope(...handlers)](#copehandlers)
   - [leaf()](#leaf)
   - [on(options, ...handlers)](#onoptions-handlers)
@@ -29,7 +29,7 @@ A service has only one trunk.
 Methods
 -------
 
-### at(path[, ...handlers])
+### at(path[, options[, ...handlers]])
 
 Returns *a new [branch](branch)*
 
@@ -46,6 +46,20 @@ Routes requests at a path down a new [branch](branch).
     The branch will parse the path parameters. They are available to all handlers
     through [request.getPathParam(name)](request#getpathparamname)
     and [request.getPathParms()](request#getpathparams).
+
+  - **options** *object* <span class="optional">[optional]</span>
+    - **serializers** *object* 
+  
+      Property names must be content types such as "application/json" and
+      values must be [serializer](plugins#serializers-and-deserializers)
+      plugins.
+  
+    - **deserializers** *object* 
+  
+      Property names must be content types such as "application/json" and
+      values must be [deserializer](plugins#serializers-and-deserializers)
+      plugins.
+  
 
   - **handlers** *function or object* <span class="optional">[optional]</span>
 

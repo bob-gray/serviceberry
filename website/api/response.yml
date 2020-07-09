@@ -103,7 +103,7 @@ methods:
         - name: content
           type: string, buffer, or readable stream
           required: false
-          description: Mutually exclusive with `body` options. Content will not be serialized.
+          description: Mutually exclusive with `body` option. Content will not be serialized.
         - name: encoding
           type: string
           default: utf8

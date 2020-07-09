@@ -23,7 +23,7 @@ properties:
 - name: remainingPath
   type: string
   description: |
-    The portion of the URL pathname that is after the current path to of the currently executing handler.
+    The portion of the URL pathname that is after the current path of the currently executing handler.
 
 methods:
 - name: fail

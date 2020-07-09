@@ -74,7 +74,7 @@ The resolved result of the latest finished handler.
 
 
 
-The portion of the URL pathname that is after the current path to of the currently executing handler.
+The portion of the URL pathname that is after the current path of the currently executing handler.
 
 Methods
 -------

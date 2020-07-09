@@ -179,7 +179,7 @@ there are no more handlers in the queue.
   
     - **content** *string, buffer, or readable stream* <span class="optional">[optional]</span>
   
-      Mutually exclusive with `body` options. Content will not be serialized.
+      Mutually exclusive with `body` option. Content will not be serialized.
   
     - **encoding** *string* <span class="optional">[optional]</span>
   

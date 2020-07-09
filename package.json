@@ -1,6 +1,6 @@
 {
   "name": "serviceberry",
-  "version": "0.9.4",
+  "version": "0.10.0",
   "description": "A focused HTTP service framework",
   "main": "src/main.js",
   "files": [
@@ -37,6 +37,7 @@
   "dependencies": {
     "accepts": "^1.3.7",
     "content-type": "^1.0.4",
+    "mime-types": "^2.1.27",
     "serviceberry-form": "^1.0.2",
     "serviceberry-json": "^1.0.4",
     "solv": "^1.0.1"

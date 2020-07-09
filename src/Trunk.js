@@ -5,7 +5,7 @@ const Branch = require("./Branch"),
 	BranchNode = require("./BranchNode"),
 	Request = require("./Request"),
 	Response = require("./Response"),
-	Route = require("./Route"),
+	RequestRoute = require("./RequestRoute"),
 	Director = require("./Director"),
 	defaultOptions = {
 		port: 3000,
@@ -82,7 +82,7 @@ function respond (incomingMessage, serverResponse) {
 	var request = new Request(incomingMessage),
 		response = new Response(serverResponse),
 		director = new Director(request, response),
-		route = new Route(this.root.node, request, response);
+		route = new RequestRoute(this.root.node, request, response);
 
 	director.run(route);
 }

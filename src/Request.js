@@ -28,8 +28,8 @@ class Request {
 		this.#url = Object.freeze(new URL(this.getFullUrl()));
 		this.#contentType = parseContentType(incomingMessage);
 		this.#content = "";
-
 		this.remainingPath = this.#url.pathname.slice(1);
+
 		incomingMessage.setEncoding(this.getEncoding());
 	}
 
@@ -79,6 +79,12 @@ class Request {
 
 	getFullUrl () {
 		return this.getProtocol() + "://" + this.getHost() + this.incomingMessage.url;
+	}
+
+	getCurrentPath () {
+		const path = this.getUrl().pathname;
+
+		return path.slice(1, path.length - this.remainingPath.length - 1);
 	}
 
 	setContent (content) {
@@ -145,8 +151,8 @@ class Request {
 		return getCaseInsensitive(this.getParams(), name);
 	}
 
-	setAllowedMethods (allow) {
-		this.allowedMethods = allow;
+	setAllowedMethods (allowedMethods) {
+		this.allowedMethods = allowedMethods;
 	}
 
 	getAllowedMethods () {

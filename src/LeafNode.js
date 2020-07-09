@@ -1,7 +1,8 @@
 "use strict";
 
 const HandlersResolver = require("./HandlersResolver"),
-	accepts = require("accepts");
+	accepts = require("accepts"),
+	mime = require("mime-types");
 
 class LeafNode extends HandlersResolver {
 	constructor (options = {}) {
@@ -60,8 +61,7 @@ class LeafNode extends HandlersResolver {
 		}
 
 		if (acceptable && response.withoutHeader("Content-Type")) {
-			// TODO: set content type charset
-			response.setHeader("Content-Type", acceptable);
+			response.setHeader("Content-Type", mime.contentType(acceptable));
 		}
 
 		return acceptable !== false;

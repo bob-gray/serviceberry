@@ -8,9 +8,8 @@ class Branch extends Leaf {
 		this.node = new BranchNode(options);
 	}
 
-	// TODO: allow options for serializers and deserializers
 	at (path, ...handlers) {
-		const branch = new Branch({path});
+		const branch = createBranch(path, handlers);
 
 		this.node.branches.push(branch.node);
 		branch.use(...handlers);
@@ -43,6 +42,17 @@ function createLeaf (options) {
 	}
 
 	return new Leaf(options);
+}
+
+function createBranch (path, handlers) {
+	var options = {path};
+
+	// if the first handler is not a handler it is an options object
+	if (handlers.length && typeof handlers[0] !== "function" && typeof handlers[0].use !== "function") {
+		Object.assign(options, handlers.shift());
+	}
+
+	return new Branch(options);
 }
 
 module.exports = Branch;

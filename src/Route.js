@@ -2,10 +2,12 @@
 
 require("solv/src/array/empty");
 
-const Base = require("solv/src/abstract/base");
+const {freeze} = require("./class"),
+	Base = require("solv/src/abstract/base"),
+	deepMerge = require("./deepMerge");
 
-class Route extends Base {
-	constructor (root, ...args) {
+module.exports = freeze(class Route extends Base {
+	constructor () {
 		super();
 
 		Object.assign(this, {
@@ -14,8 +16,18 @@ class Route extends Base {
 			coped: [],
 			options: {}
 		});
+	}
 
-		this.invoke(plot, root, args);
+	plot (node, ...args) {
+		this.invoke(setOptions, node.options);
+		this.invoke(addCoping, node.coping);
+		node.transition(...args);
+		this.add(node.handlers, ...args);
+		this.invoke(plotNext, node, args);
+	}
+
+	add (handlers) {
+		this.queue = this.queue.concat(handlers);
 	}
 
 	getNextHandler () {
@@ -31,21 +43,13 @@ class Route extends Base {
 
 		return handler;
 	}
-}
-
-function plot (node, args) {
-	this.invoke(setOptions, node.options);
-	this.invoke(addCoping, node.coping);
-	this.invoke(add, node.handlers);
-	node.transition(...args);
-	this.invoke(plotNext, node, args);
-}
+});
 
 function plotNext (node, args) {
 	var next = node.chooseNext(...args);
 
 	if (next) {
-		this.invoke(plot, next, args);
+		this.plot(next, ...args);
 	}
 }
 
@@ -54,17 +58,12 @@ function resetCoping () {
 	this.coped.empty();
 }
 
-function add (handlers) {
-	this.queue = this.queue.concat(handlers);
-}
-
 function addCoping (handlers) {
 	this.queue = this.queue.concat(handlers.map(toCoping));
 }
 
 function setOptions (options) {
-	// TODO: deep merge - important for serializers and deserializers
-	Object.assign(this.options, options);
+	deepMerge(this.options, options);
 }
 
 function getNext () {
@@ -83,5 +82,3 @@ function toCoping (handler) {
 		coping: handler
 	};
 }
-
-module.exports = Route;

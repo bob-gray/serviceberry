@@ -32,9 +32,9 @@ async function resolveHandlers () {
 function prepareHandler (handler) {
 	if (typeof handler !== "function" && typeof handler.use === "function") {
 		handler = handler.use.bind(handler);
-	}
-
-	if (typeof handler !== "function") {
+	} else if (typeof handler === "function") {
+		handler = handler.bind(null);
+	} else {
 		badHandler();
 	}
 

@@ -59,6 +59,8 @@ module.exports = freeze(base(class Director {
 	async proceed () {
 		const handler = this.route.getNextHandler();
 
+		this.request.remainingPath = this.route.remainingPath;
+
 		if (handler) {
 			await this.call(handler);
 		} else if (this.response.notBegun()) {

@@ -32,6 +32,20 @@ describe("Response", () => {
 		expect(response.getBody()).toBe(5);
 	});
 
+	it("should return false from isBodyStreamable() when body doesn't have pipe method", () => {
+		response.setBody(5);
+
+		expect(response.isBodyStreamable()).toBe(false);
+	});
+
+	it("should return false from isBodyStreamable() when body does have pipe method", () => {
+		response.setBody({
+			pipe: Function.prototype
+		});
+
+		expect(response.isBodyStreamable()).toBe(true);
+	});
+
 	it("should set and get encoding", () => {
 		response.setEncoding("ascii");
 

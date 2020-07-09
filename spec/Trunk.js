@@ -4,7 +4,7 @@
 
 const mock = require("mock-require"),
 	EventEmitter = require("events"),
-	mockRequest = {},
+	mockRequest = {remainingPath: ""},
 	mockResponse = {},
 	mockDirector = {
 		run: jasmine.createSpy("director run")
@@ -31,8 +31,8 @@ mock("../src/Director", MockDirector);
 mock.reRequire("../src/Director");
 
 MockRoute.and.returnValue(mockRoute);
-mock("../src/Route", MockRoute);
-mock.reRequire("../src/Route");
+mock("../src/RequestRoute", MockRoute);
+mock.reRequire("../src/RequestRoute");
 
 // eslint-disable-next-line one-var
 const Trunk = mock.reRequire("../src/Trunk");

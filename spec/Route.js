@@ -31,7 +31,8 @@ describe("Route", () => {
 		root.test.and.returnValue(true);
 		root.chooseNext.and.returnValue(child);
 
-		route = new Route(root, "arg1", "arg2");
+		route = new Route();
+		route.plot(root, "arg1", "arg2");
 	});
 
 	it("should return one handler at a time in sequence from getNextHandler()", () => {
@@ -101,7 +102,8 @@ describe("Route", () => {
 
 	it("should have root options even if root tests false", () => {
 		root.test.and.returnValue(false);
-		route = new Route(root);
+		route = new Route();
+		route.plot(root);
 
 		expect(route.options.root).toBe(true);
 	});

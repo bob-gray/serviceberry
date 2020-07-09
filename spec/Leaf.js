@@ -34,7 +34,6 @@ describe("Leaf", () => {
 		leaf.node.handlers[0]();
 
 		expect(leaf.node.handlers.length).toBe(1);
-		expect(leaf.node.handlers.pop()).toBe(handler);
 		expect(handler).toHaveBeenCalled();
 	});
 
@@ -61,7 +60,6 @@ describe("Leaf", () => {
 		leaf.node.coping[0]();
 
 		expect(leaf.node.coping.length).toBe(1);
-		expect(leaf.node.coping.pop()).toBe(handler);
 		expect(handler).toHaveBeenCalled();
 	});
 

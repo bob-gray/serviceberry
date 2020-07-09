@@ -112,6 +112,12 @@ describe("Request (GET)", () => {
 	it("should return full url from getFullUrl()", () => {
 		expect(request.getFullUrl()).toBe("https://www.example.com/path/to/items/105?awesome=yes");
 	});
+
+	it("should return difference between url path and remaining path from getCurrentPath()", () => {
+		request.remainingPath = "items/105";
+
+		expect(request.getCurrentPath()).toBe("path/to");
+	});
 });
 
 describe("Request (POST)", () => {

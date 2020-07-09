@@ -5,7 +5,7 @@
 const Director = require("../src/Director"),
 	Request = require("../src/Request"),
 	Response = require("../src/Response"),
-	Route = require("../src/Route"),
+	RequestRoute = require("../src/RequestRoute"),
 	httpMocks = require("node-mocks-http"),
 	EventEmitter = require("events");
 
@@ -68,6 +68,32 @@ describe("Director", () => {
 					done();
 				}
 			]
+		});
+
+		director.run(route);
+	});
+
+	it("should deserialize a json request body", (done) => {
+		const goodJson = {good: "json"};
+
+		request = createRequest({
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json"
+			},
+			content: JSON.stringify(goodJson)
+		});
+
+		director = new Director(request, response);
+
+		route = createRoute(request, response, {
+			handlers: [
+				req => {
+					expect(req.getBody()).toEqual(goodJson);
+					done();
+				}
+			],
+			coping: []
 		});
 
 		director.run(route);
@@ -292,7 +318,7 @@ function createRoute (request, response, rootOptions = getDefaultRootOptions()) 
 	Object.assign(root, rootOptions);
 	root.test.and.returnValue(true);
 
-	return new Route(root, request, response);
+	return new RequestRoute(root, request, response);
 }
 
 function getDefaultRootOptions () {

@@ -53,15 +53,19 @@ describe("HandlersResolver", () => {
 	});
 
 	it("should set resolved handler functions", async () => {
+		const spy = jasmine.createSpy("handler");
+
 		handlers.concat(coping)
 			.concat(waiting)
-			.forEach(handler => handler.resolve(Function.prototype));
+			.forEach(handler => handler.resolve(spy));
 
 		await resolver.resolved;
 
 		resolver.handlers.concat(resolver.coping)
 			// eslint-disable-next-line max-nested-callbacks
-			.forEach(handler => expect(handler).toBe(Function.prototype));
+			.forEach(handler => handler());
+
+		expect(spy.calls.count()).toBe(handlers.length + coping.length);
 	});
 
 	it("should set resolved handler objects", async () => {

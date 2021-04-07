@@ -2,8 +2,7 @@
 
 "use strict";
 
-const Deserializer = require("../src/Deserializer"),
-	{Readable} = require("stream");
+const Deserializer = require("../src/Deserializer");
 
 describe("Deserializer", () => {
 	var deserializer,
@@ -36,7 +35,7 @@ describe("Deserializer", () => {
 
 		await deserializer.deserialize(request, response);
 
-		expect(request.content).toBe(text.string);
+		expect(request.getContent()).toBe(text.string);
 		expect(text.handler).toHaveBeenCalledWith(request, response);
 		expect(text.handler).toHaveBeenCalledTimes(1);
 	});
@@ -47,12 +46,12 @@ describe("Deserializer", () => {
 
 		await deserializer.deserialize(request, response);
 
-		expect(request.content).toBe(json.string);
+		expect(request.getContent()).toBe(json.string);
 		expect(json.handler).toHaveBeenCalledWith(request, response);
 		expect(json.handler).toHaveBeenCalledTimes(1);
 	});
 
-	it("should call result in raw content when no handler exists", async () => {
+	it("should result in raw content when no handler exists", async () => {
 		const csv = {
 				type: "text/csv",
 				// eslint-disable-next-line quotes
@@ -63,25 +62,20 @@ describe("Deserializer", () => {
 
 		deserializer = new Deserializer();
 
-		await deserializer.deserialize(request, response);
-
-		expect(request.content).toBe(csv.string);
+		expect(await deserializer.deserialize(request, response)).toBe(csv.string);
 	});
 });
 
 function createRequest (content) {
-	var incomingMessage = new Readable(),
-		request = {
-			incomingMessage,
-			getContentType: () => content.type,
-			getContent: () => request.content || "",
-			setContent (value) {
-				request.content = value;
-			}
-		};
+	const {type, string} = content;
 
-	incomingMessage.push(content.string);
-	incomingMessage.push(null);
+	return {
+		getContentType () {
+			return type;
+		},
 
-	return request;
+		getContent () {
+			return string;
+		}
+	};
 }

@@ -3,6 +3,9 @@
 const {freeze, base} = require("./class"),
 	headersAccessor = require("./headersAccessor"),
 	HttpError = require("./HttpError"),
+	{decodeStream} = require("iconv-lite"),
+	mime = require("mime-types"),
+	{once} = require("events"),
 	{URL} = require("url"),
 	querystring = require("querystring"),
 	contentType = require("content-type"),
@@ -13,24 +16,34 @@ class Request {
 	#id;
 	#url;
 	#contentType;
+	#charset;
 	#content;
 	#body;
 
 	constructor (incomingMessage) {
+		this.#startStamp = process.hrtime();
+		this.#id = createId();
+
 		Object.assign(this, {
 			incomingMessage,
 			headers: incomingMessage.headers,
 			pathParams: Object.create(null)
 		});
 
-		this.#startStamp = process.hrtime();
-		this.#id = createId();
 		this.#url = Object.freeze(new URL(this.getFullUrl()));
 		this.#contentType = parseContentType(incomingMessage);
-		this.#content = "";
 		this.remainingPath = this.#url.pathname.slice(1);
 
-		incomingMessage.setEncoding(this.getEncoding());
+		// TODO: maybe incomingMessage should not be #content directly but piped through a PassThrough stream?
+		this.#content = this.incomingMessage;
+
+		if (this.#contentType) {
+			this.#charset = this.#contentType.parameters.charset || (mime.charset(this.#contentType) || undefined);
+		}
+
+		if (this.#charset) {
+			this.#charset = this.#charset.toLowerCase();
+		}
 	}
 
 	getId () {
@@ -87,8 +100,41 @@ class Request {
 		return path.slice(1, path.length - this.remainingPath.length - 1);
 	}
 
+	decode () {
+		try {
+			this.pipe(decodeStream(this.getCharset()));
+		} catch {
+			// TODO: handle errors with encoding - ignoring for now until I figure out a good way to handle them
+		}
+	}
+
+	pipe (stream, options) {
+		this.#content = this.#content.pipe(stream, options);
+
+		return stream;
+	}
+
+	buffer () {
+		const stream = this.#content;
+
+		this.#content = null;
+		stream.on("data", chunk => this.addContent(chunk));
+
+		return once(stream, "end");
+	}
+
 	setContent (content) {
 		this.#content = content;
+	}
+
+	addContent (content) {
+		if (!this.#content) {
+			this.setContent(content);
+		} else if (Buffer.isBuffer(this.#content)) {
+			this.setContent(Buffer.concat([this.#content, content]));
+		} else {
+			this.setContent(this.#content + content);
+		}
 	}
 
 	getContent () {
@@ -99,8 +145,12 @@ class Request {
 		return this.#contentType && this.#contentType.type;
 	}
 
+	getCharset () {
+		return this.#charset;
+	}
+
 	getEncoding () {
-		return this.#contentType && (this.#contentType.parameters.charset || "utf8");
+		return this.getCharset();
 	}
 
 	getPathParam (name) {

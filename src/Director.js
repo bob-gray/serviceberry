@@ -25,6 +25,14 @@ module.exports = freeze(base(class Director {
 		this.setTimer();
 		this.response.on("serialize", this.serialize.bind(this));
 
+		if (this.request.getCharset()) {
+			this.request.decode();
+		}
+
+		if (this.route.options.buffer) {
+			await this.request.buffer();
+		}
+
 		await this.deserialize();
 		await this.proceed();
 	}

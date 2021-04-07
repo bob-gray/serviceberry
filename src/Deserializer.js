@@ -18,11 +18,6 @@ module.exports = freeze(base(class Deserializer {
 		const type = request.getContentType(),
 			handler = this.handlers[type] || request.getContent.bind(request);
 
-		await new Promise(resolve => request.incomingMessage
-			.on("data", content => request.setContent(request.getContent() + content))
-			.on("end", resolve)
-		);
-
 		return handler(request, response);
 	}
 }));

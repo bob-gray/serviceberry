@@ -14,7 +14,9 @@ module.exports = freeze(class Route extends Base {
 			queue: [],
 			coping: [],
 			coped: [],
-			options: {}
+			options: {
+				buffer: true
+			}
 		});
 	}
 

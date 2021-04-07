@@ -284,7 +284,6 @@ function createRequest (options = {}) {
 	});
 
 	Object.assign(incomingMessage, {
-		setEncoding: Function.prototype,
 		socket: {
 			remoteAddress: options.ip,
 			localPort: options.port
@@ -294,7 +293,7 @@ function createRequest (options = {}) {
 		}
 	});
 
-	setImmediate(emitRequestContent, incomingMessage, options.content);
+	setImmediate(emitRequestContent, incomingMessage, options.content || "");
 
 	return new Request(incomingMessage);
 }

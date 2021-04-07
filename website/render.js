@@ -1,13 +1,13 @@
 const fs = require("fs"),
 	yaml = require("js-yaml"),
 	Handlebars = require("handlebars"),
-	serviceberry = yaml.safeLoad(fs.readFileSync("api/serviceberry.yml", "utf8")),
-	trunk = yaml.safeLoad(fs.readFileSync("api/trunk.yml", "utf8")),
-	branch = yaml.safeLoad(fs.readFileSync("api/branch.yml", "utf8")),
-	leaf = yaml.safeLoad(fs.readFileSync("api/leaf.yml", "utf8")),
-	request = yaml.safeLoad(fs.readFileSync("api/request.yml", "utf8")),
-	response = yaml.safeLoad(fs.readFileSync("api/response.yml", "utf8")),
-	httperror = yaml.safeLoad(fs.readFileSync("api/httperror.yml", "utf8"));
+	serviceberry = yaml.load(fs.readFileSync("api/serviceberry.yml", "utf8")),
+	trunk = yaml.load(fs.readFileSync("api/trunk.yml", "utf8")),
+	branch = yaml.load(fs.readFileSync("api/branch.yml", "utf8")),
+	leaf = yaml.load(fs.readFileSync("api/leaf.yml", "utf8")),
+	request = yaml.load(fs.readFileSync("api/request.yml", "utf8")),
+	response = yaml.load(fs.readFileSync("api/response.yml", "utf8")),
+	httperror = yaml.load(fs.readFileSync("api/httperror.yml", "utf8"));
 
 Handlebars.registerPartial("arguments", fs.readFileSync("templates/arguments.hbs", "utf8"));
 Handlebars.registerPartial("properties", fs.readFileSync("templates/properties.hbs", "utf8"));

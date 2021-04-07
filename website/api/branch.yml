@@ -37,6 +37,13 @@ methods:
           Property names must be content types such as "application/json" and
           values must be [deserializer](plugins#serializers-and-deserializers)
           plugins.
+      - name: buffer
+        type: boolean
+        default: true
+        description: |
+          Whether to buffer the request content. If buffer is false, the request content will be a stream instead
+          of a string or buffer.
+
   - name: handlers
     description: See [Handlers](handlers) guide.
     type: function or object
@@ -92,6 +99,12 @@ methods:
           Property names must be content types such as "application/json" and
           values must be [deserializer](plugins#serializers-and-deserializers)
           plugins.
+      - name: buffer
+        type: boolean
+        default: true
+        description: |
+          Whether to buffer the request content. If buffer is false, the request content will be a stream instead
+          of a string or buffer.
   - name: handlers
     type: function or object
     description: See [Handlers](handlers) guide.

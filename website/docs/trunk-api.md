@@ -60,6 +60,13 @@ Routes requests at a path down a new [branch](branch).
       values must be [deserializer](plugins#serializers-and-deserializers)
       plugins.
   
+    - **buffer** *boolean* <span class="optional">[optional]</span>
+  
+      <span class="default">Default true</span>
+  
+      Whether to buffer the request content. If buffer is false, the request content will be a stream instead
+      of a string or buffer.
+  
 
   - **handlers** *function or object* <span class="optional">[optional]</span>
 
@@ -125,6 +132,13 @@ will be handled by the new [leaf's](leaf) [handlers](handlers).
       Property names must be content types such as "application/json" and
       values must be [deserializer](plugins#serializers-and-deserializers)
       plugins.
+  
+    - **buffer** *boolean* <span class="optional">[optional]</span>
+  
+      <span class="default">Default true</span>
+  
+      Whether to buffer the request content. If buffer is false, the request content will be a stream instead
+      of a string or buffer.
   
 
   - **handlers** *function or object* 

@@ -24,6 +24,7 @@ argument to [Handlers](handlers). They are wrapper objects around Node's
   - [fail(error[, status[, headers]])](#failerror-status-headers-)
   - [getBody()](#getbody)
   - [getBodyParam(name)](#getbodyparamname)
+  - [getCharset()](#getcharset)
   - [getContent()](#getcontent)
   - [getContentType()](#getcontenttype)
   - [getCurrentPath()](#getcurrentpath)
@@ -46,6 +47,7 @@ argument to [Handlers](handlers). They are wrapper objects around Node's
   - [getQueryParams()](#getqueryparams)
   - [getUrl()](#geturl)
   - [hasHeader(name)](#hasheadername)
+  - [pipe(stream[, options])](#pipestream-options-)
   - [proceed([result])](#proceed-result-)
   - [withoutHeader(name)](#withoutheadername)
 
@@ -126,11 +128,20 @@ The value of a body param.
     Case insensitive.
 
 
+### getCharset()
+
+Returns *a string*
+
+Alias for [getEncoding](#getencoding)
+
+
 ### getContent()
 
-Returns *a buffer*
+Returns *a stream, a buffer, or  a string*
 
-Raw request content. Most likely use case is within a deserializer.
+After decoding (if content has a character set) and buffering (default) - before deserializing. Most likely use case
+is within a deserializer.
+
 
 
 ### getContentType()
@@ -325,6 +336,22 @@ true when the header is in the request.
   - **name** *string* 
 
     Case insensitive.
+
+
+### pipe(stream[, options])
+
+Returns *a stream*
+
+If [Branch options](branch#atpath-options-handlers) property buffer is false for the request's route then the request
+content will be a [readable stream](https://nodejs.org/dist/latest/docs/api/stream.html#stream_readable_streams).
+Calling pipe() sets the request content to the result of piping the request content stream through a transform stream.
+
+
+  - **stream** *stream* 
+
+  - **options** *object* <span class="optional">[optional]</span>
+
+    See [readable stream](https://nodejs.org/dist/latest/docs/api/stream.html#stream_readable_pipe_destination_options).
 
 
 ### proceed([result])

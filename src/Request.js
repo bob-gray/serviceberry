@@ -38,7 +38,7 @@ class Request {
 		this.#content = this.incomingMessage;
 
 		if (this.#contentType) {
-			this.#charset = this.#contentType.parameters.charset || (mime.charset(this.#contentType) || undefined);
+			this.#charset = this.#contentType.parameters.charset || (mime.charset(this.#contentType.type) || undefined);
 		}
 
 		if (this.#charset) {

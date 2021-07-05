@@ -20,6 +20,7 @@ class Request {
 	#content;
 	#body;
 
+	// eslint-disable-next-line complexity
 	constructor (incomingMessage) {
 		this.#startStamp = process.hrtime();
 		this.#id = createId();
@@ -43,6 +44,10 @@ class Request {
 
 		if (this.#charset) {
 			this.#charset = this.#charset.toLowerCase();
+		} else if (this.#contentType && this.#contentType.type === "application/x-www-form-urlencoded") {
+			// mime.charset() isn't returning a charset for forms
+			// We need a charset so the Director will decode the content
+			this.#charset = "utf-8";
 		}
 	}
 

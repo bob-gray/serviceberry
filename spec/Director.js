@@ -137,7 +137,7 @@ describe("Director", () => {
 
 		serverResponse.on("end", () => {
 			expect(serverResponse.statusCode).toBe(500);
-			expect(serverResponse._getChunks().toString()).toBe("");
+			expect(serverResponse._getChunks().toString()).toBe("Oops!");
 			done();
 		});
 
@@ -149,7 +149,7 @@ describe("Director", () => {
 			options: {
 				serializers: {
 					[contentType]: () => {
-						throw new Error();
+						throw new Error("Oops!");
 					}
 				}
 			}

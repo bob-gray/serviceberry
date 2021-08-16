@@ -42,6 +42,10 @@ function init (error, status, headers = {}) {
 		this.message = error;
 	}
 
+	if (!this.message) {
+		this.message = "Unknown error";
+	}
+
 	this.initStatus(status || error.status || statusCodes.INTERNAL_SERVER_ERROR);
 	this.initHeaders(headers);
 

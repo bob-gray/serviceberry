@@ -104,10 +104,10 @@ class Response extends EventEmitter {
 		}
 
 		if (buffer.length) {
-			serverResponse.write(buffer, this.#encoding);
+			serverResponse.end(buffer, this.#encoding);
+		} else {
+			serverResponse.end();
 		}
-
-		serverResponse.end();
 	}
 
 	writeBufferedHead (buffer) {

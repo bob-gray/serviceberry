@@ -46,7 +46,7 @@
   "devDependencies": {
     "babel-eslint": "^10.1.0",
     "eslint": "^7.32.0",
-    "jasmine": "^3.8.0",
+    "jasmine": "^3.9.0",
     "jasmine-spec-reporter": "^7.0.0",
     "mock-require": "^3.0.3",
     "node-mocks-http": "^1.7.5",

@@ -10,6 +10,7 @@ class Response extends EventEmitter {
 	#body;
 	#content;
 	#encoding = "utf8";
+	#begun;
 
 	constructor (serverResponse) {
 		super();
@@ -58,16 +59,19 @@ class Response extends EventEmitter {
 	}
 
 	async send (options = {}) {
-		this.set(options);
+		if (this.notBegun()) {
+			this.#begun = true;
+			this.set(options);
 
-		if (typeof this.#body !== "undefined" && typeof this.#content === "undefined") {
-			await this.serialize();
-		}
+			if (typeof this.#body !== "undefined" && typeof this.#content === "undefined") {
+				await this.serialize();
+			}
 
-		if (this.isContentStreamable()) {
-			this.streamContent();
-		} else {
-			this.sendBufferedContent();
+			if (this.isContentStreamable()) {
+				this.streamContent();
+			} else {
+				this.sendBufferedContent();
+			}
 		}
 	}
 
@@ -76,7 +80,7 @@ class Response extends EventEmitter {
 	}
 
 	notBegun () {
-		return !this.serverResponse.headersSent;
+		return !this.#begun && !this.serverResponse.writableEnded;
 	}
 
 	isBodyStreamable () {

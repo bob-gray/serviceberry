@@ -59,19 +59,24 @@ class Response extends EventEmitter {
 	}
 
 	async send (options = {}) {
-		if (this.notBegun()) {
-			this.#begun = true;
-			this.set(options);
+		try {
+			if (this.notBegun()) {
+				this.#begun = true;
+				this.set(options);
 
-			if (typeof this.#body !== "undefined" && typeof this.#content === "undefined") {
-				await this.serialize();
-			}
+				if (typeof this.#body !== "undefined" && typeof this.#content === "undefined") {
+					await this.serialize();
+				}
 
-			if (this.isContentStreamable()) {
-				this.streamContent();
-			} else {
-				this.sendBufferedContent();
+				if (this.isContentStreamable()) {
+					this.streamContent();
+				} else {
+					this.sendBufferedContent();
+				}
 			}
+		} catch (error) {
+			this.#begun = false;
+			throw error;
 		}
 	}
 

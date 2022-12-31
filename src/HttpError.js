@@ -15,6 +15,10 @@ class HttpError extends Error {
 		} else {
 			init.call(this, error, ...rest);
 		}
+
+		if (error.stack) {
+			this.stack = error.stack;
+		}
 	}
 
 	get name () {
@@ -51,10 +55,6 @@ function init (error, status, headers = {}) {
 
 	if (this.withoutHeader("Content-Type")) {
 		this.setHeader("Content-Type", "text/plain; charset=utf-8");
-	}
-
-	if (error.stack) {
-		this.stack = error.stack;
 	}
 }
 

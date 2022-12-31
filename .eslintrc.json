@@ -3,10 +3,8 @@
     "node": true,
     "es6": true
   },
-  "parser": "babel-eslint",
   "parserOptions": {
-    "sourceType": "script",
-    "ecmaVersion": 2020
+    "ecmaVersion": 2022
   },
   "extends": "eslint:recommended",
   "rules": {

@@ -4,7 +4,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
 
     working_directory: ~/repo
 
@@ -34,7 +34,7 @@ jobs:
 
   deploy-website:
     docker:
-      - image: circleci/node:lts
+      - image: cimg/node:lts
 
     steps:
       - checkout

@@ -30,7 +30,7 @@ jobs:
           command: npm run build
 
       - qlty-orb/coverage_publish:
-          files: coverage
+          files: coverage/lcov.info
 
   deploy-website:
     docker:

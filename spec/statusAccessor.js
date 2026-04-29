@@ -1,5 +1,3 @@
-/* eslint max-nested-callbacks: ["error", 3] */
-
 "use strict";
 
 const statusAccessor = require("../src/statusAccessor");
@@ -88,7 +86,7 @@ describe("statusAccessor", () => {
 		expect(accessor.is(200)).toBe(true);
 	});
 
-	it("should test status with code", () => {
+	it("should test status with text", () => {
 		expect(accessor.is("OK")).toBe(true);
 	});
 
@@ -106,7 +104,7 @@ describe("statusAccessor", () => {
 		expect(accessor.getStatusCode()).toEqual(403);
 	});
 
-	it("should initialize with passed in status code", () => {
+	it("should initialize with passed in status text", () => {
 		accessor = Object.create(statusAccessor);
 		accessor.initStatus("No Content");
 		expect(accessor.is(204)).toBe(true);

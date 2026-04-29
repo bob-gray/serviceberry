@@ -1,5 +1,3 @@
-/* eslint max-nested-callbacks: ["error", 3] */
-
 "use strict";
 
 const Serializer = require("../src/Serializer");

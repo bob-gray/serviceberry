@@ -27,7 +27,7 @@ class Response extends EventEmitter {
 
 		try {
 			type = contentType.parse(this.getHeader("Content-Type")).type;
-		} catch (error) {
+		} catch {
 			// throws if missing header or header is malformed
 		}
 
@@ -58,6 +58,7 @@ class Response extends EventEmitter {
 		this.#encoding = encoding;
 	}
 
+	// eslint-disable-next-line complexity
 	async send (options = {}) {
 		try {
 			if (this.notBegun()) {

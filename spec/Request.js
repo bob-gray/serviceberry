@@ -1,5 +1,3 @@
-/* eslint max-nested-callbacks: ["error", 3] */
-
 "use strict";
 
 const Request = require("../src/Request"),
@@ -182,7 +180,7 @@ describe("Request (POST)", () => {
 		expect(request.getParam("foo")).toBe("baz");
 	});
 
-	it("should get body param - case insensitive", () => {
+	it("should get param - case insensitive", () => {
 		request.setBody(options.body);
 
 		expect(request.getParam("FOO")).toBe("baz");

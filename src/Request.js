@@ -236,7 +236,7 @@ function parseContentType (incomingMessage) {
 
 	try {
 		parsed = Object.freeze(contentType.parse(incomingMessage));
-	} catch (error) {
+	} catch {
 		// throws if missing header or header is malformed
 	}
 

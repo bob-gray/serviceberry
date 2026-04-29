@@ -1,5 +1,3 @@
-/* eslint max-nested-callbacks: ["error", 3] */
-
 "use strict";
 
 const Director = require("../src/Director"),

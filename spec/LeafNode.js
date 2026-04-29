@@ -1,5 +1,3 @@
-/* eslint max-nested-callbacks: ["error", 3] */
-
 "use strict";
 
 const LeafNode = require("../src/LeafNode"),
@@ -165,7 +163,7 @@ describe("LeafNode", () => {
 		expect(leafNode.isSupported(request)).toBe(false);
 	});
 
-	it("should be acceptable if it produces the right content type", () => {
+	it("should be acceptable if it produces an acceptable content type from a list", () => {
 		var leafNode = new LeafNode({
 				produces: "application/json,text/plain"
 			}),
@@ -177,7 +175,7 @@ describe("LeafNode", () => {
 		expect(leafNode.isAcceptable(request, response)).toBe(true);
 	});
 
-	it("should be acceptable if it produces the right content type", () => {
+	it("should be acceptable if it produces an acceptable content type", () => {
 		var leafNode = new LeafNode({
 				produces: [
 					"application/json"

@@ -1,6 +1,6 @@
 ![Serviceberry](https://serviceberry.js.org/img/serviceberry.svg)
 
-[![CircleCI](https://circleci.com/gh/bob-gray/serviceberry.svg?style=svg)](https://circleci.com/gh/bob-gray/serviceberry)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/bob-gray/serviceberry/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/bob-gray/serviceberry/tree/master)
 [![Code Coverage](https://qlty.sh/gh/bob-gray/projects/serviceberry/coverage.svg)](https://qlty.sh/gh/bob-gray/projects/serviceberry)
 [![Maintainability](https://qlty.sh/gh/bob-gray/projects/serviceberry/maintainability.svg)](https://qlty.sh/gh/bob-gray/projects/serviceberry)
 [![npm version](https://badge.fury.io/js/serviceberry.svg)](https://badge.fury.io/js/serviceberry)

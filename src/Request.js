@@ -66,7 +66,16 @@ class Request {
 	}
 
 	getIp () {
-		return this.getHeader("X-Forwarded-For") || this.incomingMessage.socket.remoteAddress;
+		var forwardedFor = this.getHeader("X-Forwarded-For");
+
+		if (forwardedFor) {
+			forwardedFor = String(forwardedFor)
+				.split(",")
+				.at(0)
+				.trim();
+		}
+
+		return forwardedFor || this.incomingMessage.socket.remoteAddress;
 	}
 
 	getProtocol () {

@@ -99,6 +99,18 @@ describe("Request (GET)", () => {
 		expect(request.getIp()).toBe(options.ip);
 	});
 
+	it("should return first ip in X-Forwarded-For from getIp()", () => {
+		options.headers["X-Forwarded-For"] = "136.44.64.94,156.5.172.137,172.30.248.34";
+		request = createRequest(options);
+		expect(request.getIp()).toBe("136.44.64.94");
+	});
+
+	it("should return first ip in X-Forwarded-For from getIp() header values is an array", () => {
+		options.headers["X-Forwarded-For"] = ["172.19.170.114,156.5.172.137", "172.30.248.34"];
+		request = createRequest(options);
+		expect(request.getIp()).toBe("172.19.170.114");
+	});
+
 	it("should return protocol from getProtocol()", () => {
 		expect(request.getProtocol()).toBe(options.protocol);
 	});
